@@ -1,0 +1,59 @@
+
+␛[0;32mI (48) boot: ESP-IDF 2.210.0 2nd stage bootloader␛[0m
+␛[0;32mI (48) boot: compile time 19:57:13␛[0m
+␛[0;32mI (48) boot: Enabling RNG early entropy source...␛[0m
+␛[0;32mI (63) boot: SPI Speed      : 80MHz␛[0m
+␛[0;32mI (76) boot: SPI Mode       : DIO␛[0m
+␛[0;32mI (88) boot: SPI Flash Size : 4MB␛[0m
+␛[0;32mI (100) boot: Partition Table:␛[0m
+␛[0;32mI (112) boot: ## Label            Usage          Type ST Offset   Length␛[0m
+␛[0;32mI (134) boot:  0 nvs              WiFi data        01 02 00009000 00006000␛[0m
+␛[0;32mI (158) boot:  1 phy_init         RF data          01 01 0000f000 00001000␛[0m
+␛[0;32mI (181) boot:  2 factory          factory app      00 00 00010000 00100000␛[0m
+␛[0;32mI (204) boot: End of partition table␛[0m
+␛[0;32mI (217) boot: Disabling RNG early entropy source...␛[0m
+␛[0;32mI (234) boot: Loading app partition at offset 00010000␛[0m
+␛[0;32mI (1263) boot: segment 0: paddr=0x00010018 vaddr=0x00000000 size=0x0ffe8 ( 65512) ␛[0m
+␛[0;32mI (1264) boot: segment 1: paddr=0x00020008 vaddr=0x3f400010 size=0x250e4 (151780) map␛[0m
+␛[0;32mI (1281) boot: segment 2: paddr=0x000450f4 vaddr=0x3ffc0000 size=0x02c14 ( 11284) load␛[0m
+␛[0;32mI (1310) boot: segment 3: paddr=0x00047d10 vaddr=0x40080000 size=0x00400 (  1024) load␛[0m
+␛[0;32mI (1334) boot: segment 4: paddr=0x00048118 vaddr=0x40080400 size=0x1255c ( 75100) load␛[0m
+␛[0;32mI (1382) boot: segment 5: paddr=0x0005a67c vaddr=0x400c0000 size=0x00000 (     0) load␛[0m
+␛[0;32mI (1387) boot: segment 6: paddr=0x0005a684 vaddr=0x00000000 size=0x05984 ( 22916) ␛[0m
+␛[0;32mI (1412) boot: segment 7: paddr=0x00060010 vaddr=0x400d0018 size=0x7b67c (505468) map␛[0m
+␛[0;32mI (1438) cpu_start: Pro cpu up.␛[0m
+␛[0;32mI (1449) cpu_start: Starting app cpu, entry point is 0x40080e5c␛[0m
+␛[0;32mI (1470) cpu_start: App cpu up.␛[0m
+␛[0;32mI (1483) heap_alloc_caps: Initializing. RAM available for dynamic allocation:␛[0m
+␛[0;32mI (1506) heap_alloc_caps: At 3FFAFF10 len 000000F0 (0 KiB): DRAM␛[0m
+␛[0;32mI (1526) heap_alloc_caps: At 3FFC8500 len 00017B00 (94 KiB): DRAM␛[0m
+␛[0;32mI (1547) heap_alloc_caps: At 3FFE0440 len 00003BC0 (14 KiB): D/IRAM␛[0m
+␛[0;32mI (1568) heap_alloc_caps: At 3FFE4350 len 0001BCB0 (111 KiB): D/IRAM␛[0m
+␛[0;32mI (1590) heap_alloc_caps: At 4009295C len 0000D6A4 (53 KiB): IRAM␛[0m
+␛[0;32mI (1611) cpu_start: Pro cpu start user code␛[0m
+␛[0;32mI (1678) cpu_start: Starting scheduler on PRO CPU.␛[0m
+␛[0;32mI (1681) cpu_start: Starting scheduler on APP CPU.␛[0m
+hello world!done!␛[0;31mE (1681) Socket: << createSocket: socket: 105␛[0m
+␛[0;31mE (1681) Socket: bind: Socket is not initialized.␛[0m
+␛[0;31mE (1691) Socket: << bind: bind[socket=-1]: 9: Bad file number␛[0m
+␛[0;31mE (1691) Socket: << listen: Bad file number␛[0m
+␛[0;31mE (1701) Socket: getBind: Socket is not initialized.␛[0m
+␛[0;31mE (1701) Socket: accept(): Bad file number, m_sock=-1␛[0m
+abort() was called at PC 0x400edb4b on core 1
+
+Backtrace: 0x40086514:0x3ffd2f80 0x40086613:0x3ffd2fa0 0x400edb4b:0x3ffd2fc0 0x400edb6a:0x3ffd2fe0 0x401302df:0x3ffd3000 0x400fd2be:0x3ffd3020 0x400fc9d2:0x3ffd3080
+
+Rebooting...
+ets Jun  8 2016 00:22:57
+
+rst:0xc (SW_CPU_RESET),boot:0x13 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0x00
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:1
+load:0x3fff0008,len:8
+load:0x3fff0010,len:4412
+ho 0 tail 12 room 4
+load:0x40078000,len:11072
+load:0x40080000,len:252
+entry 0x40080034
+

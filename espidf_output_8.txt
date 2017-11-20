@@ -1,0 +1,29 @@
+
+PS C:\Users\bachman0\Documents\PlatformIO\Projects\lolin32-idf-PA17_bmat_6> pio run -v
+>>
+[11/12/17 19:40:38] Processing lolin32 (platform: espressif32; build_flags: -D_POSIX_THREADS -fexceptions; board: lolin32; framework: espidf)
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Collected 1 compatible libraries
+Looking for dependencies...
+Library Dependency Graph
+|-- <nkolban> (C:\Users\bachman0\Documents\PlatformIO\Projects\lolin32-idf-PA17_bmat_6\lib\nkolban)
+xtensa-esp32-elf-g++ -o .pioenvs\lolin32\firmware.elf -nostdlib -Wl,-static -u call_user_start_cpu0 -Wl,--undefined=uxTopUsedPriority -Wl,--gc-sections -u __cxa_guard_dummy -
+T esp32.common.ld -T esp32.rom.ld -T esp32.peripherals.ld -Wl,-T"esp32_out.ld" .pioenvs\lolin32\src\main.o -LC:\Users\bachman0\.platformio\packages\framework-espidf\component
+s\esp32 -LC:\Users\bachman0\.platformio\packages\framework-espidf\components\esp32\ld -LC:\Users\bachman0\.platformio\packages\framework-espidf\components\esp32\lib -LC:\User
+s\bachman0\.platformio\packages\framework-espidf\components\bt\lib -LC:\Users\bachman0\.platformio\packages\framework-espidf\components\newlib\lib -L.pioenvs\lolin32 -L.pioen
+vs\lolin32 -Wl,--start-group .pioenvs\lolin32\libapp_update.a .pioenvs\lolin32\libaws_iot.a .pioenvs\lolin32\libbt.a .pioenvs\lolin32\libcoap.a .pioenvs\lolin32\libcxx.a .pio
+envs\lolin32\libdriver.a .pioenvs\lolin32\libesp32.a .pioenvs\lolin32\libespcoredump.a .pioenvs\lolin32\libethernet.a .pioenvs\lolin32\libexpat.a .pioenvs\lolin32\libfatfs.a
+.pioenvs\lolin32\libfreertos.a .pioenvs\lolin32\libjsmn.a .pioenvs\lolin32\libjson.a .pioenvs\lolin32\liblog.a .pioenvs\lolin32\liblwip.a .pioenvs\lolin32\libmbedtls.a .pioen
+vs\lolin32\libmdns.a .pioenvs\lolin32\libmicro-ecc.a .pioenvs\lolin32\libnewlib.a .pioenvs\lolin32\libnvs_flash.a .pioenvs\lolin32\libopenssl.a .pioenvs\lolin32\libsdmmc.a .p
+ioenvs\lolin32\libtcpip_adapter.a .pioenvs\lolin32\libulp.a .pioenvs\lolin32\libvfs.a .pioenvs\lolin32\libwear_levelling.a .pioenvs\lolin32\libwpa_supplicant.a .pioenvs\lolin
+32\libxtensa-debug-module.a .pioenvs\lolin32\libspi_flash.a .pioenvs\lolin32\libapp_trace.a .pioenvs\lolin32\libsoc.a .pioenvs\lolin32\libsodium.a -lbtdm_app -lhal -lcoexist
+-lcore -lnet80211 -lphy -lrtc -lpp -lwpa -lwpa2 -lwps -lsmartconfig -lm -lc -lgcc -lstdc++ .pioenvs\lolin32\lib\libnkolban.a -Wl,--end-group
+.pioenvs\lolin32\libesp32.a(cpu_start.o):(.literal.main_task+0x8): undefined reference to `app_main'
+.pioenvs\lolin32\libesp32.a(cpu_start.o): In function `main_task':
+C:\Users\bachman0\.platformio\packages\framework-espidf\components\esp32/cpu_start.c:330: undefined reference to `app_main'
+collect2.exe: error: ld returned 1 exit status
+*** [.pioenvs\lolin32\firmware.elf] Error 1
+======================================================================== [ERROR] Took 10.18 seconds ========================================================================
+PS C:\Users\bachman0\Documents\PlatformIO\Projects\lolin32-idf-PA17_bmat_6>
+Linter
+Severity  Provider  Description Line

@@ -1,0 +1,19 @@
+
+mode:DIO, clock div:1
+load:0x3fff0010,len:4
+load:0x3fff0014,len:588
+load:0x40078000,len:0
+load:0x40078000,len:9768
+entry 0x400789b8
+E (1107) Socket: << createSocket: socket: 105
+E (1107) Socket: bind: Socket is not initialized.
+E (1107) Socket: << bind: bind[socket=-1]: 9: Bad file number
+E (1110) Socket: << listen: Bad file number
+E (1114) Socket: getBind: Socket is not initialized.
+E (1119) Socket: accept(): Bad file number, m_sock=-1
+abort() was called at PC 0x400dd4d7 on core 1
+
+
+Backtrace: 0x40086c30:0x3ffd5be0 0x40086d2f:0x3ffd5c00 0x400dd4d7:0x3ffd5c20 0x400dd4f6:0x3ffd5c40 0x401198cf:0x3ffd5c60 0x4011595d:0x3ffd5c80 0x40114f9b:0x3ffd5ce0
+
+Rebooting...

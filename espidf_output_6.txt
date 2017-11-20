@@ -1,0 +1,30 @@
+
+Compiling .pioenvs\lolin32\lib\nkolban\WebSocket.o
+Compiling .pioenvs\lolin32\lib\nkolban\WebSocketFileTransfer.o
+Compiling .pioenvs\lolin32\lib\nkolban\WiFi.o
+Compiling .pioenvs\lolin32\lib\nkolban\WiFiEventHandler.o
+Archiving .pioenvs\lolin32\lib\libnkolban.a
+Linking .pioenvs\lolin32\firmware.elf
+Calculating size .pioenvs\lolin32\firmware.elf
+
+Building .pioenvs\lolin32\firmware.bin
+text       data     bss     dec     hex filename
+583744   110548   22720  717012   af0d4 .pioenvs\lolin32\firmware.elf
+esptool.py v2.0-beta1
+Traceback (most recent call last):
+File "C:\Users\bachman0\.platformio\packages\tool-esptoolpy\esptool.py", line 2257, in <module>
+main()
+File "C:\Users\bachman0\.platformio\packages\tool-esptoolpy\esptool.py", line 2072, in main
+operation_func(args)
+File "C:\Users\bachman0\.platformio\packages\tool-esptoolpy\esptool.py", line 1708, in elf2image
+image.save(args.output)
+File "C:\Users\bachman0\.platformio\packages\tool-esptoolpy\esptool.py", line 1282, in save
+assert (f.tell() + 8) % IROM_ALIGN == segment.addr % IROM_ALIGN
+AssertionError
+*** [.pioenvs\lolin32\firmware.bin] Error 1
+ [ERROR] Took 23.85 seconds
+ 
+Linter
+Severity 	Provider 	Description	Line 
+PIO Buildsrc\main.cpp00014:7
+CRLFUTF-8C++0 files

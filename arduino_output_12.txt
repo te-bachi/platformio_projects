@@ -1,0 +1,181 @@
+
+
+Project
+lolin32-blinky
+espidf-ble-adv
+nano-blinky
+lolin32-oled
+lolin32-i2c-scanner
+lolin32-mlx90614
+PhysioTrain
+nano-PA17_bmat_6
+lolin32-simple-wifi-server
+lib
+readme.txt
+src
+main.cpp
+.gitignore
+.travis.yml
+platformio.ini
+lolin32-arduino-PA17_bmat_6
+lib
+nkolban
+examples
+src
+CPPNVS.cpp
+CPPNVS.h
+FATFS_VFS.cpp
+FATFS_VFS.h
+File.cpp
+File.h
+FileSystem.cpp
+FileSystem.h
+FreeRTOS.cpp
+FreeRTOS.h
+FreeRTOSTimer.cpp
+FreeRTOSTimer.h
+GeneralUtils.cpp
+GeneralUtils.h
+GPIO.cpp
+GPIO.h
+HttpParser.cpp
+HttpParser.h
+HttpRequest.cpp
+HttpRequest.h
+HttpResponse.cpp
+HttpResponse.h
+HttpServer.cpp
+HttpServer.h
+I2C.cpp
+I2C.h
+I2S.cpp
+I2S.h
+IFTTT.cpp
+IFTTT.h
+JSON.cpp
+JSON.h
+Memory.cpp
+Memory.h
+PWM.cpp
+PWM.h
+RESTClient.cpp
+RESTClient.h
+RMT.cpp
+RMT.h
+SmartLED.cpp
+SmartLED.h
+SOC.cpp
+SOC.h
+Socket.cpp
+Socket.h
+SockServ.cpp
+SockServ.h
+SPI.cpp
+SPI.h
+SSLUtils.cpp
+SSLUtils.h
+Task.cpp
+Task.h
+WebServer.cpp
+WebServer.h
+WebSocket.cpp
+WebSocket.h
+WebSocketFileTransfer.cpp
+WebSocketFileTransfer.h
+readme.txt
+src
+main.cpp
+.gitignore
+.travis.yml
+platformio.ini
+lolin32-idf-PA17_bmat_6
+lolin32-idf-hello-world
+lolin32-idf-nkolban-ble
+lolin32-arduino-nkolban-ble
+PlatformIO Home
+main.cpp
+1
+2
+3
+4
+5
+6
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+7
+8
+9
+10
+11
+12
+  
+  
+#include <Arduino.h>  
+#include <HttpServer.h>  
+#include <WiFi.h>  
+  
+  
+static void  
+helloWorldHandler(HttpRequest* pRequest, HttpResponse* pResponse)  
+{  
+····pResponse->setStatus(HttpResponse::HTTP_STATUS_OK, "OK");  
+····pResponse->addHeader(HttpRequest::HTTP_HEADER_CONTENT_TYPE, "text/plain");  
+····pResponse->sendData("Hello back");  
+····pResponse->close();  
+}  
+  
+void  
+setup()  
+{  
+····Serial.begin(115200);  
+····delay(100);  
+····Serial.println("setup()");  
+····delay(200);  
+  
+//#include <esp_wifi.h>  
+  
+HttpServer httpServer;  
+  
+const char *ssid = "My_ESP32_AP";  
+const char *password = "test";  
+
+ 
+39.3 s
+platformio run --target upload
+|-- <WiFi> v1.0
+|-- <nkolban>
+Linking .pioenvs\lolin32\firmware.elf
+Checking program size
+text       data     bss     dec     hex filename
+695709   132324   29504  857537   d15c1 .pioenvs\lolin32\firmware.elf
+Looking for upload port...
+
+Auto-detected: COM21
+Uploading .pioenvs\lolin32\firmware.bin
+esptool.py v2.1-beta1
+Connecting....
+Chip is ESP32D0WDQ6 (revision 0)
+Uploading stub...
+Running stub...
+Stub running...
+Configuring flash size...
+Auto-detected Flash size: 4MB
+Flash params set to 0x022f
+Linter
+Severity 	Provider 	Description	Line 

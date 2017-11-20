@@ -1,0 +1,35 @@
+
+
+
+␛[0;32mI (1478) cpu_start: App cpu up.␛[0m
+␛[0;32mI (1491) heap_alloc_caps: Initializing. RAM available for dynamic allocation:␛[0m
+␛[0;32mI (1513) heap_alloc_caps: At 3FFAFF10 len 000000F0 (0 KiB): DRAM␛[0m
+␛[0;32mI (1534) heap_alloc_caps: At 3FFC8500 len 00017B00 (94 KiB): DRAM␛[0m
+␛[0;32mI (1555) heap_alloc_caps: At 3FFE0440 len 00003BC0 (14 KiB): D/IRAM␛[0m
+␛[0;32mI (1576) heap_alloc_caps: At 3FFE4350 len 0001BCB0 (111 KiB): D/IRAM␛[0m
+␛[0;32mI (1598) heap_alloc_caps: At 4009295C len 0000D6A4 (53 KiB): IRAM␛[0m
+␛[0;32mI (1619) cpu_start: Pro cpu start user code␛[0m
+␛[0;32mI (1686) cpu_start: Starting scheduler on PRO CPU.␛[0m
+␛[0;32mI (1689) cpu_start: Starting scheduler on APP CPU.␛[0m
+hello world!D (1689) FreeRTOS: Semaphore taking: name: clientSemaphore (0x3ffccd50), owner: <N/A> for SockServ␛[0m
+D (1689) FreeRTOS: Semaphore taken:  name: clientSemaphore (0x3ffccd50), owner: SockServ␛[0m
+D (1699) HttpServer: >> start: port: 80, useSSL: 0␛[0m
+done!D (1709) Task: >> runTask: taskName=HttpServerTask␛[0m
+D (1709) HttpServerTask: Run task␛[0m
+D (1719) Socket: >> listen: port: 80, isDatagram: 0␛[0m
+D (1719) Socket: >> createSocket: isDatagram: 0␛[0m
+␛[0;31mE (1729) Socket: << createSocket: socket: 105␛[0m
+D (1729) Socket: >> bind: port=80, address=0x0␛[0m
+␛[0;31mE (1739) Socket: bind: Socket is not initialized.␛[0m
+␛[0;31mE (1739) Socket: << bind: bind[socket=-1]: 9: Bad file number␛[0m
+␛[0;31mE (1749) Socket: << listen: Bad file number␛[0m
+D (1749) Socket: << listen␛[0m
+D (1749) SockServ: Now listening on port 80␛[0m
+D (1759) HttpServerTask: Listening on port 80␛[0m
+␛[0;31mE (1759) Socket: getBind: Socket is not initialized.␛[0m
+D (1769) HttpServerTask: Waiting for new peer client␛[0m
+D (1769) SockServ: >> waitForNewClient␛[0m
+D (1779) Socket: >> accept: Accepting on 165.165.165.165 [42405]; sockFd: -1, using SSL: 0␛[0m
+V (1789) FreeRTOS: >> wait: Semaphore waiting: name: clientSemaphore (0x3ffccd50), owner: SockServ for waitForNewClient␛[0m
+␛[0;31mE (1799) Socket: accept(): Bad file number, m_sock=-1␛[0m
+abort() was called at PC 0x400edc9f on core 1

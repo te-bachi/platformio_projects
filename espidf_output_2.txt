@@ -1,0 +1,83 @@
+
+PS C:\Users\bachman0\Documents\PlatformIO\Projects\lolin32-arduino-PA17_bmat_6> platformio run -v
+>>
+[11/12/17 16:01:06] Processing lolin32 (platform: espressif32; build_flags: -D_POSIX_THREADS -fexceptions; board: lolin32; framework: arduino)
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Collected 16 compatible libraries
+Looking for dependencies...
+Library Dependency Graph
+|-- <nkolban> (C:\Users\bachman0\Documents\PlatformIO\Projects\lolin32-arduino-PA17_bmat_6\lib\nkolban)
+xxtensa-esp32-elf-g++ -o .pioenvs\lolin32\firmware.elf -nostdlib -Wl,-static -u call_user_start_cpu0 -Wl,--undefined=uxTopUsedPriority -Wl,--gc-sections -Wl,-EL -T esp32.comm
+on.ld -T esp32.rom.ld -T esp32.peripherals.ld -u ld_include_panic_highint_hdl -Wl,-T"esp32_out.ld" .pioenvs\lolin32\src\main.o
+-lC:\Users\bachman0\.platformio\packages\framew
+ork-arduinoespressif32\tools\sdk\lib
+-lC:\Users\bachman0\.platformio\packages\framework-arduinoespressif32\tools\sdk\ld
+-l.pioenvs\lolin32 -Wl,--start-group .pioenvs\lolin32\
+libFrameworkArduinoVariant.a .pioenvs\lolin32\libFrameworkArduino.a
+-lgcc
+-lstdc++
+-lapp_trace
+-lapp_update
+-lbootloader_support
+-lbt
+-lbtdm_app
+-lc
+-lc_nano
+-lcoap
+-lcoexist
+-lcore
+-lcxx
+-ldriver
+-lesp32
+-lethernet
+-lexpat
+-lfatfs
+-lfreertos
+-lhal
+-lheap
+-ljsmn
+-ljson
+-llog
+-llwip
+-lm
+-lmbedtls
+-lmdns
+-lmicro-ecc
+-lnet80211
+-lnewlib
+-lnghttp
+-lnvs_flash
+-lopenssl
+-lphy
+-lpp
+-lrtc
+-lsdmmc
+-lsmartconfig
+-lsoc
+-lspi_flash
+-ltcpip_adapter
+-lulp
+-lvfs
+-lwear_levelling
+-lwpa
+-lwpa2
+-lwpa_supplicant
+-lwps
+-lxtensa-debug-module
+.pioenvs\lolin32\lib\libnkolban.a -Wl,--end-group
+.pioenvs\lolin32\lib\libnkolban.a(FreeRTOS.o):(.literal._ZN8FreeRTOS9Semaphore4waitENSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE+0x0): undefined reference to `pthread_mutex_lock'
+.pioenvs\lolin32\lib\libnkolban.a(FreeRTOS.o):(.literal._ZN8FreeRTOS9Semaphore4waitENSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE+0x4): undefined reference to `pthread_mutex_unlock'
+.pioenvs\lolin32\lib\libnkolban.a(FreeRTOS.o):(.literal._ZN8FreeRTOS9SemaphoreD2Ev+0x0): undefined reference to `pthread_mutex_destroy'
+.pioenvs\lolin32\lib\libnkolban.a(FreeRTOS.o): In function `FreeRTOS::Semaphore::wait(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >)':
+C:\Users\bachman0\Documents\PlatformIO\Projects\lolin32-arduino-PA17_bmat_6/lib\nkolban\src/FreeRTOS.cpp:163: undefined reference to `pthread_mutex_lock'
+C:\Users\bachman0\Documents\PlatformIO\Projects\lolin32-arduino-PA17_bmat_6/lib\nkolban\src/FreeRTOS.cpp:163: undefined reference to `pthread_mutex_unlock'
+.pioenvs\lolin32\lib\libnkolban.a(FreeRTOS.o): In function `FreeRTOS::Semaphore::~Semaphore()':
+C:\Users\bachman0\Documents\PlatformIO\Projects\lolin32-arduino-PA17_bmat_6/lib\nkolban\src/FreeRTOS.cpp:163: undefined reference to `pthread_mutex_destroy'
+.pioenvs\lolin32\lib\libnkolban.a(FreeRTOS.o): In function `FreeRTOS::Semaphore::give()':
+C:\Users\bachman0\Documents\PlatformIO\Projects\lolin32-arduino-PA17_bmat_6/lib\nkolban\src/FreeRTOS.cpp:163: undefined reference to `pthread_mutex_unlock'
+.pioenvs\lolin32\lib\libnkolban.a(FreeRTOS.o): In function `FreeRTOS::Semaphore::take(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >)':
+C:\Users\bachman0\Documents\PlatformIO\Projects\lolin32-arduino-PA17_bmat_6/lib\nkolban\src/FreeRTOS.cpp:176: undefined reference to `pthread_mutex_lock'
+collect2.exe: error: ld returned 1 exit status
+*** [.pioenvs\lolin32\firmware.elf] Error 1
+========================================================================= [ERROR] Took 5.54 seconds =========================================================================
+PS C:\Users\bachman0\Documents\PlatformIO\Projects\lolin32-arduino-PA17_bmat_6>

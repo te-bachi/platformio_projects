@@ -1,0 +1,42 @@
+
+ets Jun  8 2016 00:22:57
+
+rst:0x1 (POWERON_RESET),boot:0x13 (SPI_FAST_FLASH_BOOT)
+ets Jun  8 2016 00:22:57
+
+rst:0x10 (RTCWDT_RTC_RESET),boot:0x13 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:1
+load:0x3fff0010,len:4
+load:0x3fff0014,len:588
+load:0x40078000,len:0
+load:0x40078000,len:9768
+entry 0x400789b8
+D (991) FreeRTOS: Semaphore taking: name: clientSemaphore (0x3ffcaf5c), owner: <N/A> for SockServ
+D (998) FreeRTOS: Semaphore taken:  name: clientSemaphore (0x3ffcaf5c), owner: SockServ
+setup()
+I (3538) wifi: wifi firmware version: c1b8a2f
+I (3538) wifi: config NVS flash: enabled
+I (3538) wifi: config nano formating: disabled
+I (3547) wifi: Init dynamic tx buffer num: 32
+I (3547) wifi: Init data frame dynamic rx buffer num: 64
+I (3547) wifi: Init management frame dynamic rx buffer num: 64
+I (3551) wifi: wifi driver task: 3ffd3784, prio:23, stack:4096
+I (3556) wifi: Init static rx buffer num: 10
+I (3560) wifi: Init dynamic rx buffer num: 0
+I (3564) wifi: Init rx ampdu len mblock:7
+I (3568) wifi: Init lldesc rx ampdu entry mblock:4
+I (3573) wifi: wifi power manager task: 0x3ffd8ae8 prio: 21 stack: 2560
+I (3581) wifi: wifi timer task: 3ffd9b54, prio:22, stack:3584
+I (3605) wifi: Init Ampdu: 1 tx baw=6 rx baw=6
+I (3605) wifi: mode : softAP (30:ae:a4:05:b4:b1)
+AP IP address: 192.168.4.1
+httpServer.start(80)
+D (3806) HttpServer: >> start: port: 80, useSSL: 0
+Done!
+D (3806) Task: >> runTask: taskName=HttpServerTask
+D (3809) Socket: >> listen: port: 80, isDatagram: 0
+I (3812) wifi: n:1 1, o:1 0, ap:1 1, sta:255 255, prof:1
+D (3814) Socket: >> createSocket: isDatagram: 0
+I (3819) wifi: station: 00:28:f8:3f:b1:0f join, AID=1, n, 40U

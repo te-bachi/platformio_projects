@@ -1,0 +1,97 @@
+
+
+Project
+lolin32-blinky
+espidf-ble-adv
+nano-blinky
+lolin32-oled
+lolin32-i2c-scanner
+lolin32-mlx90614
+PhysioTrain
+nano-PA17_bmat_6
+lolin32-simple-wifi-server
+lolin32-arduino-PA17_bmat_6
+lib
+src
+.gitignore
+.travis.yml
+platformio.ini
+lolin32-idf-PA17_bmat_6
+lib
+src
+main.cpp
+sdkconfig.h
+.gitignore
+.travis.yml
+platformio.ini
+lolin32-idf-hello-world
+lolin32-idf-nkolban-ble
+lolin32-arduino-nkolban-ble
+main.cpp
+1
+2
+3
+4
+5
+6
+7
+8
+9
+
+#include "HttpServer.h"
+
+void app_main()
+{
+····HttpServer httpServer;
+····httpServer.start(80);
+}
+
+
+
++ rm -rf \.pioenvs\
++    ~~~
+    + CategoryInfo          : InvalidArgument: (:) [Remove-Item], ParameterBindingException
+    + FullyQualifiedErrorId : NamedParameterNotFound,Microsoft.PowerShell.Commands.RemoveItemCommand
+
+PS C:\Users\bachman0\Documents\PlatformIO\Projects\lolin32-idf-PA17_bmat_6> rm \.pioenvs\
+rm : Der Pfad "C:\.pioenvs\" kann nicht gefunden werden, da er nicht vorhanden ist.
+In Zeile:1 Zeichen:1
++ rm \.pioenvs\
++ ~~~~~~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (C:\.pioenvs\:String) [Remove-Item], ItemNotFoundException
+    + FullyQualifiedErrorId : PathNotFound,Microsoft.PowerShell.Commands.RemoveItemCommand
+
+PS C:\Users\bachman0\Documents\PlatformIO\Projects\lolin32-idf-PA17_bmat_6> pio run
+[11/12/17 18:05:06] Processing lolin32 (platform: espressif32; build_flags: -D_POSIX_THREADS -fexceptions; board: lolin32; framework: espidf)
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Verbose mode can be enabled via `-v, --verbose` option
+
+*** Two environments with different actions were specified for the same target: C:\Users\bachman0\Documents\PlatformIO\Projects\lolin32-idf-PA17_bmat_6\.pioenvs\lolin32\app_t
+race\app_trace.o
+(action 1: xtensa-esp32-elf-gcc -o app_trace.o -c -Wno-old-style-declaration -std=gnu99 -Wall -Werror=all -Wno-error=deprecated-declarations -Wextra -Wno-unused-parameter -Wn
+o-sign-compare -Wno-error=unused-function -Og -g3 -nostdlib -Wpointer-arith -Wno-error=unused-but-set-variable -Wno-error=unused-variable -mlongcalls -ffunction-sections -fda
+ta-sections -fstrict-volatile-bitfields -fexceptions $(subst --coverage,,$(CFLAGS)) -DWITH_POSIX -DIDF_VER=\"2.210.0\" -DESP32 -DESP_PLATFORM -DF_CPU=240000000L -DHAVE_CONFIG
+_H -DMBEDTLS_CONFIG_FILE=\"mbedtls/esp_config.h\" -DPLATFORMIO=30500 -DESP32_DEV -DARDUINO_LOLIN32 -D_POSIX_THREADS @"C:\Users\bachman0\Documents\PlatformIO\Projects\lolin32-
+idf-PA17_bmat_6\.pioenvs\lolin32\longcmd-4bac321ab0435164a14320240e4fb8b6" app_trace.c)
+(action 2: xtensa-esp32-elf-gcc -o app_trace.o -c -Wno-old-style-declaration -std=gnu99 -Wall -Werror=all -Wno-error=deprecated-declarations -Wextra -Wno-unused-parameter -Wn
+o-sign-compare -Wno-error=unused-function -Og -g3 -nostdlib -Wpointer-arith -Wno-error=unused-but-set-variable -Wno-error=unused-variable -mlongcalls -ffunction-sections -fda
+ta-sections -fstrict-volatile-bitfields -fexceptions -DWITH_POSIX -DIDF_VER=\"2.210.0\" -DESP32 -DESP_PLATFORM -DF_CPU=240000000L -DHAVE_CONFIG_H -DMBEDTLS_CONFIG_FILE=\"mbed
+tls/esp_config.h\" -DPLATFORMIO=30500 -DESP32_DEV -DARDUINO_LOLIN32 -D_POSIX_THREADS @"C:\Users\bachman0\Documents\PlatformIO\Projects\lolin32-idf-PA17_bmat_6\.pioenvs\lolin3
+2\longcmd-4bac321ab0435164a14320240e4fb8b6" app_trace.c)
+File "C:\Users\bachman0\.platformio\penv\lib\site-packages\platformio\builder\tools\platformio.py", line 270, in BuildLibrary
+========================================================================= [ERROR] Took 0.98 seconds =========================================================================
+PS C:\Users\bachman0\Documents\PlatformIO\Projects\lolin32-idf-PA17_bmat_6>
+Linter
+Severity  Provider  Description Line
+
+
+
+
+./platforms/espressif32/builder/frameworks/espidf.py:        join(FRAMEWORK_DIR, "components", "app_trace", "include"),
+./platforms/espressif32/builder/frameworks/espidf.py:    join("$BUILD_DIR", "app_trace"),
+./platforms/espressif32/builder/frameworks/espidf.py:    join(FRAMEWORK_DIR, "components", "app_trace"),
+
+./framework-espidf/components/app_trace/app_trace.c
+./framework-espidf-backup/components/esp32/app_trace.c
+

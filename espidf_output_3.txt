@@ -1,0 +1,30 @@
+^
+Compiling .pioenvs\lolin32\lib\nkolban\AWS.o
+Archiving .pioenvs\lolin32\libsodium.a
+Compiling .pioenvs\lolin32\lib\nkolban\Apa102.o
+
+Compiling .pioenvs\lolin32\lib\nkolban\BLE2902.o
+Compiling .pioenvs\lolin32\lib\nkolban\BLEAddress.o
+Compiling .pioenvs\lolin32\lib\nkolban\BLEAdvertisedDevice.o
+Compiling .pioenvs\lolin32\lib\nkolban\BLEAdvertising.o
+Compiling .pioenvs\lolin32\lib\nkolban\BLECharacteristic.o
+Compiling .pioenvs\lolin32\lib\nkolban\BLECharacteristicCallbacks.o
+In file included from lib\nkolban\src\BLEAdvertising.cpp:13:0:
+lib\nkolban\src\BLEUtils.h:49:49: error: 'esp_gattc_service_elem_t' has not been declared
+static std::string gattcServiceElementToString(esp_gattc_service_elem_t *pGATTCServiceElement);
+^
+In file included from lib\nkolban\src\BLEAdvertisedDevice.cpp:19:0:
+lib\nkolban\src\BLEUtils.h:49:49: error: 'esp_gattc_service_elem_t' has not been declared
+static std::string gattcServiceElementToString(esp_gattc_service_elem_t *pGATTCServiceElement);
+^
+*** [.pioenvs\lolin32\lib\nkolban\BLEAdvertising.o] Error 1
+*** [.pioenvs\lolin32\lib\nkolban\BLEAdvertisedDevice.o] Error 1
+In file included from lib\nkolban\src\BLECharacteristic.cpp:18:0:
+lib\nkolban\src\BLEUtils.h:49:49: error: 'esp_gattc_service_elem_t' has not been declared
+static std::string gattcServiceElementToString(esp_gattc_service_elem_t *pGATTCServiceElement);
+^
+*** [.pioenvs\lolin32\lib\nkolban\BLECharacteristic.o] Error 1
+ [ERROR] Took 82.20 seconds
+ 
+Linter
+Severity 	Provider 	Description	Line 

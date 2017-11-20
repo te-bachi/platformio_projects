@@ -1,0 +1,84 @@
+
+
+Project
+lolin32-blinky
+espidf-ble-adv
+nano-blinky
+lolin32-oled
+lolin32-i2c-scanner
+lolin32-mlx90614
+PhysioTrain
+nano-PA17_bmat_6
+lolin32-simple-wifi-server
+lolin32-arduino-PA17_bmat_6
+lib
+src
+main.cpp
+.gitignore
+.travis.yml
+platformio.ini
+lolin32-idf-PA17_bmat_6
+lolin32-idf-hello-world
+lolin32-idf-nkolban-ble
+lolin32-arduino-nkolban-ble
+1
+2
+3
+4
+5
+6
+; PlatformIO Project Configuration File
+;
+;   Build options: build flags, source filter
+;   Upload options: custom upload port, speed and extra flags
+;   Library options: dependencies, extra library storages
+;   Advanced options: extra scripting
+
+
+ce -IC:\Users\bachman0\.platformio\packages\framework-arduinoespressif32\tools\sdk\include\app_update -IC:\Users\bachman0\.platformio\packages\framework-arduinoespressif32\to
+ols\sdk\include\bootloader_support -IC:\Users\bachman0\.platformio\packages\framework-arduinoespressif32\tools\sdk\include\bt -IC:\Users\bachman0\.platformio\packages\framewo
+
+rk-arduinoespressif32\tools\sdk\include\driver -IC:\Users\bachman0\.platformio\packages\framework-arduinoespressif32\tools\sdk\include\esp32 -IC:\Users\bachman0\.platformio\p
+ackages\framework-arduinoespressif32\tools\sdk\include\ethernet -IC:\Users\bachman0\.platformio\packages\framework-arduinoespressif32\tools\sdk\include\fatfs -IC:\Users\bachm
+an0\.platformio\packages\framework-arduinoespressif32\tools\sdk\include\freertos -IC:\Users\bachman0\.platformio\packages\framework-arduinoespressif32\tools\sdk\include\heap
+-IC:\Users\bachman0\.platformio\packages\framework-arduinoespressif32\tools\sdk\include\jsmn -IC:\Users\bachman0\.platformio\packages\framework-arduinoespressif32\tools\sdk\i
+nclude\log -IC:\Users\bachman0\.platformio\packages\framework-arduinoespressif32\tools\sdk\include\mdns -IC:\Users\bachman0\.platformio\packages\framework-arduinoespressif32\
+tools\sdk\include\mbedtls -IC:\Users\bachman0\.platformio\packages\framework-arduinoespressif32\tools\sdk\include\mbedtls_port -IC:\Users\bachman0\.platformio\packages\framew
+ork-arduinoespressif32\tools\sdk\include\newlib -IC:\Users\bachman0\.platformio\packages\framework-arduinoespressif32\tools\sdk\include\nvs_flash -IC:\Users\bachman0\.platfor
+mio\packages\framework-arduinoespressif32\tools\sdk\include\openssl -IC:\Users\bachman0\.platformio\packages\framework-arduinoespressif32\tools\sdk\include\soc -IC:\Users\bac
+hman0\.platformio\packages\framework-arduinoespressif32\tools\sdk\include\spi_flash -IC:\Users\bachman0\.platformio\packages\framework-arduinoespressif32\tools\sdk\include\sd
+mmc -IC:\Users\bachman0\.platformio\packages\framework-arduinoespressif32\tools\sdk\include\tcpip_adapter -IC:\Users\bachman0\.platformio\packages\framework-arduinoespressif3
+2\tools\sdk\include\ulp -IC:\Users\bachman0\.platformio\packages\framework-arduinoespressif32\tools\sdk\include\vfs -IC:\Users\bachman0\.platformio\packages\framework-arduino
+espressif32\tools\sdk\include\wear_levelling -IC:\Users\bachman0\.platformio\packages\framework-arduinoespressif32\tools\sdk\include\xtensa-debug-module -IC:\Users\bachman0\.
+platformio\packages\framework-arduinoespressif32\tools\sdk\include\newlib -IC:\Users\bachman0\.platformio\packages\framework-arduinoespressif32\tools\sdk\include\coap -IC:\Us
+ers\bachman0\.platformio\packages\framework-arduinoespressif32\tools\sdk\include\wpa_supplicant -IC:\Users\bachman0\.platformio\packages\framework-arduinoespressif32\tools\sd
+k\include\expat -IC:\Users\bachman0\.platformio\packages\framework-arduinoespressif32\tools\sdk\include\json -IC:\Users\bachman0\.platformio\packages\framework-arduinoespress
+if32\tools\sdk\include\nghttp -IC:\Users\bachman0\.platformio\packages\framework-arduinoespressif32\tools\sdk\include\lwip -IC:\Users\bachman0\.platformio\packages\framework-
+arduinoespressif32\cores\esp32 -IC:\Users\bachman0\.platformio\packages\framework-arduinoespressif32\variants\lolin32 -Ilib\nkolban\src lib\nkolban\src\WiFiEventHandler.cpp
+xtensa-esp32-elf-ar rc .pioenvs\lolin32\lib\libnkolban.a .pioenvs\lolin32\lib\nkolban\CPPNVS.o .pioenvs\lolin32\lib\nkolban\FATFS_VFS.o .pioenvs\lolin32\lib\nkolban\File.o .p
+ioenvs\lolin32\lib\nkolban\FileSystem.o .pioenvs\lolin32\lib\nkolban\FreeRTOS.o .pioenvs\lolin32\lib\nkolban\FreeRTOSTimer.o .pioenvs\lolin32\lib\nkolban\GPIO.o .pioenvs\loli
+n32\lib\nkolban\GeneralUtils.o .pioenvs\lolin32\lib\nkolban\HttpParser.o .pioenvs\lolin32\lib\nkolban\HttpRequest.o .pioenvs\lolin32\lib\nkolban\HttpResponse.o .pioenvs\lolin
+32\lib\nkolban\HttpServer.o .pioenvs\lolin32\lib\nkolban\I2C.o .pioenvs\lolin32\lib\nkolban\I2S.o .pioenvs\lolin32\lib\nkolban\IFTTT.o .pioenvs\lolin32\lib\nkolban\JSON.o .pi
+oenvs\lolin32\lib\nkolban\Memory.o .pioenvs\lolin32\lib\nkolban\PWM.o .pioenvs\lolin32\lib\nkolban\RESTClient.o .pioenvs\lolin32\lib\nkolban\RMT.o .pioenvs\lolin32\lib\nkolba
+n\SOC.o .pioenvs\lolin32\lib\nkolban\SPI.o .pioenvs\lolin32\lib\nkolban\SSLUtils.o .pioenvs\lolin32\lib\nkolban\SmartLED.o .pioenvs\lolin32\lib\nkolban\SockServ.o .pioenvs\lo
+lin32\lib\nkolban\Socket.o .pioenvs\lolin32\lib\nkolban\Task.o .pioenvs\lolin32\lib\nkolban\WebServer.o .pioenvs\lolin32\lib\nkolban\WebSocket.o .pioenvs\lolin32\lib\nkolban\
+WebSocketFileTransfer.o .pioenvs\lolin32\lib\nkolban\WiFi.o .pioenvs\lolin32\lib\nkolban\WiFiEventHandler.o
+xtensa-esp32-elf-g++ -o .pioenvs\lolin32\firmware.elf -nostdlib -Wl,-static -u call_user_start_cpu0 -Wl,--undefined=uxTopUsedPriority -Wl,--gc-sections -Wl,-EL -T esp32.commo
+n.ld -T esp32.rom.ld -T esp32.peripherals.ld -u ld_include_panic_highint_hdl -Wl,-T"esp32_out.ld" .pioenvs\lolin32\src\main.o -LC:\Users\bachman0\.platformio\packages\framewo
+rk-arduinoespressif32\tools\sdk\lib -LC:\Users\bachman0\.platformio\packages\framework-arduinoespressif32\tools\sdk\ld -L.pioenvs\lolin32 -Wl,--start-group .pioenvs\lolin32\l
+ibFrameworkArduinoVariant.a .pioenvs\lolin32\libFrameworkArduino.a -lgcc -lstdc++ -lapp_trace -lapp_update -lbootloader_support -lbt -lbtdm_app -lc -lc_nano -lcoap -lcoexist
+-lcore -lcxx -ldriver -lesp32 -lethernet -lexpat -lfatfs -lfreertos -lhal -lheap -ljsmn -ljson -llog -llwip -lm -lmbedtls -lmdns -lmicro-ecc -lnet80211 -lnewlib -lnghttp -lnv
+s_flash -lopenssl -lphy -lpp -lrtc -lsdmmc -lsmartconfig -lsoc -lspi_flash -ltcpip_adapter -lulp -lvfs -lwear_levelling -lwpa -lwpa2 -lwpa_supplicant -lwps -lxtensa-debug-mod
+ule .pioenvs\lolin32\lib\libnkolban.a -Wl,--end-group
+"c:\users\bachman0\.platformio\penv\scripts\python.exe" "C:\Users\bachman0\.platformio\packages\tool-esptoolpy\esptool.py" --chip esp32 elf2image --flash_mode dio --flash_fre
+q 80m --flash_size 4MB -o .pioenvs\lolin32\firmware.bin .pioenvs\lolin32\firmware.elf
+xtensa-esp32-elf-size -B -d .pioenvs\lolin32\firmware.elf
+text       data     bss     dec     hex filename
+583744   110548   22720  717012   af0d4 .pioenvs\lolin32\firmware.elf
+esptool.py v2.0-beta1
+Traceback (most recent call last):
+File "C:\Users\bachman0\.platformio\packages\tool-esptoolpy\esptool.py", line 2257, in <module>
+Linter
+Severity  Provider  Description Line
+PIO Buildplatformio.ini00014:20
+MixedUTF-8INI0 files

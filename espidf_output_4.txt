@@ -1,0 +1,103 @@
+ESP32 with espidf: make menuconfig and additional libraries
+
+
+I can't figure out how to include libraries into my project.
+
+
+ESP32 Arduino: can't use newlib library / pthread
+
+I would like to use the latest ESP-IDF 
+I would like to use Neil Kolbans Library to 
+
+    PS C:\Users\bachman0\Documents\PlatformIO\Projects\lolin32-arduino-PA17_bmat_6> platformio run -v
+    >>
+    [11/12/17 16:01:06] Processing lolin32 (platform: espressif32; build_flags: -D_POSIX_THREADS -fexceptions; board: lolin32; framework: arduino)
+    -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    Collected 16 compatible libraries
+    Looking for dependencies...
+    Library Dependency Graph
+    |-- <nkolban> (C:\Users\bachman0\Documents\PlatformIO\Projects\lolin32-arduino-PA17_bmat_6\lib\nkolban)
+    xxtensa-esp32-elf-g++ -o .pioenvs\lolin32\firmware.elf -nostdlib -Wl,-static -u call_user_start_cpu0 -Wl,--undefined=uxTopUsedPriority -Wl,--gc-sections -Wl,-EL -T esp32.comm
+    on.ld -T esp32.rom.ld -T esp32.peripherals.ld -u ld_include_panic_highint_hdl -Wl,-T"esp32_out.ld" .pioenvs\lolin32\src\main.o -LC:\Users\bachman0\.platformio\packages\framew
+    ork-arduinoespressif32\tools\sdk\lib -LC:\Users\bachman0\.platformio\packages\framework-arduinoespressif32\tools\sdk\ld -L.pioenvs\lolin32 -Wl,--start-group .pioenvs\lolin32\
+    libFrameworkArduinoVariant.a .pioenvs\lolin32\libFrameworkArduino.a -lgcc -lstdc++ -lapp_trace -lapp_update -lbootloader_support -lbt -lbtdm_app -lc -lc_nano -lcoap -lcoexist
+     -lcore -lcxx -ldriver -lesp32 -lethernet -lexpat -lfatfs -lfreertos -lhal -lheap -ljsmn -ljson -llog -llwip -lm -lmbedtls -lmdns -lmicro-ecc -lnet80211 -lnewlib -lnghttp -ln
+    vs_flash -lopenssl -lphy -lpp -lrtc -lsdmmc -lsmartconfig -lsoc -lspi_flash -ltcpip_adapter -lulp -lvfs -lwear_levelling -lwpa -lwpa2 -lwpa_supplicant -lwps -lxtensa-debug-mo
+    dule .pioenvs\lolin32\lib\libnkolban.a -Wl,--end-group
+    .pioenvs\lolin32\lib\libnkolban.a(FreeRTOS.o):(.literal._ZN8FreeRTOS9Semaphore4waitENSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE+0x0): undefined reference to `pthread_mutex_lock'
+    .pioenvs\lolin32\lib\libnkolban.a(FreeRTOS.o):(.literal._ZN8FreeRTOS9Semaphore4waitENSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE+0x4): undefined reference to `pthread_mutex_unlock'
+    .pioenvs\lolin32\lib\libnkolban.a(FreeRTOS.o):(.literal._ZN8FreeRTOS9SemaphoreD2Ev+0x0): undefined reference to `pthread_mutex_destroy'
+    .pioenvs\lolin32\lib\libnkolban.a(FreeRTOS.o): In function `FreeRTOS::Semaphore::wait(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >)':
+    C:\Users\bachman0\Documents\PlatformIO\Projects\lolin32-arduino-PA17_bmat_6/lib\nkolban\src/FreeRTOS.cpp:163: undefined reference to `pthread_mutex_lock'
+    C:\Users\bachman0\Documents\PlatformIO\Projects\lolin32-arduino-PA17_bmat_6/lib\nkolban\src/FreeRTOS.cpp:163: undefined reference to `pthread_mutex_unlock'
+    .pioenvs\lolin32\lib\libnkolban.a(FreeRTOS.o): In function `FreeRTOS::Semaphore::~Semaphore()':
+    C:\Users\bachman0\Documents\PlatformIO\Projects\lolin32-arduino-PA17_bmat_6/lib\nkolban\src/FreeRTOS.cpp:163: undefined reference to `pthread_mutex_destroy'
+    .pioenvs\lolin32\lib\libnkolban.a(FreeRTOS.o): In function `FreeRTOS::Semaphore::give()':
+    C:\Users\bachman0\Documents\PlatformIO\Projects\lolin32-arduino-PA17_bmat_6/lib\nkolban\src/FreeRTOS.cpp:163: undefined reference to `pthread_mutex_unlock'
+    .pioenvs\lolin32\lib\libnkolban.a(FreeRTOS.o): In function `FreeRTOS::Semaphore::take(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >)':
+    C:\Users\bachman0\Documents\PlatformIO\Projects\lolin32-arduino-PA17_bmat_6/lib\nkolban\src/FreeRTOS.cpp:176: undefined reference to `pthread_mutex_lock'
+    collect2.exe: error: ld returned 1 exit status
+    *** [.pioenvs\lolin32\firmware.elf] Error 1
+    ========================================================================= [ERROR] Took 5.54 seconds =========================================================================
+
+
+PS> pio platform upgrade
+Please wait while upgrading PlatformIO...
+PlatformIO has been successfully upgraded to 3.5.0b3!
+
+
+
+PS C:\Users\bachman0\Documents\PlatformIO\Projects\lolin32-idf-PA17_bmat_6> pio platform update
+Platform Atmel AVR
+--------
+Updating atmelavr                        @ 1.7.1          [Up-to-date]
+Updating toolchain-atmelavr              @ 1.40902.0      [Up-to-date]
+Updating framework-arduinoavr            @ 1.10619.0      [Up-to-date]
+Updating tool-avrdude                    @ 1.60300.2      [Up-to-date]
+
+Platform Espressif 32
+--------
+Updating espressif32                     @ 0.10.0         [Up-to-date]
+Updating tool-esptoolpy                  @ 1.20000.0      [Up-to-date]
+Updating toolchain-xtensa32              @ 1.50200.0      [Up-to-date]
+Updating framework-arduinoespressif32    @ 1.2.0          [Up-to-date]
+Updating framework-espidf                @ 2.210.0        [Up-to-date]
+Updating tool-espotapy                   @ 1.0.0          [Up-to-date]
+
+PS C:\Users\bachman0\Documents\PlatformIO\Projects\lolin32-idf-PA17_bmat_6>
+
+82.9 s
+platformio run
+C:\Users\bachman0\.platformio\packages\framework-espidf\components\libsodium\libsodium\src\libsodium\sodium\utils.c:62:22: warning: 'page_size' defined but not used [-Wunused-
+variable]
+static size_t        page_size;
+^
+Compiling .pioenvs\lolin32\lib\nkolban\AWS.o
+Archiving .pioenvs\lolin32\libsodium.a
+Compiling .pioenvs\lolin32\lib\nkolban\Apa102.o
+
+Compiling .pioenvs\lolin32\lib\nkolban\BLE2902.o
+Compiling .pioenvs\lolin32\lib\nkolban\BLEAddress.o
+Compiling .pioenvs\lolin32\lib\nkolban\BLEAdvertisedDevice.o
+Compiling .pioenvs\lolin32\lib\nkolban\BLEAdvertising.o
+Compiling .pioenvs\lolin32\lib\nkolban\BLECharacteristic.o
+Compiling .pioenvs\lolin32\lib\nkolban\BLECharacteristicCallbacks.o
+In file included from lib\nkolban\src\BLEAdvertising.cpp:13:0:
+lib\nkolban\src\BLEUtils.h:49:49: error: 'esp_gattc_service_elem_t' has not been declared
+static std::string gattcServiceElementToString(esp_gattc_service_elem_t *pGATTCServiceElement);
+^
+In file included from lib\nkolban\src\BLEAdvertisedDevice.cpp:19:0:
+lib\nkolban\src\BLEUtils.h:49:49: error: 'esp_gattc_service_elem_t' has not been declared
+static std::string gattcServiceElementToString(esp_gattc_service_elem_t *pGATTCServiceElement);
+^
+*** [.pioenvs\lolin32\lib\nkolban\BLEAdvertising.o] Error 1
+*** [.pioenvs\lolin32\lib\nkolban\BLEAdvertisedDevice.o] Error 1
+In file included from lib\nkolban\src\BLECharacteristic.cpp:18:0:
+lib\nkolban\src\BLEUtils.h:49:49: error: 'esp_gattc_service_elem_t' has not been declared
+static std::string gattcServiceElementToString(esp_gattc_service_elem_t *pGATTCServiceElement);
+^
+*** [.pioenvs\lolin32\lib\nkolban\BLECharacteristic.o] Error 1
+ [ERROR] Took 82.20 seconds
+
+Linter
+Severity  Provider  Description Line
