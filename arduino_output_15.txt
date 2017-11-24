@@ -1,0 +1,62 @@
+[11/21/17 16:55:41] Processing lolin32 (platform: espressif32; build_flags: -D_POSIX_THREADS -fexceptions; board: lolin32; framework: arduino)
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Collected 18 compatible libraries
+Looking for dependencies...
+
+Library Dependency Graph
+|-- <WiFi> v1.0 (C:\Users\bachman0\.platformio\packages\framework-arduinoespressif32\libraries\WiFi)
+|-- <SSD1306> (C:\Users\bachman0\Documents\PlatformIO\Projects\lolin32-arduino-PA17_bmat_6\lib\SSD1306)
+|   |-- <Wire> v1.0 (C:\Users\bachman0\.platformio\packages\framework-arduinoespressif32\libraries\Wire)
+|   |-- <nkolban> (C:\Users\bachman0\Documents\PlatformIO\Projects\lolin32-arduino-PA17_bmat_6\lib\nkolban)
+|-- <MLX90614> (C:\Users\bachman0\Documents\PlatformIO\Projects\lolin32-arduino-PA17_bmat_6\lib\MLX90614)
+|-- <MLX90614> (C:\Users\bachman0\Documents\PlatformIO\Projects\lolin32-arduino-PA17_bmat_6\lib\MLX90614)
+|   |-- <Wire> v1.0 (C:\Users\bachman0\.platformio\packages\framework-arduinoespressif32\libraries\Wire)
+|-- <nkolban> (C:\Users\bachman0\Documents\PlatformIO\Projects\lolin32-arduino-PA17_bmat_6\lib\nkolban)
+xtensa-esp32-elf-g++ -o .pioenvs\lolin32\firmware.elf -nostdlib -Wl,-static -u call_user_start_cpu0 -Wl,--undefined=uxTopUsedPriority -Wl,--gc-sections -Wl,-EL -T esp32.com
+mon.ld -T esp32.rom.ld -T esp32.peripherals.ld -u ld_include_panic_highint_hdl -Wl,-T"esp32_out.ld" .pioenvs\lolin32\src\PushButton.o .pioenvs\lolin32\src\main.o -LC:\Users
+\bachman0\.platformio\packages\framework-arduinoespressif32\tools\sdk\lib -LC:\Users\bachman0\.platformio\packages\framework-arduinoespressif32\tools\sdk\ld -L.pioenvs\loli
+n32 -Wl,--start-group .pioenvs\lolin32\libFrameworkArduinoVariant.a .pioenvs\lolin32\libFrameworkArduino.a -lgcc -lstdc++ -lapp_trace -lapp_update -lbootloader_support -lbt
+ -lbtdm_app -lc -lc_nano -lcoap -lcoexist -lcore -lcxx -ldriver -lesp32 -lethernet -lexpat -lfatfs -lfreertos -lhal -lheap -ljsmn -ljson -llog -llwip -lm -lmbedtls -lmdns -
+lmicro-ecc -lnet80211 -lnewlib -lnghttp -lnvs_flash -lopenssl -lphy -lpp -lrtc -lsdmmc -lsmartconfig -lsoc -lspi_flash -ltcpip_adapter -lulp -lvfs -lwear_levelling -lwpa -l
+wpa2 -lwpa_supplicant -lwps -lxtensa-debug-module .pioenvs\lolin32\lib\libWiFi.a .pioenvs\lolin32\lib\libWire.a .pioenvs\lolin32\lib\libnkolban.a .pioenvs\lolin32\lib\libSS
+D1306.a .pioenvs\lolin32\lib\libMLX90614.a -Wl,--end-group
+Checking program size
+text       data     bss     dec     hex filename
+708593   156620   29888  895101   da87d .pioenvs\lolin32\firmware.elf
+"c:\users\bachman0\.platformio\penv\scripts\python.exe" "C:\Users\bachman0\.platformio\packages\tool-esptoolpy\esptool.py" --chip esp32 elf2image --flash_mode dio --flash_f
+req 80m --flash_size 4MB -o .pioenvs\lolin32\firmware.bin .pioenvs\lolin32\firmware.elf
+esptool.py v2.0-beta1
+MethodWrapper(["upload"], [".pioenvs\lolin32\firmware.bin"])
+Auto-detected: COM21
+"c:\users\bachman0\.platformio\penv\scripts\python.exe" "C:\Users\bachman0\.platformio\packages\framework-arduinoespressif32\tools\esptool.py" --before default_reset --afte
+r hard_reset --chip esp32 --port "COM21" --before default_reset --after hard_reset --baud 115200 write_flash -z --flash_mode dio --flash_freq 80m --flash_size detect 0x1000
+ "C:\Users\bachman0\.platformio\packages\framework-arduinoespressif32\tools\sdk\bin\bootloader.bin" 0x8000 "C:\Users\bachman0\Documents\PlatformIO\Projects\lolin32-arduino-
+PA17_bmat_6\.pioenvs\lolin32\partitions.bin" 0xe000 "C:\Users\bachman0\.platformio\packages\framework-arduinoespressif32\tools\partitions\boot_app0.bin" 0x10000 .pioenvs\lo
+lin32\firmware.bin
+esptool.py v2.1-beta1
+Connecting......
+Chip is ESP32D0WDQ6 (revision 0)
+Uploading stub...
+Running stub...
+Stub running...
+Configuring flash size...
+Auto-detected Flash size: 4MB
+Auto-detected Flash size: 4MB
+Flash params set to 0x022f
+Compressed 10464 bytes to 7012...
+Wrote 10464 bytes (7012 compressed) at 0x00001000 in 0.6 seconds (effective 136.3 kbit/s)...
+Hash of data verified.
+Compressed 3072 bytes to 122...
+Wrote 3072 bytes (122 compressed) at 0x00008000 in 0.0 seconds (effective 910.2 kbit/s)...
+Hash of data verified.
+Compressed 8192 bytes to 47...
+Wrote 8192 bytes (47 compressed) at 0x0000e000 in 0.0 seconds (effective 4096.0 kbit/s)...
+Hash of data verified.
+Compressed 956528 bytes to 530504...
+Wrote 956528 bytes (530504 compressed) at 0x00010000 in 46.7 seconds (effective 163.8 kbit/s)...
+Hash of data verified.
+
+Leaving...
+Hard resetting...
+====================================================================== [SUCCESS] Took 58.81 seconds ======================================================================
+

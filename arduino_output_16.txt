@@ -1,0 +1,292 @@
+ets Jun  8 2016 00:22:57
+
+rst:0x1 (POWERON_RESET),boot:0x13 (SPI_FAST_FLASH_BOOT)
+ets Jun  8 2016 00:22:57
+
+rst:0x10 (RTCWDT_RTC_RESET),boot:0x13 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:1
+load:0x3fff0010,len:4
+load:0x3fff0014,len:588
+load:0x40078000,len:0
+load:0x40078000,len:9768
+entry 0x400789b8
+D (1022) FreeRTOS: Semaphore taking: name: clientSemaphore (0x3ffcb1c0), owner:                                                                                                                                    <N/A> for SockServ
+D (1028) FreeRTOS: Semaphore taken:  name: clientSemaphore (0x3ffcb1c0), owner:                                                                                                                                    SockServ
+Listing directory: /
+                      FILE: /jquery-3.2.1.min.js  SIZE: 86659
+I (3081) wifi: wifi firmware version: c1b8a2f
+I (3081) wifi: config NVS flash: enabled
+I (3081) wifi: config nano formating: disabled
+I (3089) wifi: Init dynamic tx buffer num: 32
+I (3089) wifi: Init data frame dynamic rx buffer num: 64
+I (3089) wifi: Init management frame dynamic rx buffer num: 64
+I (3093) wifi: wifi driver task: 3ffd4d70, prio:23, stack:4096
+I (3098) wifi: Init static rx buffer num: 10
+I (3102) wifi: Init dynamic rx buffer num: 0
+I (3106) wifi: Init rx ampdu len mblock:7
+I (3110) wifi: Init lldesc rx ampdu entry mblock:4
+I (3115) wifi: wifi power manager task: 0x3ffda0d4 prio: 21 stack: 2560
+I (3123) wifi: wifi timer task: 3ffdb140, prio:22, stack:3584
+I (3153) wifi: Init Ampdu: 1 tx baw=6 rx baw=6
+I (3153) wifi: mode : softAP (30:ae:a4:04:3d:21)
+AP IP address: 192.168.4.1
+Scanning...
+I2C device found at address 0x3C  !
+I2C device found at address 0x5A  !
+done
+
+httpServer.start(80)
+D (3208) HttpServer: >> start: port: 80, useSSL: 0
+Done!
+D (3209) Task: >> runTask: taskName=HttpServerTask
+D (3209) Socket: >> listen: port: 80, isDatagram: 0
+D (3213) Socket: >> createSocket: isDatagram: 0
+D (3218) Socket: << createSocket: sockFd: 0
+D (3222) Socket: >> bind: port=80, address=0x0
+D (3226) Socket: << bind
+D (3228) Socket: << listen
+D (3230) SockServ: Now listening on port 80
+D (3234) HttpServerTask: Listening on port 80
+D (3235) Socket: >> accept: Accepting on 0.0.0.0 [80]; sockFd: 0, using SSL: 0
+D (3239) HttpServerTask: Waiting for new peer client
+D (3250) SockServ: >> waitForNewClient
+V (3254) FreeRTOS: >> wait: Semaphore waiting: name: clientSemaphore (0x3ffcb1c0                                                                                                                                   ), owner: SockServ for waitForNewClient
+I (17122) wifi: n:1 1, o:1 0, ap:1 1, sta:255 255, prof:1
+I (17122) wifi: station: 00:28:f8:3f:b1:0f join, AID=1, n, 40U
+D (47643) Socket:  - accept: Received new client!: sockFd: 1
+D (47643) Socket: << accept: sockFd: 1
+V (47643) FreeRTOS: Semaphore giving: name: clientSemaphore (0x3ffcb1c0), owner: SockServ
+V (47649) FreeRTOS: << wait: Semaphore released: name: clientSemaphore (0x3ffcb1c0), owner: waitForNewClient
+D (47658) FreeRTOS: Semaphore taking: name: clientSemaphore (0x3ffcb1c0), owner: <N/A> for waitForNewClient
+D (47660) Socket: >> accept: Accepting on 0.0.0.0 [80]; sockFd: 0, using SSL: 0
+D (47669) FreeRTOS: Semaphore taken:  name: clientSemaphore (0x3ffcb1c0), owner: waitForNewClient
+D (47683) SockServ: << waitForNewClient
+D (47687) HttpServerTask: HttpServer listening on port 80 received a new client connection; sockFd=1
+D (47697) HttpParser: >> parseRequestLine: "GET / HTTP/1.1" [14]
+D (47702) HttpParser: << parseRequestLine: method: GET, url: /, version: HTTP/1.1
+D (47735) HttpRequest: Method: GET, URL: "/", Version: HTTP/1.1
+D (47735) HttpRequest: name="Accept", value="text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+D (47739) HttpRequest: name="Accept-Encoding", value="gzip, deflate"
+D (47746) HttpRequest: name="Accept-Language", value="de,en-US;q=0.7,en;q=0.3"
+D (47752) HttpRequest: name="Connection", value="keep-alive"
+D (47758) HttpRequest: name="Host", value="192.168.4.1"
+D (47763) HttpRequest: name="Upgrade-Insecure-Requests", value="1"
+D (47769) HttpRequest: name="User-Agent", value="Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:57.0) Gecko/20100101 Firefox/57.0"
+D (47780) HttpRequest: Body: ""
+D (47783) HttpServerTask: >> processRequest: Method: GET, Path: /
+D (47789) PathHandler: plain matching: / with /
+D (47793) HttpServerTask: Found a path handler match!!
+D (47798) Socket: send: Binary of length: 44
+D (47802) Socket: send: Raw binary of length: 44
+D (47807) Socket: send: Binary of length: 338
+D (47810) Socket: send: Raw binary of length: 338
+D (47815) Socket: close: m_sock=1, ssl: 0
+D (47818) Socket: Calling lwip_close on 1
+D (47823) Socket: close: m_sock=-1, ssl: 0
+D (47826) HttpServerTask: Waiting for new peer client
+D (47831) SockServ: >> waitForNewClient
+V (47834) FreeRTOS: >> wait: Semaphore waiting: name: clientSemaphore (0x3ffcb1c0), owner: waitForNewClient for waitForNewClient
+D (47870) Socket:  - accept: Received new client!: sockFd: 2
+D (47870) Socket: << accept: sockFd: 2
+V (47870) FreeRTOS: Semaphore giving: name: clientSemaphore (0x3ffcb1c0), owner: waitForNewClient
+V (47876) FreeRTOS: << wait: Semaphore released: name: clientSemaphore (0x3ffcb1c0), owner: waitForNewClient
+D (47886) FreeRTOS: Semaphore taking: name: clientSemaphore (0x3ffcb1c0), owner: <N/A> for waitForNewClient
+D (47887) Socket: >> accept: Accepting on 0.0.0.0 [80]; sockFd: 0, using SSL: 0
+D (47896) FreeRTOS: Semaphore taken:  name: clientSemaphore (0x3ffcb1c0), owner: waitForNewClient
+D (47911) SockServ: << waitForNewClient
+D (47915) HttpServerTask: HttpServer listening on port 80 received a new client connection; sockFd=2
+D (47927) HttpParser: >> parseRequestLine: "GET /jquery-3.2.1.min.js HTTP/1.1" [33]
+D (47931) HttpParser: << parseRequestLine: method: GET, url: /jquery-3.2.1.min.js, version: HTTP/1.1
+D (47961) HttpRequest: Method: GET, URL: "/jquery-3.2.1.min.js", Version: HTTP/1.1
+D (47962) HttpRequest: name="Accept", value="*/*"
+D (47962) HttpRequest: name="Accept-Encoding", value="gzip, deflate"
+D (47968) HttpRequest: name="Accept-Language", value="de,en-US;q=0.7,en;q=0.3"
+D (47975) HttpRequest: name="Connection", value="keep-alive"
+D (47981) HttpRequest: name="Host", value="192.168.4.1"
+D (47986) HttpRequest: name="Referer", value="http://192.168.4.1/"
+D (47991) HttpRequest: name="User-Agent", value="Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:57.0) Gecko/20100101 Firefox/57.0"
+D (48003) HttpRequest: Body: ""
+D (48006) HttpServerTask: >> processRequest: Method: GET, Path: /jquery-3.2.1.min.js
+D (48013) PathHandler: plain matching: / with /jquery-3.2.1.min.js
+D (48019) PathHandler: plain matching: /jquery-3.2.1.min.js with /jquery-3.2.1.min.js
+D (48027) HttpServerTask: Found a path handler match!!
+=== Read from file: abort() was called at PC 0x400d530a on core 1
+
+Backtrace: 0x400879d8:0x3ffe6340 0x40087ad7:0x3ffe6360 0x400d530a:0x3ffe6380 0x400d69f9:0x3ffe63a0 0x400d6c47:0x3ffe63c0 0x400d5c9d:0x3ffe63f0 0x400d5fda:0x3ffe6430 0x4016aa41:0x3ffe6450 0x400ddeb9:0x3ffe6470 0x400de58b:0x3ffe64b0 0x400de5bf:0x3ffe6540 0x4016b5dd:0x3ffe6580 0x400d6886:0x3ffe65c0 0x400d68b9:0x3ffe6600 0x400d1a65:0x3ffe6620 0x4016d565:0x3ffe6780 0x4012c6f2:0x3ffe67a0 0x4012d46d:0x3ffe6d00 0x4012e480:0x3ffe82e0
+
+Rebooting...
+ets Jun  8 2016 00:22:57
+
+rst:0xc (SW_CPU_RESET),boot:0x13 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:1
+load:0x3fff0010,len:4
+load:0x3fff0014,len:588
+load:0x40078000,len:0
+load:0x40078000,len:9768
+entry 0x400789b8
+D (1023) FreeRTOS: Semaphore taking: name: clientSemaphore (0x3ffcb1c0), owner: <N/A> for SockServ
+D (1029) FreeRTOS: Semaphore taken:  name: clientSemaphore (0x3ffcb1c0), owner: SockServ
+Listing directory: /
+                      FILE: /jquery-3.2.1.min.js  SIZE: 86659
+I (4006) wifi: wifi firmware version: c1b8a2f
+I (4007) wifi: config NVS flash: enabled
+I (4007) wifi: config nano formating: disabled
+I (4015) wifi: Init dynamic tx buffer num: 32
+I (4015) wifi: Init data frame dynamic rx buffer num: 64
+I (4015) wifi: Init management frame dynamic rx buffer num: 64
+I (4019) wifi: wifi driver task: 3ffd4d70, prio:23, stack:4096
+I (4025) wifi: Init static rx buffer num: 10
+I (4029) wifi: Init dynamic rx buffer num: 0
+I (4033) wifi: Init rx ampdu len mblock:7
+I (4036) wifi: Init lldesc rx ampdu entry mblock:4
+I (4041) wifi: wifi power manager task: 0x3ffda0d4 prio: 21 stack: 2560
+I (4049) wifi: wifi timer task: 3ffdb140, prio:22, stack:3584
+I (4079) wifi: Init Ampdu: 1 tx baw=6 rx baw=6
+I (4079) wifi: mode : softAP (30:ae:a4:04:3d:21)
+AP IP address: 192.168.4.1
+Scanning...
+I2C device found at address 0x3C  !
+I2C device found at address 0x5A  !
+done
+
+httpServer.start(80)
+D (4135) HttpServer: >> start: port: 80, useSSL: 0
+Done!
+D (4135) Task: >> runTask: taskName=HttpServerTask
+D (4135) Socket: >> listen: port: 80, isDatagram: 0
+D (4140) Socket: >> createSocket: isDatagram: 0
+D (4144) Socket: << createSocket: sockFd: 0
+D (4148) Socket: >> bind: port=80, address=0x0
+D (4152) Socket: << bind
+D (4155) Socket: << listen
+D (4157) SockServ: Now listening on port 80
+D (4161) HttpServerTask: Listening on port 80
+D (4161) Socket: >> accept: Accepting on 0.0.0.0 [80]; sockFd: 0, using SSL: 0
+D (4165) HttpServerTask: Waiting for new peer client
+D (4176) SockServ: >> waitForNewClient
+V (4180) FreeRTOS: >> wait: Semaphore waiting: name: clientSemaphore (0x3ffcb1c0), owner: SockServ for waitForNewClient
+I (35805) wifi: n:1 1, o:1 0, ap:1 1, sta:255 255, prof:1
+I (35806) wifi: station: 00:28:f8:3f:b1:0f join, AID=1, n, 40U
+I (36331) wifi: n:1 1, o:1 1, ap:1 1, sta:255 255, prof:1
+I (36331) wifi: station: 00:28:f8:3f:b1:0f join, AID=1, n, 40U
+D (45381) Socket:  - accept: Received new client!: sockFd: 1
+D (45381) Socket: << accept: sockFd: 1
+V (45381) FreeRTOS: Semaphore giving: name: clientSemaphore (0x3ffcb1c0), owner: SockServ
+V (45386) FreeRTOS: << wait: Semaphore released: name: clientSemaphore (0x3ffcb1c0), owner: waitForNewClient
+D (45396) FreeRTOS: Semaphore taking: name: clientSemaphore (0x3ffcb1c0), owner: <N/A> for waitForNewClient
+D (45397) Socket: >> accept: Accepting on 0.0.0.0 [80]; sockFd: 0, using SSL: 0
+D (45406) FreeRTOS: Semaphore taken:  name: clientSemaphore (0x3ffcb1c0), owner: waitForNewClient
+D (45421) SockServ: << waitForNewClient
+D (45425) HttpServerTask: HttpServer listening on port 80 received a new client connection; sockFd=1
+D (45435) HttpParser: >> parseRequestLine: "GET / HTTP/1.1" [14]
+D (45439) HttpParser: << parseRequestLine: method: GET, url: /, version: HTTP/1.1
+D (45475) HttpRequest: Method: GET, URL: "/", Version: HTTP/1.1
+D (45475) HttpRequest: name="Accept", value="text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+D (45479) HttpRequest: name="Accept-Encoding", value="gzip, deflate"
+D (45485) HttpRequest: name="Accept-Language", value="de,en-US;q=0.7,en;q=0.3"
+D (45492) HttpRequest: name="Cache-Control", value="max-age=0"
+D (45498) HttpRequest: name="Connection", value="keep-alive"
+D (45503) HttpRequest: name="Host", value="192.168.4.1"
+D (45508) HttpRequest: name="Upgrade-Insecure-Requests", value="1"
+D (45514) HttpRequest: name="User-Agent", value="Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:57.0) Gecko/20100101 Firefox/57.0"
+D (45525) HttpRequest: Body: ""
+D (45528) HttpServerTask: >> processRequest: Method: GET, Path: /
+D (45534) PathHandler: plain matching: / with /
+D (45538) HttpServerTask: Found a path handler match!!
+D (45544) Socket: send: Binary of length: 44
+D (45547) Socket: send: Raw binary of length: 44
+D (45552) Socket: send: Binary of length: 338
+D (45556) Socket: send: Raw binary of length: 338
+D (45560) Socket: close: m_sock=1, ssl: 0
+D (45564) Socket: Calling lwip_close on 1
+D (45568) Socket: close: m_sock=-1, ssl: 0
+D (45571) HttpServerTask: Waiting for new peer client
+D (45576) SockServ: >> waitForNewClient
+V (45580) FreeRTOS: >> wait: Semaphore waiting: name: clientSemaphore (0x3ffcb1c0), owner: waitForNewClient for waitForNewClient
+D (45599) Socket:  - accept: Received new client!: sockFd: 2
+D (45599) Socket: << accept: sockFd: 2
+V (45600) FreeRTOS: Semaphore giving: name: clientSemaphore (0x3ffcb1c0), owner: waitForNewClient
+V (45608) FreeRTOS: << wait: Semaphore released: name: clientSemaphore (0x3ffcb1c0), owner: waitForNewClient
+D (45618) FreeRTOS: Semaphore taking: name: clientSemaphore (0x3ffcb1c0), owner: <N/A> for waitForNewClient
+D (45619) Socket: >> accept: Accepting on 0.0.0.0 [80]; sockFd: 0, using SSL: 0
+D (45628) FreeRTOS: Semaphore taken:  name: clientSemaphore (0x3ffcb1c0), owner: waitForNewClient
+D (45643) SockServ: << waitForNewClient
+D (45647) HttpServerTask: HttpServer listening on port 80 received a new client connection; sockFd=2
+D (45659) HttpParser: >> parseRequestLine: "GET /jquery-3.2.1.min.js HTTP/1.1" [33]
+D (45663) HttpParser: << parseRequestLine: method: GET, url: /jquery-3.2.1.min.js, version: HTTP/1.1
+D (45693) HttpRequest: Method: GET, URL: "/jquery-3.2.1.min.js", Version: HTTP/1.1
+D (45693) HttpRequest: name="Accept", value="*/*"
+D (45694) HttpRequest: name="Accept-Encoding", value="gzip, deflate"
+D (45700) HttpRequest: name="Accept-Language", value="de,en-US;q=0.7,en;q=0.3"
+D (45707) HttpRequest: name="Connection", value="keep-alive"
+D (45712) HttpRequest: name="Host", value="192.168.4.1"
+D (45717) HttpRequest: name="Referer", value="http://192.168.4.1/"
+D (45723) HttpRequest: name="User-Agent", value="Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:57.0) Gecko/20100101 Firefox/57.0"
+D (45734) HttpRequest: Body: ""
+D (45737) HttpServerTask: >> processRequest: Method: GET, Path: /jquery-3.2.1.min.js
+D (45745) PathHandler: plain matching: / with /jquery-3.2.1.min.js
+D (45751) PathHandler: plain matching: /jquery-3.2.1.min.js with /jquery-3.2.1.min.js
+D (45758) HttpServerTask: Found a path handler match!!
+=== Read from file: abort() was called at PC 0x400d530a on core 1
+
+Backtrace: 0x400879d8:0x3ffe6340 0x40087ad7:0x3ffe6360 0x400d530a:0x3ffe6380 0x400d69f9:0x3ffe63a0 0x400d6c47:0x3ffe63c0 0x400d5c9d:0x3ffe63f0 0x400d5fda:0x3ffe6430 0x4016aa41:0x3ffe6450 0x400ddeb9:0x3ffe6470 0x400de58b:0x3ffe64b0 0x400de5bf:0x3ffe6540 0x4016b5dd:0x3ffe6580 0x400d6886:0x3ffe65c0 0x400d68b9:0x3ffe6600 0x400d1a65:0x3ffe6620 0x4016d565:0x3ffe6780 0x4012c6f2:0x3ffe67a0 0x4012d46d:0x3ffe6d00 0x4012e480:0x3ffe82e0
+
+Rebooting...
+ets Jun  8 2016 00:22:57
+
+rst:0xc (SW_CPU_RESET),boot:0x13 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:1
+load:0x3fff0010,len:4
+load:0x3fff0014,len:588
+load:0x40078000,len:0
+load:0x40078000,len:9768
+entry 0x400789b8
+D (1023) FreeRTOS: Semaphore taking: name: clientSemaphore (0x3ffcb1c0), owner: <N/A> for SockServ
+D (1029) FreeRTOS: Semaphore taken:  name: clientSemaphore (0x3ffcb1c0), owner: SockServ
+Listing directory: /
+                      FILE: /jquery-3.2.1.min.js  SIZE: 86659
+I (4003) wifi: wifi firmware version: c1b8a2f
+I (4003) wifi: config NVS flash: enabled
+I (4003) wifi: config nano formating: disabled
+I (4013) wifi: Init dynamic tx buffer num: 32
+I (4013) wifi: Init data frame dynamic rx buffer num: 64
+I (4013) wifi: Init management frame dynamic rx buffer num: 64
+I (4017) wifi: wifi driver task: 3ffd4d70, prio:23, stack:4096
+I (4022) wifi: Init static rx buffer num: 10
+I (4026) wifi: Init dynamic rx buffer num: 0
+I (4030) wifi: Init rx ampdu len mblock:7
+I (4034) wifi: Init lldesc rx ampdu entry mblock:4
+I (4039) wifi: wifi power manager task: 0x3ffda0d4 prio: 21 stack: 2560
+I (4047) wifi: wifi timer task: 3ffdb140, prio:22, stack:3584
+I (4077) wifi: Init Ampdu: 1 tx baw=6 rx baw=6
+I (4077) wifi: mode : softAP (30:ae:a4:04:3d:21)
+AP IP address: 192.168.4.1
+Scanning...
+I2C device found at address 0x3C  !
+I2C device found at address 0x5A  !
+done
+
+httpServer.start(80)
+D (4133) HttpServer: >> start: port: 80, useSSL: 0
+Done!
+D (4133) Task: >> runTask: taskName=HttpServerTask
+D (4134) Socket: >> listen: port: 80, isDatagram: 0
+D (4138) Socket: >> createSocket: isDatagram: 0
+D (4143) Socket: << createSocket: sockFd: 0
+D (4146) Socket: >> bind: port=80, address=0x0
+D (4151) Socket: << bind
+D (4153) Socket: << listen
+D (4155) SockServ: Now listening on port 80
+D (4159) HttpServerTask: Listening on port 80
+D (4159) Socket: >> accept: Accepting on 0.0.0.0 [80]; sockFd: 0, using SSL: 0
+D (4164) HttpServerTask: Waiting for new peer client
+D (4175) SockServ: >> waitForNewClient
+V (4178) FreeRTOS: >> wait: Semaphore waiting: name: clientSemaphore (0x3ffcb1c0), owner: SockServ for waitForNewClient
+I (57291) wifi: n:1 1, o:1 0, ap:1 1, sta:255 255, prof:1
+I (57292) wifi: station: 00:28:f8:3f:b1:0f join, AID=1, n, 40U
