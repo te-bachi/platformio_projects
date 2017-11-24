@@ -8,69 +8,37 @@
 #include "SSD1306.h"
 #include "MLX90614.h"
 
+#include "FlashFileSystem.h"
+#include "I2CScan.h"
+#include "HttpPathHandlers.h"
+
 #define BMAT6_DISPLAY_YELLOW_WIDTH      DISPLAY_WIDTH
 #define BMAT6_DISPLAY_YELLOW_HEIGHT     16
 
 HttpServer      httpServer;
 SSD1306         display(0x3C, 21, 22);
 MLX90614        thermopile;
+//PushButton      modeButton();
 
-
+bool bootInit = false;
 const char *ssid = "ABCTEST";
 const char *password = "test1234567";
-
-static void
-helloWorldHandler(HttpRequest* pRequest, HttpResponse* pResponse)
-{
-    pResponse->setStatus(HttpResponse::HTTP_STATUS_OK, "OK");
-    pResponse->addHeader(HttpRequest::HTTP_HEADER_CONTENT_TYPE, "text/plain");
-    pResponse->sendData("Hello back");
-    pResponse->close();
-}
-
-static void
-scanI2C()
-{
-    byte error, address;
-    int nDevices;
-
-    Serial.println("Scanning...");
-
-    nDevices = 0;
-    for (address = 1; address < 127; address++) {
-        Wire.beginTransmission(address);
-        error = Wire.endTransmission();
-
-        if (error == 0) {
-            Serial.print("I2C device found at address 0x");
-            if (address < 16) {
-                Serial.print("0");
-            }
-            Serial.print(address,HEX);
-            Serial.println("  !");
-
-            nDevices++;
-        } else if (error == 4) {
-            Serial.print("Unknown error at address 0x");
-            if (address<16) {
-                Serial.print("0");
-            }
-            Serial.println(address,HEX);
-        }
-    }
-    if (nDevices == 0) {
-        Serial.println("No I2C devices found\n");
-    } else {
-        Serial.println("done\n");
-    }
-}
-
 
 void
 setup()
 {
     /*** SERIAL ***************************************************************/
     Serial.begin(115200);
+
+    /*** SPIFFS ***************************************************************/
+    /*
+    if (!SPIFFS.begin()) {
+      Serial.println("SPIFFS Mount Failed");
+      return;
+    }
+    listDir(SPIFFS, "/", 0);
+    readFile(SPIFFS, "/jquery.js");
+    */
 
     /*** WIFI AP **************************************************************/
     if (!WiFi.softAP(ssid, password)) {
@@ -106,17 +74,22 @@ setup()
     /*** HTTP SERVER **********************************************************/
     Serial.println("httpServer.start(80)");
     httpServer.start(80);
-    httpServer.addPathHandler(
-        HttpRequest::HTTP_METHOD_GET,
-        "/helloWorld",
-        helloWorldHandler);
+    httpServer.addPathHandler(HttpRequest::HTTP_METHOD_GET, "/", rootHandler);
+    httpServer.addPathHandler(HttpRequest::HTTP_METHOD_GET, "/helloWorld", helloWorldHandler);
+    httpServer.addPathHandler(HttpRequest::HTTP_METHOD_GET, "/jquery-3.2.1.min.js", jqueryJsHandler);
+    httpServer.addPathHandler(HttpRequest::HTTP_METHOD_GET, "/jqueryTest", jqueryTestHandler);
 
     Serial.println("Done!");
+    bootInit = true;
 }
 
 void
 loop()
 {
+    if (!bootInit) {
+        return;
+    }
+
     double temp = thermopile.readObjectTempC();
     String tempStr = String(temp);
 

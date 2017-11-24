@@ -8,6 +8,11 @@
 
 #include "PushButton.h"
 
+#include <Arduino.h>
+#include <sstream>
+
+using namespace PA17_bmat_6;
+
 class PushButtonHandlerDefault : public PushButtonHandler {
     public:
         PushButtonHandlerDefault()
@@ -20,9 +25,12 @@ class PushButtonHandlerDefault : public PushButtonHandler {
 
         }
 
-        bool handle()
+        void handle(int pin, PushButtonEvent event)
         {
-            return true;
+            std::ostringstream buffer;
+            buffer << "PushButtonHandlerDefault: pin=" << pin;
+            buffer << " event=" << event << "\n";
+            Serial.println(buffer.str().c_str());
         }
 };
 
@@ -49,6 +57,7 @@ PushButton::~PushButton()
 bool
 PushButton::getValue()
 {
+    /*
     int     curr = millis();
     int     prev = _prev;
 
@@ -58,4 +67,5 @@ PushButton::getValue()
     }
 
     return _value;
+    */
 }

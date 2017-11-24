@@ -22,10 +22,7 @@ namespace PA17_bmat_6 {
 
     class PushButtonHandler {
         public:
-                            PushButtonHandler();
-            virtual         ~PushButtonHandler();
-
-            bool            handle(int pin, PushButtonEvent event);
+            virtual void    handle(int pin, PushButtonEvent event) = 0;
 
     };
 
@@ -48,13 +45,14 @@ namespace PA17_bmat_6 {
 
     class PushButtonTask : Task {
         private:
-            std::vector<PushButton>     m_pushButtons;
+            std::vector<PushButton *>   m_pushButtons;
 
         public:
                                         PushButtonTask(int pin);
             virtual                     ~PushButtonTask();
 
        	    void                        run(void* data);
+            void                        addPushButton(PushButton *pushButton);
     };
 };
 

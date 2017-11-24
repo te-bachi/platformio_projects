@@ -12,7 +12,6 @@
 #include <esp_log.h>
 #include "HttpRequest.h"
 #include "HttpResponse.h"
-#include "FileSystem.h"
 #include "WebSocket.h"
 #include "GeneralUtils.h"
 static const char* LOG_TAG = "HttpServer";
@@ -40,21 +39,7 @@ static void listDirectory(std::string path, HttpResponse& response) {
 	response.sendData("<hr/>");
 	response.sendData("<p><a href='..'>[To Parent Directory]</a></p>");
 	response.sendData("<table style='font-family: monospace;'>");
-	auto files = FileSystem::getDirectoryContents(path);
-	for (auto it = files.begin(); it != files.end(); ++it) {
-		std::stringstream ss;
-		ss << "<tr><td><a href='" << it->getName() << "'>" << it->getName() << "</a></td>";
-		if (it->isDirectory()) {
-			ss << "<td>&lt;dir&gt;</td>";
-		}
-		else {
-			ss << "<td>" << it->length() << "</td>";
-		}
 
-		ss << "</tr>";
-		response.sendData(ss.str());
-		ESP_LOGD(LOG_TAG, "file: %s", ss.str().c_str());
-	}
 	response.sendData("</table>");
 	response.sendData("<hr/>");
 	response.sendData("</body></html>");
@@ -131,43 +116,6 @@ private:
 			request.getWebSocket()->close();     // If we do, close the socket as there is nothing further to do.
 			return;
 		}
-
-		// Serve up the content from the file on the file system ... if found ...
-		std::ifstream ifStream;
-		std::string fileName = m_pHttpServer->getRootPath() + request.getPath(); // Build the absolute file name to read.
-
-		// If the file name ends with a '/' then remove it ... we are normalizing to NO trailing slashes.
-		if (GeneralUtils::endsWith(fileName, '/')) {
-			fileName = fileName.substr(0, fileName.length()-1);
-		}
-
-		// Test if the path is a directory.
-		if (FileSystem::isDirectory(fileName)) {
-			ESP_LOGD(LOG_TAG, "Path %s is a directory", fileName.c_str());
-			HttpResponse response(&request);
-			listDirectory(fileName, response);
-			return;
-		} // Path was a directory.
-
-		ESP_LOGD("HttpServerTask", "Opening file: %s", fileName.c_str());
-		ifStream.open(fileName, std::ifstream::in | std::ifstream::binary);      // Attempt to open the file for reading.
-
-		// If we failed to open the requested file, then it probably didn't exist so return a not found.
-		if (!ifStream.is_open()) {
-			ESP_LOGE("HttpServerTask", "Unable to open file %s for reading", fileName.c_str());
-			HttpResponse response(&request);
-			response.setStatus(HttpResponse::HTTP_STATUS_NOT_FOUND, "Not Found");
-			response.sendData("");
-			return; // Since we failed to open the file, no further work to be done.
-		}
-
-		// We now have an open file and want to push the content of that file through to the browser.
-		HttpResponse response(&request);
-		response.setStatus(HttpResponse::HTTP_STATUS_OK, "OK");
-		std::stringstream ss;
-		ss << ifStream.rdbuf();
-		response.sendData(ss.str());
-		ifStream.close();
 
 	} // processRequest
 
