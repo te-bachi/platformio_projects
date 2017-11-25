@@ -32,6 +32,7 @@ listDir(fs::FS &fs, const char * dirname, uint8_t levels)
           Serial.print("  SIZE: ");
           Serial.println(file.size());
         }
+        file.close();
         file = root.openNextFile();
     }
 }
@@ -66,12 +67,28 @@ readFile(fs::FS &fs, const char * path)
     File file = fs.open(path);
     if (!file) {
         Serial.println("Failed to open file for reading");
-    return;
+        return;
     }
 
-    Serial.print("Read from file: ");
+    Serial.print("Read from file: (name=");
+    Serial.print(file.name());
+    Serial.print(" size=");
+    Serial.print(file.size());
+    Serial.println(")");
+
+    char b;
     while (file.available()) {
+        //String s = file.readStringUntil('\n');
+        //Serial.println(s);
         Serial.write(file.read());
+        /*
+        b = (char) file.read();
+        if (b < 0) {
+            Serial.println("Can't read file");
+            return;
+        }
+        Serial.print(b);
+        */
     }
 }
 
