@@ -1,0 +1,229 @@
+ets Jun  8 2016 00:22:57
+
+rst:0x1 (POWERON_RESET),boot:0x13 (SPI_FAST_FLASH_BOOT)
+ets Jun  8 2016 00:22:57
+
+rst:0x10 (RTCWDT_RTC_RESET),boot:0x13 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:1
+load:0x3fff0010,len:4
+load:0x3fff0014,len:588
+load:0x40078000,len:0
+load:0x40078000,len:9768
+entry 0x400789b8
+D (1023) FreeRTOS: Semaphore taking: name: clientSemaphore (0x3ffcb3d0), owner:                                                                                                                                    <N/A> for SockServ
+D (1030) FreeRTOS: Semaphore taken:  name: clientSemaphore (0x3ffcb3d0), owner:                                                                                                                                    SockServ
+D (1301) Task: >> runTask: taskName=PushButtonTask
+I (1346) wifi: wifi firmware version: c1b8a2f
+I (1346) wifi: config NVS flash: enabled
+I (1347) wifi: config nano formating: disabled
+I (1354) wifi: Init dynamic tx buffer num: 32
+I (1354) wifi: Init data frame dynamic rx buffer num: 64
+I (1354) wifi: Init management frame dynamic rx buffer num: 64
+I (1358) wifi: wifi driver task: 3ffcdbc8, prio:23, stack:4096
+I (1364) wifi: Init static rx buffer num: 10
+I (1368) wifi: Init dynamic rx buffer num: 0
+I (1372) wifi: Init rx ampdu len mblock:7
+I (1375) wifi: Init lldesc rx ampdu entry mblock:4
+I (1380) wifi: wifi power manager task: 0x3ffde54c prio: 21 stack: 2560
+I (1388) wifi: wifi timer task: 3ffdf5a4, prio:22, stack:3584
+I (1420) wifi: Init Ampdu: 1 tx baw=6 rx baw=6
+I (1420) wifi: mode : softAP (30:ae:a4:04:3d:21)
+AP IP address: 192.168.4.1
+Scanning...
+I2C device found at address 0x3C  !
+I2C device found at address 0x5A  !
+done
+
+httpServer.start(80)
+D (1476) HttpServer: >> start: port: 80, useSSL: 0
+Done!
+D (1476) Task: >> runTask: taskName=HttpServerTask
+D (1476) Socket: >> listen: port: 80, isDatagram: 0
+D (1481) Socket: >> createSocket: isDatagram: 0
+D (1485) Socket: << createSocket: sockFd: 0
+D (1489) Socket: >> bind: port=80, address=0x0
+D (1493) Socket: << bind
+D (1496) Socket: << listen
+D (1498) SockServ: Now listening on port 80
+D (1502) HttpServerTask: Listening on port 80
+D (1502) Socket: >> accept: Accepting on 0.0.0.0 [80]; sockFd: 0, using SSL: 0
+D (1507) HttpServerTask: Waiting for new peer client
+D (1517) SockServ: >> waitForNewClient
+V (1521) FreeRTOS: >> wait: Semaphore waiting: name: clientSemaphore (0x3ffcb3d0                                                                                                                                   ), owner: SockServ for waitForNewClient
+selectHandler pin=33 event=1
+selectHandler pin=33 event=2
+modeHandler pin=32 event=1
+modeHandler pin=32 event=2
+selectHandler pin=33 event=1
+selectHandler pin=33 event=2
+modeHandler pin=32 event=1
+modeHandler pin=32 event=2
+selectHandler pin=33 event=1
+selectHandler pin=33 event=2
+modeHandler pin=32 event=1
+modeHandler pin=32 event=2
+modeHandler pin=32 event=1
+modeHandler pin=32 event=2
+modeHandler pin=32 event=1
+modeHandler pin=32 event=2
+modeHandler pin=32 event=1
+modeHandler pin=32 event=2
+selectHandler pin=33 event=1
+selectHandler pin=33 event=2
+I (33405) wifi: n:1 1, o:1 0, ap:1 1, sta:255 255, prof:1
+I (33406) wifi: station: 00:28:f8:3f:b1:0f join, AID=1, n, 40U
+D (57096) Socket:  - accept: Received new client!: sockFd: 1
+D (57096) Socket: << accept: sockFd: 1
+V (57096) FreeRTOS: Semaphore giving: name: clientSemaphore (0x3ffcb3d0), owner: SockServ
+V (57102) FreeRTOS: << wait: Semaphore released: name: clientSemaphore (0x3ffcb3d0), owner: waitForNewClient
+D (57111) FreeRTOS: Semaphore taking: name: clientSemaphore (0x3ffcb3d0), owner: <N/A> for waitForNewClient
+D (57113) Socket: >> accept: Accepting on 0.0.0.0 [80]; sockFd: 0, using SSL: 0
+D (57122) FreeRTOS: Semaphore taken:  name: clientSemaphore (0x3ffcb3d0), owner: waitForNewClient
+D (57137) SockServ: << waitForNewClient
+D (57140) HttpServerTask: HttpServer listening on port 80 received a new client connection; sockFd=1
+D (57151) HttpParser: >> parseRequestLine: "GET / HTTP/1.1" [14]
+D (57155) HttpParser: << parseRequestLine: method: GET, url: /, version: HTTP/1.1
+D (57192) HttpRequest: Method: GET, URL: "/", Version: HTTP/1.1
+D (57193) HttpRequest: name="Accept", value="text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+D (57197) HttpRequest: name="Accept-Encoding", value="gzip, deflate"
+D (57203) HttpRequest: name="Accept-Language", value="de,en-US;q=0.7,en;q=0.3"
+D (57210) HttpRequest: name="Connection", value="keep-alive"
+D (57215) HttpRequest: name="Host", value="192.168.4.1"
+D (57220) HttpRequest: name="Upgrade-Insecure-Requests", value="1"
+D (57226) HttpRequest: name="User-Agent", value="Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:52.0) Gecko/20100101 Firefox/52.0"
+D (57237) HttpRequest: Body: ""
+D (57240) HttpServerTask: >> processRequest: Method: GET, Path: /
+D (57246) PathHandler: plain matching: / with /
+D (57250) HttpServerTask: Found a path handler match!!
+D (57256) Socket: send: Binary of length: 44
+D (57259) Socket: send: Raw binary of length: 44
+D (57265) Socket: send: Binary of length: 1117
+D (57268) Socket: send: Raw binary of length: 1117
+D (57272) Socket: close: m_sock=1, ssl: 0
+D (57276) Socket: Calling lwip_close on 1
+D (57280) Socket: close: m_sock=-1, ssl: 0
+D (57284) HttpServerTask: Waiting for new peer client
+D (57288) SockServ: >> waitForNewClient
+V (57292) FreeRTOS: >> wait: Semaphore waiting: name: clientSemaphore (0x3ffcb3d0), owner: waitForNewClient for waitForNewClient
+D (65164) Socket:  - accept: Received new client!: sockFd: 2
+D (65164) Socket: << accept: sockFd: 2
+V (65164) FreeRTOS: Semaphore giving: name: clientSemaphore (0x3ffcb3d0), owner: waitForNewClient
+V (65171) FreeRTOS: << wait: Semaphore released: name: clientSemaphore (0x3ffcb3d0), owner: waitForNewClient
+D (65180) FreeRTOS: Semaphore taking: name: clientSemaphore (0x3ffcb3d0), owner: <N/A> for waitForNewClient
+D (65181) Socket: >> accept: Accepting on 0.0.0.0 [80]; sockFd: 0, using SSL: 0
+D (65190) FreeRTOS: Semaphore taken:  name: clientSemaphore (0x3ffcb3d0), owner: waitForNewClient
+D (65205) SockServ: << waitForNewClient
+D (65209) HttpServerTask: HttpServer listening on port 80 received a new client connection; sockFd=2
+D (65220) HttpParser: >> parseRequestLine: "POST / HTTP/1.1" [15]
+D (65223) HttpParser: << parseRequestLine: method: POST, url: /, version: HTTP/1.1
+D (65271) HttpParser: Size of body: 26
+D (65271) HttpRequest: Method: POST, URL: "/", Version: HTTP/1.1
+D (65271) HttpRequest: name="Accept", value="text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+D (65278) HttpRequest: name="Accept-Encoding", value="gzip, deflate"
+D (65285) HttpRequest: name="Accept-Language", value="de,en-US;q=0.7,en;q=0.3"
+D (65291) HttpRequest: name="Connection", value="keep-alive"
+D (65297) HttpRequest: name="Content-Length", value="26"
+D (65302) HttpRequest: name="Content-Type", value="application/x-www-form-urlencoded"
+D (65309) HttpRequest: name="Host", value="192.168.4.1"
+D (65314) HttpRequest: name="Referer", value="http://192.168.4.1/"
+D (65320) HttpRequest: name="Upgrade-Insecure-Requests", value="1"
+D (65326) HttpRequest: name="User-Agent", value="Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:52.0) Gecko/20100101 Firefox/52.0"
+D (65337) HttpRequest: Body: "duration=40&temperature=50"
+D (65343) HttpServerTask: >> processRequest: Method: POST, Path: /
+D (65349) PathHandler: plain matching: / with /
+D (65353) HttpServerTask: Found a path handler match!!
+D (65358) HttpRequest: >> parseForm
+D (65361) HttpRequest: Processing: duration=40
+D (65365) HttpRequest:  duration = "40"
+D (65369) HttpRequest: Processing: temperature=50
+D (65373) HttpRequest:  temperature = "50"
+D (65377) HttpRequest: << parseForm
+Try to convert strings to numbers
+duration 30 -> 40 temperature 50 -> 50
+D (65387) Socket: send: Binary of length: 44
+D (65391) Socket: send: Raw binary of length: 44
+D (65396) Socket: send: Binary of length: 1117
+D (65399) Socket: send: Raw binary of length: 1117
+D (65404) Socket: close: m_sock=2, ssl: 0
+D (65407) Socket: Calling lwip_close on 2
+D (65412) Socket: close: m_sock=-1, ssl: 0
+D (65415) HttpServerTask: Waiting for new peer client
+D (65420) SockServ: >> waitForNewClient
+V (65423) FreeRTOS: >> wait: Semaphore waiting: name: clientSemaphore (0x3ffcb3d0), owner: waitForNewClient for waitForNewClient
+D (83581) Socket:  - accept: Received new client!: sockFd: 3
+D (83582) Socket: << accept: sockFd: 3
+V (83582) FreeRTOS: Semaphore giving: name: clientSemaphore (0x3ffcb3d0), owner: waitForNewClient
+V (83588) FreeRTOS: << wait: Semaphore released: name: clientSemaphore (0x3ffcb3d0), owner: waitForNewClient
+D (83598) FreeRTOS: Semaphore taking: name: clientSemaphore (0x3ffcb3d0), owner: <N/A> for waitForNewClient
+D (83599) Socket: >> accept: Accepting on 0.0.0.0 [80]; sockFd: 0, using SSL: 0
+D (83608) FreeRTOS: Semaphore taken:  name: clientSemaphore (0x3ffcb3d0), owner: waitForNewClient
+D (83623) SockServ: << waitForNewClient
+D (83626) HttpServerTask: HttpServer listening on port 80 received a new client connection; sockFd=3
+D (83638) HttpParser: >> parseRequestLine: "GET / HTTP/1.1" [14]
+D (83641) HttpParser: << parseRequestLine: method: GET, url: /, version: HTTP/1.1
+D (83678) HttpRequest: Method: GET, URL: "/", Version: HTTP/1.1
+D (83678) HttpRequest: name="Accept", value="text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+D (83682) HttpRequest: name="Accept-Encoding", value="gzip, deflate"
+D (83688) HttpRequest: name="Accept-Language", value="de,en-US;q=0.7,en;q=0.3"
+D (83695) HttpRequest: name="Connection", value="keep-alive"
+D (83700) HttpRequest: name="Host", value="192.168.4.1"
+D (83705) HttpRequest: name="Upgrade-Insecure-Requests", value="1"
+D (83711) HttpRequest: name="User-Agent", value="Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:52.0) Gecko/20100101 Firefox/52.0"
+D (83723) HttpRequest: Body: ""
+D (83726) HttpServerTask: >> processRequest: Method: GET, Path: /
+D (83731) PathHandler: plain matching: / with /
+D (83736) HttpServerTask: Found a path handler match!!
+D (83741) Socket: send: Binary of length: 44
+D (83744) Socket: send: Raw binary of length: 44
+D (83750) Socket: send: Binary of length: 1117
+D (83753) Socket: send: Raw binary of length: 1117
+D (83758) Socket: close: m_sock=3, ssl: 0
+D (83761) Socket: Calling lwip_close on 3
+D (83766) Socket: close: m_sock=-1, ssl: 0
+D (83769) HttpServerTask: Waiting for new peer client
+D (83773) SockServ: >> waitForNewClient
+V (83777) FreeRTOS: >> wait: Semaphore waiting: name: clientSemaphore (0x3ffcb3d0), owner: waitForNewClient for waitForNewClient
+D (86781) Socket:  - accept: Received new client!: sockFd: 4
+D (86781) Socket: << accept: sockFd: 4
+V (86781) FreeRTOS: Semaphore giving: name: clientSemaphore (0x3ffcb3d0), owner: waitForNewClient
+V (86787) FreeRTOS: << wait: Semaphore released: name: clientSemaphore (0x3ffcb3d0), owner: waitForNewClient
+D (86797) FreeRTOS: Semaphore taking: name: clientSemaphore (0x3ffcb3d0), owner: <N/A> for waitForNewClient
+D (86798) Socket: >> accept: Accepting on 0.0.0.0 [80]; sockFd: 0, using SSL: 0
+D (86807) FreeRTOS: Semaphore taken:  name: clientSemaphore (0x3ffcb3d0), owner: waitForNewClient
+D (86822) SockServ: << waitForNewClient
+D (86826) HttpServerTask: HttpServer listening on port 80 received a new client connection; sockFd=4
+D (86836) HttpParser: >> parseRequestLine: "GET / HTTP/1.1" [14]
+D (86840) HttpParser: << parseRequestLine: method: GET, url: /, version: HTTP/1.1
+D (86880) HttpRequest: Method: GET, URL: "/", Version: HTTP/1.1
+D (86880) HttpRequest: name="Accept", value="text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+D (86884) HttpRequest: name="Accept-Encoding", value="gzip, deflate"
+D (86890) HttpRequest: name="Accept-Language", value="de,en-US;q=0.7,en;q=0.3"
+D (86897) HttpRequest: name="Cache-Control", value="max-age=0"
+D (86902) HttpRequest: name="Connection", value="keep-alive"
+D (86908) HttpRequest: name="Host", value="192.168.4.1"
+D (86913) HttpRequest: name="Upgrade-Insecure-Requests", value="1"
+D (86919) HttpRequest: name="User-Agent", value="Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:52.0) Gecko/20100101 Firefox/52.0"
+D (86930) HttpRequest: Body: ""
+D (86933) HttpServerTask: >> processRequest: Method: GET, Path: /
+D (86939) PathHandler: plain matching: / with /
+D (86943) HttpServerTask: Found a path handler match!!
+D (86948) Socket: send: Binary of length: 44
+D (86952) Socket: send: Raw binary of length: 44
+D (86957) Socket: send: Binary of length: 1117
+D (86960) Socket: send: Raw binary of length: 1117
+D (86965) Socket: close: m_sock=4, ssl: 0
+D (86968) Socket: Calling lwip_close on 4
+D (86973) Socket: close: m_sock=-1, ssl: 0
+D (86976) HttpServerTask: Waiting for new peer client
+D (86981) SockServ: >> waitForNewClient
+V (86984) FreeRTOS: >> wait: Semaphore waiting: name: clientSemaphore (0x3ffcb3d0), owner: waitForNewClient for waitForNewClient
+selectHandler pin=33 event=1
+selectHandler pin=33 event=2
+modeHandler pin=32 event=1
+modeHandler pin=32 event=2
+selectHandler pin=33 event=1
+selectHandler pin=33 event=2
+modeHandler pin=32 event=1
+modeHandler pin=32 event=2

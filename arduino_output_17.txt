@@ -1,0 +1,61 @@
+ets Jun  8 2016 00:22:57
+
+rst:0x1 (POWERON_RESET),boot:0x13 (SPI_FAST_FLASH_BOOT)
+ets Jun  8 2016 00:22:57
+
+rst:0x10 (RTCWDT_RTC_RESET),boot:0x13 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:1
+load:0x3fff0010,len:4
+load:0x3fff0014,len:588
+load:0x40078000,len:0
+load:0x40078000,len:9768
+entry 0x400789b8
+D (1014) FreeRTOS: Semaphore taking: name: clientSemaphore (0x3ffcb1e0), owner:                                                                                                                                    <N/A> for SockServ
+D (1020) FreeRTOS: Semaphore taken:  name: clientSemaphore (0x3ffcb1e0), owner:                                                                                                                                    SockServ
+Listing directory: /
+                      FILE: /hallo.txt  SIZE: 22
+  FILE: /index.html  SIZE: 122
+  FILE: /jquery.js  SIZE: 86659
+  FILE: /test.txt  SIZE: 21
+Reading file: test.txt
+                      [E][vfs_api.cpp:27] open(): test.txt does not start with /
+Failed to open file for reading
+I (4537) wifi: wifi firmware version: c1b8a2f
+I (4539) wifi: config NVS flash: enabled
+I (4543) wifi: config nano formating: disabled
+I (4556) wifi: Init dynamic tx buffer num: 32
+I (4556) wifi: Init data frame dynamic rx buffer num: 64
+I (4556) wifi: Init management frame dynamic rx buffer num: 64
+I (4560) wifi: wifi driver task: 3ffd4d90, prio:23, stack:4096
+I (4565) wifi: Init static rx buffer num: 10
+I (4569) wifi: Init dynamic rx buffer num: 0
+I (4573) wifi: Init rx ampdu len mblock:7
+I (4577) wifi: Init lldesc rx ampdu entry mblock:4
+I (4582) wifi: wifi power manager task: 0x3ffda0f4 prio: 21 stack: 2560
+I (4590) wifi: wifi timer task: 3ffdb160, prio:22, stack:3584
+I (4620) wifi: Init Ampdu: 1 tx baw=6 rx baw=6
+I (4620) wifi: mode : softAP (30:ae:a4:04:3d:21)
+AP IP address: 192.168.4.1
+Scanning...
+I2C device found at address 0x3C  !
+I2C device found at address 0x5A  !
+done
+
+httpServer.start(80)
+D (4676) HttpServer: >> start: port: 80, useSSL: 0
+Done!
+D (4676) Task: >> runTask: taskName=HttpServerTask
+D (4677) Socket: >> listen: port: 80, isDatagram: 0
+D (4681) Socket: >> createSocket: isDatagram: 0
+D (4686) Socket: << createSocket: sockFd: 0
+D (4689) Socket: >> bind: port=80, address=0x0
+D (4694) Socket: << bind
+D (4696) Socket: << listen
+D (4698) SockServ: Now listening on port 80
+D (4702) HttpServerTask: Listening on port 80
+D (4702) Socket: >> accept: Accepting on 0.0.0.0 [80]; sockFd: 0, using SSL: 0
+D (4707) HttpServerTask: Waiting for new peer client
+D (4718) SockServ: >> waitForNewClient
+V (4721) FreeRTOS: >> wait: Semaphore waiting: name: clientSemaphore (0x3ffcb1e0                                                                                                                                   ), owner: SockServ for waitForNewClient

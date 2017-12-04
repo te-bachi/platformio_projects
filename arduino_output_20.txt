@@ -1,0 +1,337 @@
+ets Jun  8 2016 00:22:57
+
+rst:0x1 (POWERON_RESET),boot:0x13 (SPI_FAST_FLASH_BOOT)
+ets Jun  8 2016 00:22:57
+
+rst:0x10 (RTCWDT_RTC_RESET),boot:0x13 (SPI_FAST_FLASH_BOOT)
+configsip: 0, SPIWP:0xee
+clk_drv:0x00,q_drv:0x00,d_drv:0x00,cs0_drv:0x00,hd_drv:0x00,wp_drv:0x00
+mode:DIO, clock div:1
+load:0x3fff0010,len:4
+load:0x3fff0014,len:588
+load:0x40078000,len:0
+load:0x40078000,len:9768
+entry 0x400789b8
+D (1022) FreeRTOS: Semaphore taking: name: clientSemaphore (0x3ffcb348), owner:                                                                                                                                    <N/A> for SockServ
+D (1028) FreeRTOS: Semaphore taken:  name: clientSemaphore (0x3ffcb348), owner:                                                                                                                                    SockServ
+I (972) wifi: wifi firmware version: c1b8a2f
+I (972) wifi: config NVS flash: enabled
+I (972) wifi: config nano formating: disabled
+I (981) wifi: Init dynamic tx buffer num: 32
+I (981) wifi: Init data frame dynamic rx buffer num: 64
+I (981) wifi: Init management frame dynamic rx buffer num: 64
+I (985) wifi: wifi driver task: 3ffd507c, prio:23, stack:4096
+I (990) wifi: Init static rx buffer num: 10
+I (994) wifi: Init dynamic rx buffer num: 0
+I (998) wifi: Init rx ampdu len mblock:7
+I (1001) wifi: Init lldesc rx ampdu entry mblock:4
+I (1006) wifi: wifi power manager task: 0x3ffda314 prio: 21 stack: 2560
+I (1014) wifi: wifi timer task: 3ffdb36c, prio:22, stack:3584
+I (1047) wifi: Init Ampdu: 1 tx baw=6 rx baw=6
+I (1047) wifi: mode : softAP (30:ae:a4:04:3d:21)
+AP IP address: 192.168.4.1
+Scanning...
+I2C device found at address 0x3C  !
+I2C device found at address 0x5A  !
+done
+
+httpServer.start(80)
+D (1103) HttpServer: >> start: port: 80, useSSL: 0
+Done!
+> D (1103) Task: >> runTask: taskName=HttpServerTask
+D (1103) Socket: >> listen: port: 80, isDatagram: 0
+D (1108) Socket: >> createSocket: isDatagram: 0
+D (1112) Socket: << createSocket: sockFd: 0
+D (1116) Socket: >> bind: port=80, address=0x0
+D (1120) Socket: << bind
+D (1123) Socket: << listen
+D (1125) SockServ: Now listening on port 80
+D (1129) HttpServerTask: Listening on port 80
+D (1129) Socket: >> accept: Accepting on 0.0.0.0 [80]; sockFd: 0, using SSL: 0
+D (1134) HttpServerTask: Waiting for new peer client
+D (1144) SockServ: >> waitForNewClient
+V (1148) FreeRTOS: >> wait: Semaphore waiting: name: clientSemaphore (0x3ffcb348                                                                                                                                   ), owner: SockServ for waitForNewClient
+I (115338) wifi: n:1 0, o:1 0, ap:1 1, sta:255 255, prof:1
+I (115338) wifi: station: f8:01:13:05:ef:1f join, AID=1, g, 20
+D (129130) Socket:  - accept: Received new client!: sockFd: 1
+D (129130) Socket: << accept: sockFd: 1
+V (129130) FreeRTOS: Semaphore giving: name: clientSemaphore (0x3ffcb348), owner: SockServ
+V (129136) FreeRTOS: << wait: Semaphore released: name: clientSemaphore (0x3ffcb348), owner: waitForNewClient
+D (129146) FreeRTOS: Semaphore taking: name: clientSemaphore (0x3ffcb348), owner: <N/A> for waitForNewClient
+D (129147) Socket: >> accept: Accepting on 0.0.0.0 [80]; sockFd: 0, using SSL: 0
+D (129156) FreeRTOS: Semaphore taken:  name: clientSemaphore (0x3ffcb348), owner: waitForNewClient
+D (129163) Socket:  - accept: Received new client!: sockFd: 2
+D (129172) SockServ: << waitForNewClient
+D (129177) Socket: << accept: sockFd: 2
+D (129181) HttpServerTask: HttpServer listening on port 80 received a new client connection; sockFd=1
+V (129184) FreeRTOS: Semaphore giving: name: clientSemaphore (0x3ffcb348), owner: waitForNewClient
+D (129211) Socket: >> accept: Accepting on 0.0.0.0 [80]; sockFd: 0, using SSL: 0
+D (129211) Socket:  - accept: Received new client!: sockFd: 3
+D (129214) Socket: << accept: sockFd: 3
+D (129255) HttpParser: >> parseRequestLine: "GET / HTTP/1.1" [14]
+D (129256) HttpParser: << parseRequestLine: method: GET, url: /, version: HTTP/1.1
+D (129300) HttpRequest: Method: GET, URL: "/", Version: HTTP/1.1
+D (129301) HttpRequest: name="Accept", value="text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8"
+D (129307) HttpRequest: name="Accept-Encoding", value="gzip, deflate"
+D (129313) HttpRequest: name="Accept-Language", value="de-CH,de-DE;q=0.8,de;q=0.6,en-US;q=0.4,en;q=0.2"
+D (129322) HttpRequest: name="Connection", value="keep-alive"
+D (129327) HttpRequest: name="Host", value="192.168.4.1"
+D (129332) HttpRequest: name="Upgrade-Insecure-Requests", value="1"
+D (129338) HttpRequest: name="User-Agent", value="Mozilla/5.0 (Linux; Android 5.1.1; HUAWEI P7-L10 Build/HuaweiP7-L10) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.98 Mobile Safari/537.36"
+D (129356) HttpRequest: Body: ""
+D (129359) HttpServerTask: >> processRequest: Method: GET, Path: /
+D (129365) PathHandler: plain matching: / with /
+D (129369) HttpServerTask: Found a path handler match!!
+D (129375) Socket: send: Binary of length: 44
+D (129378) Socket: send: Raw binary of length: 44
+D (129383) Socket: send: Binary of length: 1126
+D (129387) Socket: send: Raw binary of length: 1126
+D (129392) Socket: close: m_sock=1, ssl: 0
+D (129395) Socket: Calling lwip_close on 1
+D (129400) Socket: close: m_sock=-1, ssl: 0
+D (129403) HttpServerTask: Waiting for new peer client
+D (129408) SockServ: >> waitForNewClient
+V (129411) FreeRTOS: >> wait: Semaphore waiting: name: clientSemaphore (0x3ffcb348), owner: <N/A> for waitForNewClient
+V (129422) FreeRTOS: << wait: Semaphore released: name: clientSemaphore (0x3ffcb348), owner: waitForNewClient
+D (129432) FreeRTOS: Semaphore taking: name: clientSemaphore (0x3ffcb348), owner: <N/A> for waitForNewClient
+D (129441) FreeRTOS: Semaphore taken:  name: clientSemaphore (0x3ffcb348), owner: waitForNewClient
+V (129450) FreeRTOS: Semaphore giving: name: clientSemaphore (0x3ffcb348), owner: waitForNewClient
+D (129451) SockServ: << waitForNewClient
+D (129462) HttpServerTask: HttpServer listening on port 80 received a new client connection; sockFd=2
+D (129469) Socket: >> accept: Accepting on 0.0.0.0 [80]; sockFd: 0, using SSL: 0
+D (130390) HttpParser: >> parseRequestLine: "GET /favicon.ico HTTP/1.1" [25]
+D (130390) HttpParser: << parseRequestLine: method: GET, url: /favicon.ico, version: HTTP/1.1
+D (130433) HttpRequest: Method: GET, URL: "/favicon.ico", Version: HTTP/1.1
+D (130433) HttpRequest: name="Accept", value="image/webp,image/apng,image/*,*/*;q=0.8"
+D (130436) HttpRequest: name="Accept-Encoding", value="gzip, deflate"
+D (130442) HttpRequest: name="Accept-Language", value="de-CH,de-DE;q=0.8,de;q=0.6,en-US;q=0.4,en;q=0.2"
+D (130451) HttpRequest: name="Connection", value="keep-alive"
+D (130457) HttpRequest: name="Host", value="192.168.4.1"
+D (130462) HttpRequest: name="Referer", value="http://192.168.4.1/"
+D (130468) HttpRequest: name="User-Agent", value="Mozilla/5.0 (Linux; Android 5.1.1; HUAWEI P7-L10 Build/HuaweiP7-L10) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.98 Mobile Safari/537.36"
+D (130485) HttpRequest: Body: ""
+D (130488) HttpServerTask: >> processRequest: Method: GET, Path: /favicon.ico
+D (130495) PathHandler: plain matching: / with /favicon.ico
+D (130500) PathHandler: plain matching: /helloWorld with /favicon.ico
+D (130507) PathHandler: plain matching: /jquery-3.2.1.min.js with /favicon.ico
+D (130513) PathHandler: plain matching:  /jqueryTest with /favicon.ico
+D (130520) HttpServerTask: No Path handler found
+D (130524) Socket: close: m_sock=2, ssl: 0
+D (130528) Socket: Calling lwip_close on 2
+D (130532) HttpServerTask: Waiting for new peer client
+D (130537) SockServ: >> waitForNewClient
+V (130540) FreeRTOS: >> wait: Semaphore waiting: name: clientSemaphore (0x3ffcb348), owner: <N/A> for waitForNewClient
+V (130551) FreeRTOS: << wait: Semaphore released: name: clientSemaphore (0x3ffcb348), owner: waitForNewClient
+D (130560) FreeRTOS: Semaphore taking: name: clientSemaphore (0x3ffcb348), owner: <N/A> for waitForNewClient
+D (130570) FreeRTOS: Semaphore taken:  name: clientSemaphore (0x3ffcb348), owner: waitForNewClient
+D (130579) SockServ: << waitForNewClient
+D (130582) HttpServerTask: HttpServer listening on port 80 received a new client connection; sockFd=3
+D (130595) HttpParser: >> parseRequestLine: "GET /favicon.ico HTTP/1.1" [25]
+D (130598) HttpParser: << parseRequestLine: method: GET, url: /favicon.ico, version: HTTP/1.1
+D (130643) HttpRequest: Method: GET, URL: "/favicon.ico", Version: HTTP/1.1
+D (130643) HttpRequest: name="Accept", value="image/webp,image/apng,image/*,*/*;q=0.8"
+D (130646) HttpRequest: name="Accept-Encoding", value="gzip, deflate"
+D (130652) HttpRequest: name="Accept-Language", value="de-CH,de-DE;q=0.8,de;q=0.6,en-US;q=0.4,en;q=0.2"
+D (130661) HttpRequest: name="Connection", value="keep-alive"
+D (130667) HttpRequest: name="Host", value="192.168.4.1"
+D (130672) HttpRequest: name="Referer", value="http://192.168.4.1/"
+D (130678) HttpRequest: name="User-Agent", value="Mozilla/5.0 (Linux; Android 5.1.1; HUAWEI P7-L10 Build/HuaweiP7-L10) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.98 Mobile Safari/537.36"
+D (130695) HttpRequest: Body: ""
+D (130698) HttpServerTask: >> processRequest: Method: GET, Path: /favicon.ico
+D (130705) PathHandler: plain matching: / with /favicon.ico
+D (130710) PathHandler: plain matching: /helloWorld with /favicon.ico
+D (130717) PathHandler: plain matching: /jquery-3.2.1.min.js with /favicon.ico
+D (130724) PathHandler: plain matching:  /jqueryTest with /favicon.ico
+D (130730) HttpServerTask: No Path handler found
+D (130734) Socket: close: m_sock=3, ssl: 0
+D (130738) Socket: Calling lwip_close on 3
+D (130743) HttpServerTask: Waiting for new peer client
+D (130747) SockServ: >> waitForNewClient
+V (130750) FreeRTOS: >> wait: Semaphore waiting: name: clientSemaphore (0x3ffcb348), owner: waitForNewClient for waitForNewClient
+D (130755) Socket:  - accept: Received new client!: sockFd: 4
+D (130767) Socket: << accept: sockFd: 4
+V (130771) FreeRTOS: Semaphore giving: name: clientSemaphore (0x3ffcb348), owner: waitForNewClient
+V (130779) FreeRTOS: << wait: Semaphore released: name: clientSemaphore (0x3ffcb348), owner: waitForNewClient
+D (130789) FreeRTOS: Semaphore taking: name: clientSemaphore (0x3ffcb348), owner: <N/A> for waitForNewClient
+D (130790) Socket: >> accept: Accepting on 0.0.0.0 [80]; sockFd: 0, using SSL: 0
+D (130799) FreeRTOS: Semaphore taken:  name: clientSemaphore (0x3ffcb348), owner: waitForNewClient
+D (130814) SockServ: << waitForNewClient
+D (130818) HttpServerTask: HttpServer listening on port 80 received a new client connection; sockFd=4
+D (130830) HttpParser: >> parseRequestLine: "GET /favicon.ico HTTP/1.1" [25]
+D (130834) HttpParser: << parseRequestLine: method: GET, url: /favicon.ico, version: HTTP/1.1
+D (130882) HttpRequest: Method: GET, URL: "/favicon.ico", Version: HTTP/1.1
+D (130883) HttpRequest: name="Accept", value="image/webp,image/apng,image/*,*/*;q=0.8"
+D (130886) HttpRequest: name="Accept-Encoding", value="gzip, deflate"
+D (130892) HttpRequest: name="Accept-Language", value="de-CH,de-DE;q=0.8,de;q=0.6,en-US;q=0.4,en;q=0.2"
+D (130901) HttpRequest: name="Connection", value="keep-alive"
+D (130906) HttpRequest: name="Host", value="192.168.4.1"
+D (130911) HttpRequest: name="Referer", value="http://192.168.4.1/"
+D (130917) HttpRequest: name="User-Agent", value="Mozilla/5.0 (Linux; Android 5.1.1; HUAWEI P7-L10 Build/HuaweiP7-L10) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.98 Mobile Safari/537.36"
+D (130935) HttpRequest: Body: ""
+D (130938) HttpServerTask: >> processRequest: Method: GET, Path: /favicon.ico
+D (130945) PathHandler: plain matching: / with /favicon.ico
+D (130950) PathHandler: plain matching: /helloWorld with /favicon.ico
+D (130956) PathHandler: plain matching: /jquery-3.2.1.min.js with /favicon.ico
+D (130963) PathHandler: plain matching:  /jqueryTest with /favicon.ico
+D (130969) HttpServerTask: No Path handler found
+D (130974) Socket: close: m_sock=4, ssl: 0
+D (130977) Socket: Calling lwip_close on 4
+D (130982) HttpServerTask: Waiting for new peer client
+D (130986) SockServ: >> waitForNewClient
+V (130990) FreeRTOS: >> wait: Semaphore waiting: name: clientSemaphore (0x3ffcb348), owner: waitForNewClient for waitForNewClient
+D (139420) Socket:  - accept: Received new client!: sockFd: 5
+D (139420) Socket: << accept: sockFd: 5
+V (139421) FreeRTOS: Semaphore giving: name: clientSemaphore (0x3ffcb348), owner: waitForNewClient
+V (139427) FreeRTOS: << wait: Semaphore released: name: clientSemaphore (0x3ffcb348), owner: waitForNewClient
+D (139437) FreeRTOS: Semaphore taking: name: clientSemaphore (0x3ffcb348), owner: <N/A> for waitForNewClient
+D (139438) Socket: >> accept: Accepting on 0.0.0.0 [80]; sockFd: 0, using SSL: 0
+D (139447) FreeRTOS: Semaphore taken:  name: clientSemaphore (0x3ffcb348), owner: waitForNewClient
+D (139462) SockServ: << waitForNewClient
+D (139466) HttpServerTask: HttpServer listening on port 80 received a new client connection; sockFd=5
+D (139476) HttpParser: >> parseRequestLine: "POST / HTTP/1.1" [15]
+D (139480) HttpParser: << parseRequestLine: method: POST, url: /, version: HTTP/1.1
+D (139544) HttpParser: Size of body: 26
+D (139545) HttpRequest: Method: POST, URL: "/", Version: HTTP/1.1
+D (139545) HttpRequest: name="Accept", value="text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8"
+D (139554) HttpRequest: name="Accept-Encoding", value="gzip, deflate"
+D (139561) HttpRequest: name="Accept-Language", value="de-CH,de-DE;q=0.8,de;q=0.6,en-US;q=0.4,en;q=0.2"
+D (139570) HttpRequest: name="Cache-Control", value="max-age=0"
+D (139575) HttpRequest: name="Connection", value="keep-alive"
+D (139581) HttpRequest: name="Content-Length", value="26"
+D (139586) HttpRequest: name="Content-Type", value="application/x-www-form-urlencoded"
+D (139594) HttpRequest: name="Host", value="192.168.4.1"
+D (139599) HttpRequest: name="Origin", value="http://192.168.4.1"
+D (139604) HttpRequest: name="Referer", value="http://192.168.4.1/"
+D (139610) HttpRequest: name="Upgrade-Insecure-Requests", value="1"
+D (139616) HttpRequest: name="User-Agent", value="Mozilla/5.0 (Linux; Android 5.1.1; HUAWEI P7-L10 Build/HuaweiP7-L10) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.98 Mobile Safari/537.36"
+D (139634) HttpRequest: Body: "duration=33&temperature=50"
+D (139639) HttpServerTask: >> processRequest: Method: POST, Path: /
+D (139645) PathHandler: plain matching: / with /
+D (139649) HttpServerTask: Found a path handler match!!
+D (139654) HttpRequest: >> parseForm
+D (139658) HttpRequest: Processing: duration=33
+D (139662) HttpRequest:  duration = "33"
+D (139666) HttpRequest: Processing: temperature=50
+D (139670) HttpRequest:  temperature = "50"
+D (139674) HttpRequest: << parseForm
+Try to convert strings to numbers
+duration 30 -> 33 temperature 50 -> 50
+D (139684) Socket: send: Binary of length: 44
+D (139688) Socket: send: Raw binary of length: 44
+D (139693) Socket: send: Binary of length: 1126
+D (139697) Socket: send: Raw binary of length: 1126
+D (139702) Socket: close: m_sock=5, ssl: 0
+D (139705) Socket: Calling lwip_close on 5
+D (139710) Socket: close: m_sock=-1, ssl: 0
+D (139713) HttpServerTask: Waiting for new peer client
+D (139718) SockServ: >> waitForNewClient
+V (139721) FreeRTOS: >> wait: Semaphore waiting: name: clientSemaphore (0x3ffcb348), owner: waitForNewClient for waitForNewClient
+D (139876) Socket:  - accept: Received new client!: sockFd: 6
+D (139876) Socket: << accept: sockFd: 6
+V (139876) FreeRTOS: Semaphore giving: name: clientSemaphore (0x3ffcb348), owner: waitForNewClient
+V (139883) FreeRTOS: << wait: Semaphore released: name: clientSemaphore (0x3ffcb348), owner: waitForNewClient
+D (139893) FreeRTOS: Semaphore taking: name: clientSemaphore (0x3ffcb348), owner: <N/A> for waitForNewClient
+D (139894) Socket: >> accept: Accepting on 0.0.0.0 [80]; sockFd: 0, using SSL: 0
+D (139903) FreeRTOS: Semaphore taken:  name: clientSemaphore (0x3ffcb348), owner: waitForNewClient
+D (139918) SockServ: << waitForNewClient
+D (139921) HttpServerTask: HttpServer listening on port 80 received a new client connection; sockFd=6
+D (139933) HttpParser: >> parseRequestLine: "GET /favicon.ico HTTP/1.1" [25]
+D (139937) HttpParser: << parseRequestLine: method: GET, url: /favicon.ico, version: HTTP/1.1
+D (139983) HttpRequest: Method: GET, URL: "/favicon.ico", Version: HTTP/1.1
+D (139983) HttpRequest: name="Accept", value="image/webp,image/apng,image/*,*/*;q=0.8"
+D (139986) HttpRequest: name="Accept-Encoding", value="gzip, deflate"
+D (139993) HttpRequest: name="Accept-Language", value="de-CH,de-DE;q=0.8,de;q=0.6,en-US;q=0.4,en;q=0.2"
+D (140002) HttpRequest: name="Connection", value="keep-alive"
+D (140007) HttpRequest: name="Host", value="192.168.4.1"
+D (140012) HttpRequest: name="Referer", value="http://192.168.4.1/"
+D (140018) HttpRequest: name="User-Agent", value="Mozilla/5.0 (Linux; Android 5.1.1; HUAWEI P7-L10 Build/HuaweiP7-L10) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.98 Mobile Safari/537.36"
+D (140036) HttpRequest: Body: ""
+D (140039) HttpServerTask: >> processRequest: Method: GET, Path: /favicon.ico
+D (140045) PathHandler: plain matching: / with /favicon.ico
+D (140051) PathHandler: plain matching: /helloWorld with /favicon.ico
+D (140057) PathHandler: plain matching: /jquery-3.2.1.min.js with /favicon.ico
+D (140064) PathHandler: plain matching:  /jqueryTest with /favicon.ico
+D (140070) HttpServerTask: No Path handler found
+D (140074) Socket: close: m_sock=6, ssl: 0
+D (140078) Socket: Calling lwip_close on 6
+D (140083) HttpServerTask: Waiting for new peer client
+D (140087) SockServ: >> waitForNewClient
+V (140091) FreeRTOS: >> wait: Semaphore waiting: name: clientSemaphore (0x3ffcb348), owner: waitForNewClient for waitForNewClient
+D (155373) Socket:  - accept: Received new client!: sockFd: 7
+D (155373) Socket: << accept: sockFd: 7
+V (155373) FreeRTOS: Semaphore giving: name: clientSemaphore (0x3ffcb348), owner: waitForNewClient
+V (155379) FreeRTOS: << wait: Semaphore released: name: clientSemaphore (0x3ffcb348), owner: waitForNewClient
+D (155389) FreeRTOS: Semaphore taking: name: clientSemaphore (0x3ffcb348), owner: <N/A> for waitForNewClient
+D (155390) Socket: >> accept: Accepting on 0.0.0.0 [80]; sockFd: 0, using SSL: 0
+D (155399) FreeRTOS: Semaphore taken:  name: clientSemaphore (0x3ffcb348), owner: waitForNewClient
+D (155414) SockServ: << waitForNewClient
+D (155418) HttpServerTask: HttpServer listening on port 80 received a new client connection; sockFd=7
+D (155429) HttpParser: >> parseRequestLine: "POST / HTTP/1.1" [15]
+D (155433) HttpParser: << parseRequestLine: method: POST, url: /, version: HTTP/1.1
+D (155498) HttpParser: Size of body: 25
+D (155498) HttpRequest: Method: POST, URL: "/", Version: HTTP/1.1
+D (155499) HttpRequest: name="Accept", value="text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8"
+D (155508) HttpRequest: name="Accept-Encoding", value="gzip, deflate"
+D (155514) HttpRequest: name="Accept-Language", value="de-CH,de-DE;q=0.8,de;q=0.6,en-US;q=0.4,en;q=0.2"
+D (155523) HttpRequest: name="Cache-Control", value="max-age=0"
+D (155529) HttpRequest: name="Connection", value="keep-alive"
+D (155534) HttpRequest: name="Content-Length", value="25"
+D (155540) HttpRequest: name="Content-Type", value="application/x-www-form-urlencoded"
+D (155547) HttpRequest: name="Host", value="192.168.4.1"
+D (155552) HttpRequest: name="Origin", value="http://192.168.4.1"
+D (155558) HttpRequest: name="Referer", value="http://192.168.4.1/"
+D (155564) HttpRequest: name="Upgrade-Insecure-Requests", value="1"
+D (155570) HttpRequest: name="User-Agent", value="Mozilla/5.0 (Linux; Android 5.1.1; HUAWEI P7-L10 Build/HuaweiP7-L10) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.98 Mobile Safari/537.36"
+D (155588) HttpRequest: Body: "duration=A&temperature=50"
+D (155593) HttpServerTask: >> processRequest: Method: POST, Path: /
+D (155599) PathHandler: plain matching: / with /
+D (155603) HttpServerTask: Found a path handler match!!
+D (155608) HttpRequest: >> parseForm
+D (155612) HttpRequest: Processing: duration=A
+D (155616) HttpRequest:  duration = "A"
+D (155619) HttpRequest: Processing: temperature=50
+D (155623) HttpRequest:  temperature = "50"
+D (155627) HttpRequest: << parseForm
+Try to convert strings to numbers
+Error in converstion: duration = A temperature = 50
+D (155639) Socket: send: Binary of length: 44
+D (155642) Socket: send: Raw binary of length: 44
+D (155647) Socket: send: Binary of length: 1166
+D (155651) Socket: send: Raw binary of length: 1166
+D (155657) Socket: close: m_sock=7, ssl: 0
+D (155659) Socket: Calling lwip_close on 7
+D (155664) Socket: close: m_sock=-1, ssl: 0
+D (155667) HttpServerTask: Waiting for new peer client
+D (155672) SockServ: >> waitForNewClient
+V (155676) FreeRTOS: >> wait: Semaphore waiting: name: clientSemaphore (0x3ffcb348), owner: waitForNewClient for waitForNewClient
+D (155961) Socket:  - accept: Received new client!: sockFd: 8
+D (155961) Socket: << accept: sockFd: 8
+V (155962) FreeRTOS: Semaphore giving: name: clientSemaphore (0x3ffcb348), owner: waitForNewClient
+V (155968) FreeRTOS: << wait: Semaphore released: name: clientSemaphore (0x3ffcb348), owner: waitForNewClient
+D (155978) FreeRTOS: Semaphore taking: name: clientSemaphore (0x3ffcb348), owner: <N/A> for waitForNewClient
+D (155979) Socket: >> accept: Accepting on 0.0.0.0 [80]; sockFd: 0, using SSL: 0
+D (155988) FreeRTOS: Semaphore taken:  name: clientSemaphore (0x3ffcb348), owner: waitForNewClient
+D (156003) SockServ: << waitForNewClient
+D (156007) HttpServerTask: HttpServer listening on port 80 received a new client connection; sockFd=8
+D (156018) HttpParser: >> parseRequestLine: "GET /favicon.ico HTTP/1.1" [25]
+D (156022) HttpParser: << parseRequestLine: method: GET, url: /favicon.ico, version: HTTP/1.1
+D (156069) HttpRequest: Method: GET, URL: "/favicon.ico", Version: HTTP/1.1
+D (156069) HttpRequest: name="Accept", value="image/webp,image/apng,image/*,*/*;q=0.8"
+D (156072) HttpRequest: name="Accept-Encoding", value="gzip, deflate"
+D (156078) HttpRequest: name="Accept-Language", value="de-CH,de-DE;q=0.8,de;q=0.6,en-US;q=0.4,en;q=0.2"
+D (156087) HttpRequest: name="Connection", value="keep-alive"
+D (156093) HttpRequest: name="Host", value="192.168.4.1"
+D (156098) HttpRequest: name="Referer", value="http://192.168.4.1/"
+D (156104) HttpRequest: name="User-Agent", value="Mozilla/5.0 (Linux; Android 5.1.1; HUAWEI P7-L10 Build/HuaweiP7-L10) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.98 Mobile Safari/537.36"
+D (156121) HttpRequest: Body: ""
+D (156124) HttpServerTask: >> processRequest: Method: GET, Path: /favicon.ico
+D (156131) PathHandler: plain matching: / with /favicon.ico
+D (156136) PathHandler: plain matching: /helloWorld with /favicon.ico
+D (156143) PathHandler: plain matching: /jquery-3.2.1.min.js with /favicon.ico
+D (156150) PathHandler: plain matching:  /jqueryTest with /favicon.ico
+D (156156) HttpServerTask: No Path handler found
+D (156160) Socket: close: m_sock=8, ssl: 0
+D (156164) Socket: Calling lwip_close on 8
+D (156169) HttpServerTask: Waiting for new peer client
+D (156173) SockServ: >> waitForNewClient
+V (156176) FreeRTOS: >> wait: Semaphore waiting: name: clientSemaphore (0x3ffcb348), owner: waitForNewClient for waitForNewClient
