@@ -8,6 +8,7 @@
 
 #include <Arduino.h>
 #include <FS.h>
+#include <EEPROM.h>
 
 /* unbedingt nachdem Arduino.h included wurde, sonst gibt
    es Probleme mit IPADDR_NONE in lwip/ip4_addr.h */
@@ -15,6 +16,7 @@
 
 #include <string>
 
+#include "EEPROMUtil.h"
 #include "SPIFFS.h"
 #include "Parameters.h"
 
@@ -34,7 +36,9 @@ rootHandler(HttpRequest* pRequest, HttpResponse* pResponse)
         std::map<std::string, std::string> map = pRequest->parseForm();
         std::string d_str = map["duration"];
         std::string t_str = map["temperature"];
-        try {
+
+        Serial.println("Try to convert strings to numbers");
+        if (is_digits(d_str) && is_digits(t_str)) {
             int d = std::stoi(d_str);
             int t = std::stoi(t_str);
             Serial.print("duration ");
@@ -47,14 +51,7 @@ rootHandler(HttpRequest* pRequest, HttpResponse* pResponse)
             Serial.println(t);
             duration    = d;
             temperature = t;
-        } catch (const std::invalid_argument& ia) {
-            Serial.print("Error in converstion: ");
-            Serial.print("duration = ");
-            Serial.print(d_str.c_str());
-            Serial.print(" temperature = ");
-            Serial.println(t_str.c_str());
-            error = true;
-        } catch (const std::out_of_range& oor) {
+        } else {
             Serial.print("Error in converstion: ");
             Serial.print("duration = ");
             Serial.print(d_str.c_str());
@@ -80,16 +77,16 @@ rootHandler(HttpRequest* pRequest, HttpResponse* pResponse)
     buffer << "                    <td colspan=\"2\"><label form=\"control-panel\">Cutaneous Leishmaniasis Control Panel</label></td>\n";
     buffer << "                </tr>\n";
     buffer << "                <tr>\n";
-    buffer << "                    <td><label for=\"duration\">Duration</label></td>\n";
+    buffer << "                    <td><label for=\"duration\">Duration:</label></td>\n";
     buffer << "                    <td><input type=\"text\" name=\"duration\" id=\"duration\" maxlength=\"3\" value=\"" << duration << "\"></td>\n";
     buffer << "                </tr>\n";
     buffer << "                <tr>\n";
-    buffer << "                    <td><label for=\"temperature\">Temperature</label></td>\n";
+    buffer << "                    <td><label for=\"temperature\">Temperature:</label></td>\n";
     buffer << "                    <td><input type=\"text\" name=\"temperature\" id=\"temperature\" maxlength=\"3\" value=\"" << temperature << "\"></td>\n";
     buffer << "                </tr>\n";
     buffer << "                <tr>\n";
     buffer << "                    <td>&nbsp;</td>\n";
-    buffer << "                    <td><button type=\"submit\">Eingaben absenden</button></td>\n";
+    buffer << "                    <td><button type=\"submit\">Submit</button></td>\n";
     buffer << "                </tr>\n";
     buffer << "            </table>\n";
     buffer << "        </form>\n";

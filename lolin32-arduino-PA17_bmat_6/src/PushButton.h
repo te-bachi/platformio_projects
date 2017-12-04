@@ -14,11 +14,14 @@
 #include "Task.h"
 
 namespace PA17_bmat_6 {
+
     enum PushButtonEvent {
         PUSH_BUTTON_NONE = 0,
-        PUSH_BUTTON_PRESSED,
-        PUSH_BUTTON_RELEASED
+        PUSH_BUTTON_PRESS,
+        PUSH_BUTTON_RELEASE
     };
+
+    typedef void (*PushButtonHandlerFunc)(int pin, PushButtonEvent event);
 
     class PushButtonHandler {
         public:
@@ -28,31 +31,43 @@ namespace PA17_bmat_6 {
 
     class PushButton {
         private:
-            PushButtonHandler&  m_handler;
-            int                 m_pin;
-            int                 m_prev;  // timestamp
-            bool                m_value; // buffered value to be returned
 
+            friend class PushButtonTask;
+
+            enum PushButtonHandlerType {
+                HANDLER_CLASS,
+                HANDLER_FUNC
+            };
+            PushButtonHandlerType   m_handlerType;
+            PushButtonHandler&      m_handler;
+            PushButtonHandlerFunc   m_handlerFunc;
+            int                     m_pin;
+            PushButtonEvent         m_lastEvent;
 
         public:
                             PushButton(int pin);
-                            PushButton(PushButtonHandler& handler, int pin);
+                            PushButton(int pin, PushButtonHandler& handler);
+                            PushButton(int pin, PushButtonHandlerFunc handler);
             virtual         ~PushButton();
 
-            bool            getValue();
+            int             getPin();
+            PushButtonEvent getLastEvent();
 
     };
 
     class PushButtonTask : Task {
         private:
-            std::vector<PushButton *>   m_pushButtons;
+            std::vector<PushButton*>    m_pushButtons;
+            bool                        m_running;
+            uint8_t                     m_debouncingDelay;
 
         public:
-                                        PushButtonTask(int pin);
+                                        PushButtonTask(uint8_t debouncingDelay);
             virtual                     ~PushButtonTask();
 
-       	    void                        run(void* data);
-            void                        addPushButton(PushButton *pushButton);
+            void                        start();
+            bool                        addPushButton(PushButton* pushButton);
+            void                        run(void* data);
     };
 };
 

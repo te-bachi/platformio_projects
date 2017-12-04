@@ -3,7 +3,9 @@
 
 #include <Arduino.h>
 #include <WiFi.h>
+#include <EEPROM.h>
 
+#include "EEPROMUtil.h"
 #include "Console.h"
 #include "HttpServer.h"
 #include "SSD1306.h"
@@ -14,14 +16,23 @@
 #include "FlashFileSystem.h"
 #include "I2CScan.h"
 #include "HttpPathHandlers.h"
+#include "PushButton.h"
+#include "PushButtonHandler.h"
+
+#define BMAT6_TIME_DEBOUNCING_DELAY_MS  30
 
 #define BMAT6_DISPLAY_YELLOW_WIDTH      DISPLAY_WIDTH
 #define BMAT6_DISPLAY_YELLOW_HEIGHT     16
+
+using namespace PA17_bmat_6;
 
 HttpServer      httpServer;
 SSD1306         display(0x3C, 21, 22);
 MLX90614        thermopile;
 Shell           shell;
+PushButtonTask  pushButtonTask(BMAT6_TIME_DEBOUNCING_DELAY_MS);
+PushButton      modeButton(32, modeHandler);
+PushButton      selectButton(33, selectHandler);
 
 /* Duration in seconds */
 int duration = 30;
@@ -41,13 +52,24 @@ setup()
     /*** SERIAL ***************************************************************/
     Serial.begin(115200);
 
+    /*** PUSH BUTTONS *********************************************************/
+    pushButtonTask.addPushButton(&modeButton);
+    pushButtonTask.addPushButton(&selectButton);
+    pushButtonTask.start();
+
     /*** SHELL ****************************************************************/
     shell.setPrompt("> ");
     shell.begin(Serial, 5);
 
+    /*** EEPROM ***************************************************************/
+    if (!EEPROM.begin(EEPROM_SIZE)) {
+      Serial.println("EEPROM failed to initialise");
+      return;
+    }
+
     /*** SPIFFS ***************************************************************/
     if (!SPIFFS.begin()) {
-      Serial.println("SPIFFS Mount Failed");
+      Serial.println("SPIFFS mount failed");
       return;
     }
     //listDir(SPIFFS, "/", 0);
@@ -60,7 +82,7 @@ setup()
 
     /*** WIFI AP **************************************************************/
     if (!WiFi.softAP(ssid, password)) {
-        Serial.println("WiFi.softAP() failed!!");
+        Serial.println("WiFi AP failed to initialise");
         return;
     }
 
@@ -109,9 +131,9 @@ loop()
         return;
     }
 
-    shell.loop();
+    //shell.loop();
 
-/*
+
     double temp = thermopile.readObjectTempC();
     String tempStr = String(temp);
 
@@ -120,7 +142,7 @@ loop()
     for (int i = 0, k = 2; i < 16; i++, k++) {
         display.drawLine(0, i, 2*k, i);
     }
-*/
+
     //display.drawProgressBar(0, 0, uint16_t width, uint16_t height, uint8_t progress);
 
 /*
@@ -130,12 +152,10 @@ loop()
     display.drawString(0, 10, String(os.str().c_str()));
 */
 
-/*
     display.setFont(ArialMT_Plain_24);
     display.drawString(0, 26, tempStr);
     display.display();
-*/
 
-    //delay(1000);
+    delay(1000);
 
 }
