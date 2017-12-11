@@ -49,7 +49,7 @@ setup()
 
     timerIncrement     = 500;
     timerThresholdBulb = 2500;
-    timerThresholdWave = 9500;
+    timerThresholdWave = 9000;
     timerCount         = 0;
     triggerZcd         = false;
     enableZcd          = true;
@@ -325,17 +325,20 @@ zcdIsr_e()
 
 /******************************************************************************/
 
+//inline void
+
 void
 loop_f()
 {
     static int      _zcdOld         = LOW;
     static bool     _zcdEnable      = true;
     static bool     _triggerChange  = false;
-    static uint16_t _timerCount     = 0;
-    static uint16_t _microsOld      = 0;
+    static uint32_t _timerCount     = 0;
+    static uint32_t _microsOld      = 0;
 
     int             zcd = digitalRead(zcdPin);
-    uint16_t        diff;
+    uint32_t        microsNew;
+    uint32_t        diff;
 
     /* If rising edge or falling edge trigger */
     if ((zcd == HIGH && _zcdOld == LOW) || (zcd == LOW && _zcdOld == HIGH)) {
@@ -359,22 +362,21 @@ loop_f()
 
     /* If not edge trigger */
     if (!_triggerChange) {
-        diff         = micros() - _microsOld;
-        _microsOld   = micros();
+        microsNew    = micros();
+        diff         = microsNew - _microsOld;
+        _microsOld   = microsNew;
         _timerCount += diff;
 
-        if (!_zcdEnable) {
-            if (_timerCount >= timerThresholdBulb) {
-                /* Stop bulb */
-                digitalWrite(switchPin, HIGH);
-            }
+        if (_timerCount >= timerThresholdBulb) {
+            /* Stop bulb */
+            digitalWrite(switchPin, HIGH);
+        }
 
-            if (_timerCount >= timerThresholdWave) {
-                _zcdEnable = true;
+        if (_timerCount >= timerThresholdWave) {
+            _zcdEnable = true;
 
-                /* Start bulb */
-                digitalWrite(switchPin, LOW);
-            }
+            /* Start bulb */
+            //digitalWrite(switchPin, LOW);
         }
     }
 
@@ -392,6 +394,65 @@ inline void
 zcdIsr_f()
 {
     /* NOT USED */
+}
+
+/******************************************************************************/
+
+void
+loop_g()
+{
+    #define NUM  100
+    int             zcd;
+
+    static bool     _init           = false;
+    static int      _zcdOld         = LOW;
+    static uint32_t _pos[NUM];
+    static uint32_t _neg[NUM];
+    static int      _i              = 0;
+    static int      _k              = 0;
+    static bool     _printValues    = false;
+    static bool     _firstPositiv   = false;
+
+    if (!_init) {
+        _init = true;
+        memset(_pos, 0, sizeof(_pos));
+        memset(_neg, 0, sizeof(_neg));
+    }
+
+    if (_i < NUM || _k < NUM) {
+        zcd = digitalRead(zcdPin);
+
+        if (_i < NUM && zcd == HIGH && _zcdOld == LOW) {
+            _pos[_i++] = micros();
+            _firstPositiv = true;
+            //Serial.println("P");
+        } else if (_firstPositiv &&_k < NUM && zcd == LOW && _zcdOld == HIGH) {
+            _neg[_k++] = micros();
+            //Serial.println("N");
+        }
+
+        _zcdOld     = zcd;
+    } else if (!_printValues) {
+        _printValues = true;
+
+        Serial.println("Pos:");
+        for (int i = 0; i < NUM; i++) {
+            Serial.print("  ");
+            Serial.println(_pos[i]);
+        }
+        Serial.println("Neg:");
+        for (int i = 0; i < NUM; i++) {
+            Serial.print("  ");
+            Serial.println(_neg[i]);
+        }
+        Serial.println("Diff:");
+        for (int i = 0; i < NUM; i++) {
+            uint32_t diff = _neg[i] - _pos[i];
+            Serial.print("  ");
+            Serial.println(diff);
+        }
+    }
+
 }
 
 /******************************************************************************/
