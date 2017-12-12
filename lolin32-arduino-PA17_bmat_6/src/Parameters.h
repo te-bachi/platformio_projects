@@ -9,7 +9,22 @@
 #ifndef __PARAMETERS_H__
 #define __PARAMETERS_H__
 
-extern int duration;
-extern int temperature;
+#include <stdint.h>
+
+#include "Display.h"
+
+using namespace PA17_bmat_6;
+
+#define NANO_I2C_ADDRESS    0x08
+
+typedef uint32_t            DurationType;
+typedef uint32_t            TemperatureType;
+typedef uint8_t             IntensityType;
+
+extern DurationType         duration;
+extern TemperatureType      temperature;
+extern IntensityType        intensityDebug;
+
+extern Display              display;
 
 #endif

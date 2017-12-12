@@ -1,11 +1,19 @@
-
+/*******************************************************************************
+ * lolin32-arduino-PA17_bmat_6 (c) 2017
+ * Andreas Bachmann
+ * 20.11.2017
+ *
+ * https://github.com/te-bachi/XXX
+ */
+ 
 #include "I2CScan.h"
 
 #include <Arduino.h>
 #include <Wire.h>
 
 void
-scanI2C()
+
+PA17_bmat_6::scanI2C()
 {
     byte error, address;
     int nDevices;

@@ -12,11 +12,30 @@
 #include <stddef.h>
 #include <stdint.h>
 
-#define EEPROM_SIZE 64
+#include "Parameters.h"
 
-class EEPROMUtil {
-    static uint32_t readUInt32(int address);
-    static void writeUInt32(int address, uint32_t value);
+namespace PA17_bmat_6 {
+    typedef struct {
+        DurationType    duration;
+        TemperatureType temperature;
+    } EEPROMConfig;
+
+    #define EEPROM_SIZE sizeof(EEPROMConfig)
+
+    class EEPROMUtil {
+        public:
+            static uint32_t readUInt32(int address);
+            static void writeUInt32(int address, uint32_t value);
+
+            static void writeDuration(DurationType duration);
+            static DurationType readDuration();
+
+            static void writeTemperature(TemperatureType temperature);
+            static TemperatureType readTemperature();
+
+            static void writeConfig(EEPROMConfig config);
+            static EEPROMConfig readConfig();
+    };
 };
 
 #endif

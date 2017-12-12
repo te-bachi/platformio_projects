@@ -11,9 +11,12 @@
 
 #include "HttpServer.h"
 
-void rootHandler(HttpRequest* pRequest, HttpResponse* pResponse);
-void helloWorldHandler(HttpRequest* pRequest, HttpResponse* pResponse);
-void jqueryJsHandler(HttpRequest* pRequest, HttpResponse* pResponse);
-void jqueryTestHandler(HttpRequest* pRequest, HttpResponse* pResponse);
+namespace PA17_bmat_6 {
+    void rootHandler(HttpRequest* pRequest, HttpResponse* pResponse);
+    void intensityDebugHandler(HttpRequest* pRequest, HttpResponse* pResponse);
+    void helloWorldHandler(HttpRequest* pRequest, HttpResponse* pResponse);
+    void jqueryJsHandler(HttpRequest* pRequest, HttpResponse* pResponse);
+    void jqueryTestHandler(HttpRequest* pRequest, HttpResponse* pResponse);
+};
 
 #endif

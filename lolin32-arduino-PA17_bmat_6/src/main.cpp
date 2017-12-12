@@ -8,7 +8,6 @@
 #include "EEPROMUtil.h"
 #include "Console.h"
 #include "HttpServer.h"
-#include "SSD1306.h"
 #include "MLX90614.h"
 #include "SPIFFS.h"
 
@@ -21,36 +20,35 @@
 
 #define BMAT6_TIME_DEBOUNCING_DELAY_MS  30
 
-#define BMAT6_DISPLAY_YELLOW_WIDTH      DISPLAY_WIDTH
-#define BMAT6_DISPLAY_YELLOW_HEIGHT     16
-
 using namespace PA17_bmat_6;
 
 HttpServer      httpServer;
-SSD1306         display(0x3C, 21, 22);
 MLX90614        thermopile;
 Shell           shell;
+Display         display;
 PushButtonTask  pushButtonTask(BMAT6_TIME_DEBOUNCING_DELAY_MS);
 PushButton      modeButton(32, modeHandler);
 PushButton      selectButton(33, selectHandler);
 
-/* Duration in seconds */
-int duration = 30;
+/* Duration in seconds (saved in EEPROM) */
+DurationType    duration;
 
-/* Temperature in Celsius */
-int temperature = 50;
+/* Temperature in Celsius (saved in EEPROM) */
+TemperatureType temperature;
 
-//PushButton      modeButton();
+/* Dimmer Intensity Debug */
+IntensityType   intensityDebug  = 0;
 
-bool bootInit = false;
-const char *ssid = "ABCTEST";
-const char *password = "test1234567";
+bool            bootInit        = false;
+
+const char *    ssid            = "PA17_bmat_6";
+const char *    password        = "PA17_bmat_6";
 
 void
 setup()
 {
     /*** SERIAL ***************************************************************/
-    Serial.begin(115200);
+    Serial.begin(115200 /* baud rate */);
 
     /*** PUSH BUTTONS *********************************************************/
     pushButtonTask.addPushButton(&modeButton);
@@ -62,10 +60,13 @@ setup()
     shell.begin(Serial, 5);
 
     /*** EEPROM ***************************************************************/
-    if (!EEPROM.begin(EEPROM_SIZE)) {
+    if (!EEPROM.begin(EEPROM_SIZE /* size */)) {
       Serial.println("EEPROM failed to initialise");
       return;
     }
+    EEPROMConfig config = EEPROMUtil::readConfig();
+    duration    = config.duration;
+    temperature = config.temperature;
 
     /*** SPIFFS ***************************************************************/
     if (!SPIFFS.begin()) {
@@ -90,23 +91,12 @@ setup()
     Serial.print("AP IP address: ");
     Serial.println(myIP);
 
-    /*** OLED *****************************************************************/
-    Wire.begin(21, 22);
+    /*** I2C ******************************************************************/
+    Wire.begin(21 /*SDA */, 22 /* SCL */);
     scanI2C();
 
-    display.init();
-    display.flipScreenVertically();
-    display.setFont(ArialMT_Plain_10);
-
-    display.clear();
-    display.setTextAlignment(TEXT_ALIGN_LEFT);
-    display.setFont(ArialMT_Plain_10);
-    display.drawString(0, 0, "Hello world");
-    display.setFont(ArialMT_Plain_16);
-    display.drawString(0, 10, "Hello world");
-    display.setFont(ArialMT_Plain_24);
-    display.drawString(0, 26, "Hello world");
-    display.display();
+    /*** DISPLAY **************************************************************/
+    display.begin();
 
     /*** THERMOPILE ***********************************************************/
     thermopile.begin();
@@ -116,6 +106,8 @@ setup()
     httpServer.start(80);
     httpServer.addPathHandler(HttpRequest::HTTP_METHOD_GET,  "/", rootHandler);
     httpServer.addPathHandler(HttpRequest::HTTP_METHOD_POST, "/", rootHandler);
+    httpServer.addPathHandler(HttpRequest::HTTP_METHOD_GET,  "/intensityDebug", intensityDebugHandler);
+    httpServer.addPathHandler(HttpRequest::HTTP_METHOD_POST, "/intensityDebug", intensityDebugHandler);
     httpServer.addPathHandler(HttpRequest::HTTP_METHOD_GET,  "/helloWorld", helloWorldHandler);
     httpServer.addPathHandler(HttpRequest::HTTP_METHOD_GET,  "/jquery-3.2.1.min.js", jqueryJsHandler);
     httpServer.addPathHandler(HttpRequest::HTTP_METHOD_GET, " /jqueryTest", jqueryTestHandler);
@@ -131,31 +123,5 @@ loop()
         return;
     }
 
-    //shell.loop();
-
-
-    double temp = thermopile.readObjectTempC();
-    String tempStr = String(temp);
-
-    //Serial.println("Loop");
-    display.clear();
-    for (int i = 0, k = 2; i < 16; i++, k++) {
-        display.drawLine(0, i, 2*k, i);
-    }
-
-    //display.drawProgressBar(0, 0, uint16_t width, uint16_t height, uint8_t progress);
-
-/*
-    std::ostringstream os;
-    os << "hello " << 12 << "world!";
-    display.setFont(ArialMT_Plain_16);
-    display.drawString(0, 10, String(os.str().c_str()));
-*/
-
-    display.setFont(ArialMT_Plain_24);
-    display.drawString(0, 26, tempStr);
-    display.display();
-
-    delay(1000);
-
+    display.getCurrentMenu()->loop();
 }
