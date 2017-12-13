@@ -11,6 +11,10 @@
 
 #include <stdint.h>
 
+#include <Arduino.h>
+#include <WiFi.h>
+
+#include "MLX90614.h"
 #include "Display.h"
 
 using namespace PA17_bmat_6;
@@ -26,5 +30,11 @@ extern TemperatureType      temperature;
 extern IntensityType        intensityDebug;
 
 extern Display              display;
+extern MLX90614             thermopile;
+
+extern const char *         ssid;
+extern const char *         password;
+
+extern IPAddress            myIP;
 
 #endif

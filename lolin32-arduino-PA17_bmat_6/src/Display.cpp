@@ -10,6 +10,8 @@
 #include "Parameters.h"
 
 #include <Arduino.h>
+#include <string>
+#include <sstream>
 
 #include "SSD1306.h"
 
@@ -84,7 +86,7 @@ LogoMenu::setup()
     oled.setFont(ArialMT_Plain_10);
     oled.drawString(64, 0, "Press ANY key");
 
-    oled.drawXbm(0, Display::DISPLAY_YELLOW_HEIGHT + 1, logo_width, logo_height, logo_bits);
+    oled.drawXbm(0, Display::DISPLAY_YELLOW_HEIGHT, logo_width, logo_height, logo_bits);
 
     oled.display();
 }
@@ -154,17 +156,42 @@ TreatmentMenu::loop()
     }
     oled.setFont(ArialMT_Plain_16);
     oled.setTextAlignment(TEXT_ALIGN_CENTER);
-    oled.drawString(64, Display::DISPLAY_YELLOW_HEIGHT + 1, "Treatment");
+    oled.drawString(64, Display::DISPLAY_YELLOW_HEIGHT, "Treatment");
 
     if (m_start) {
-        uint32_t currentTime  = millis();
-        uint32_t diffTime     = (currentTime - m_startTime) / 1000;
-        uint32_t stopwatch    = duration - diffTime;
-        String   stopwatchStr = String(stopwatch);
+        uint32_t currentTime    = millis();                             /* in milliseconds */
+        uint32_t diffTimeStart  = currentTime - m_startTime;            /* in milliseconds */
+        uint32_t diffTimeLast   = currentTime - m_lastTime;             /* in milliseconds */
+        uint32_t s              = duration - (diffTimeStart / 1000);    /* in seconds */
+        uint32_t m              = int(s / 60);                          /* in minutes */
+
+        s = s - (m * 60);
+
+        if (s == 0 && m == 0) {
+            m_start = false;
+        }
+
+        /* Convert number to string in format MM:SS */
+        std::ostringstream buffer;
+        if (s < 10) {
+            buffer << std::to_string(m) << ":0" << std::to_string(s);
+        } else {
+            buffer << std::to_string(m) << ":" << std::to_string(s);
+        }
+        String stopwatchStr = String(buffer.str().c_str());
 
         oled.setFont(ArialMT_Plain_16);
-        oled.setTextAlignment(TEXT_ALIGN_CENTER);
-        oled.drawString(64, 40, stopwatchStr);
+        oled.setTextAlignment(TEXT_ALIGN_LEFT);
+        oled.drawString(0, 40, stopwatchStr);
+
+        /* Update */
+        if (diffTimeLast > 500) {
+            m_lastTime          = currentTime;
+            m_thermopileTempStr = String(thermopile.readObjectTempC()) + "°";
+        }
+        oled.setFont(ArialMT_Plain_16);
+        oled.setTextAlignment(TEXT_ALIGN_RIGHT);
+        oled.drawString(128, 40, m_thermopileTempStr);
     }
 
     oled.display();
@@ -175,17 +202,21 @@ TreatmentMenu::loop()
 void
 TreatmentMenu::modeHandler()
 {
-    m_display->setCurrentMenu(&(m_display->m_settings));
+    if (!m_start) {
+        m_display->setCurrentMenu(&(m_display->m_settings));
+    }
 }
 
 void
 TreatmentMenu::selectHandler()
 {
     if (!m_start) {
-        m_start     = true;
-        m_startTime = millis();
+        m_start             = true;
+        m_startTime         = millis();
+        m_lastTime          = m_startTime;
+        m_thermopileTempStr = String(thermopile.readObjectTempC()) + "°";
     } else {
-        m_start     = false;
+        m_start             = false;
     }
 
 }
@@ -195,26 +226,83 @@ TreatmentMenu::selectHandler()
  * SettingsMenu
  */
 
+const char *SettingsMenu::RIGHT_SUBMENU[] = {
+    [NONE]          = "Parameters",
+    [PARAMETERS]    = "Wifi",
+    [WIFI]          = "Access",
+    [ACCESS]        = "Parameters",
+};
+
+const char *SettingsMenu::TITLE[] = {
+    [NONE]          = "Settings",
+    [PARAMETERS]    = "Parameters",
+    [WIFI]          = "WiFi",
+    [ACCESS]        = "Access",
+};
+
 void
 SettingsMenu::setup()
 {
-    oled.clear();
-
-    oled.setFont(ArialMT_Plain_10);
-    oled.setTextAlignment(TEXT_ALIGN_LEFT);
-    oled.drawString(0, 0, "Treatment");
-
-    oled.setFont(ArialMT_Plain_16);
-    oled.setTextAlignment(TEXT_ALIGN_CENTER);
-    oled.drawString(64, Display::DISPLAY_YELLOW_HEIGHT + 1, "Settings");
-
-    oled.display();
+    m_submenu = NONE;
 }
 
 void
 SettingsMenu::loop()
 {
+    oled.clear();
 
+    /* Left menu */
+    oled.setFont(ArialMT_Plain_10);
+    oled.setTextAlignment(TEXT_ALIGN_LEFT);
+    oled.drawString(0, 0, "Treatment");
+
+    /* Right menu */
+    oled.setFont(ArialMT_Plain_10);
+    oled.setTextAlignment(TEXT_ALIGN_RIGHT);
+    oled.drawString(128, 0, RIGHT_SUBMENU[m_submenu]);
+
+    /* Title */
+    oled.setFont(ArialMT_Plain_16);
+    oled.setTextAlignment(TEXT_ALIGN_CENTER);
+    oled.drawString(64, Display::DISPLAY_YELLOW_HEIGHT, TITLE[m_submenu]);
+
+    /* Content */
+    oled.setFont(ArialMT_Plain_10);
+    oled.setTextAlignment(TEXT_ALIGN_LEFT);
+    if (m_submenu == NONE) {
+        //
+    } else if (m_submenu == PARAMETERS) {
+        uint32_t s = duration;      /* in seconds */
+        uint32_t m = int(s / 60);   /* in minutes */
+
+        s = s - (m * 60);
+
+        /* Convert number to string in format MM:SS */
+        String d;
+        if (s < 10) {
+            d = String(m) + ":0" + String(s);
+        } else {
+            d = String(m) + ":" + String(s);
+        }
+        String t = String(temperature) + "°";
+        oled.drawString( 0, 35, "Duration");
+        oled.drawString(65, 35, d);
+        oled.drawString( 0, 45, "Temperatur");
+        oled.drawString(65, 45, t);
+    } else if (m_submenu == WIFI) {
+        oled.drawString( 0, 35, "SSID");
+        oled.drawString(50, 35, String(ssid));
+        oled.drawString( 0, 45, "Password");
+        oled.drawString(50, 45, String(password));
+    } else if (m_submenu == ACCESS) {
+        oled.setTextAlignment(TEXT_ALIGN_CENTER);
+        String url = String("http://") + myIP.toString() + "/";
+        oled.drawString(64, 45, url);
+    }
+
+    oled.display();
+
+    delay(100);
 }
 
 void
@@ -226,7 +314,15 @@ SettingsMenu::modeHandler()
 void
 SettingsMenu::selectHandler()
 {
-
+    if (m_submenu == NONE) {
+        m_submenu = PARAMETERS;
+    } else if (m_submenu == PARAMETERS) {
+        m_submenu = WIFI;
+    } else if (m_submenu == WIFI) {
+        m_submenu = ACCESS;
+    } else if (m_submenu == ACCESS) {
+        m_submenu = PARAMETERS;
+    }
 }
 
 /*******************************************************************************

@@ -10,6 +10,7 @@
 #define __DISPLAY_H__
 
 #include <stdint.h>
+#include <Arduino.h>
 
 namespace PA17_bmat_6 {
 
@@ -51,6 +52,8 @@ namespace PA17_bmat_6 {
         private:
             bool                m_start;
             uint32_t            m_startTime;
+            uint32_t            m_lastTime;
+            String              m_thermopileTempStr;
 
         public:
                                 TreatmentMenu(Display* display) : Menu(display) {};
@@ -65,6 +68,16 @@ namespace PA17_bmat_6 {
     class SettingsMenu : public Menu {
 
         private:
+            enum Submenu {
+                NONE = 0,
+                PARAMETERS,
+                WIFI,
+                ACCESS,
+            };
+
+            static const char  *RIGHT_SUBMENU[];
+            static const char  *TITLE[];
+            Submenu             m_submenu;
 
         public:
                                 SettingsMenu(Display* display) : Menu(display) {};

@@ -8,7 +8,6 @@
 #include "EEPROMUtil.h"
 #include "Console.h"
 #include "HttpServer.h"
-#include "MLX90614.h"
 #include "SPIFFS.h"
 
 #include "Parameters.h"
@@ -43,6 +42,8 @@ bool            bootInit        = false;
 
 const char *    ssid            = "PA17_bmat_6";
 const char *    password        = "PA17_bmat_6";
+
+IPAddress       myIP;
 
 void
 setup()
@@ -87,7 +88,7 @@ setup()
         return;
     }
 
-    IPAddress myIP = WiFi.softAPIP();
+    myIP = WiFi.softAPIP();
     Serial.print("AP IP address: ");
     Serial.println(myIP);
 
