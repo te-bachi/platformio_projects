@@ -85,11 +85,11 @@ PA17_bmat_6::rootHandler(HttpRequest* pRequest, HttpResponse* pResponse)
     buffer << "                    <td colspan=\"2\"><label form=\"control-panel\">Cutaneous Leishmaniasis Control Panel</label></td>\n";
     buffer << "                </tr>\n";
     buffer << "                <tr>\n";
-    buffer << "                    <td><label for=\"duration\">Duration:</label></td>\n";
+    buffer << "                    <td><label for=\"duration\">Duration [s]:</label></td>\n";
     buffer << "                    <td><input type=\"text\" name=\"duration\" id=\"duration\" maxlength=\"3\" value=\"" << duration << "\"></td>\n";
     buffer << "                </tr>\n";
     buffer << "                <tr>\n";
-    buffer << "                    <td><label for=\"temperature\">Temperature:</label></td>\n";
+    buffer << "                    <td><label for=\"temperature\">Temperature [°C]:</label></td>\n";
     buffer << "                    <td><input type=\"text\" name=\"temperature\" id=\"temperature\" maxlength=\"3\" value=\"" << temperature << "\"></td>\n";
     buffer << "                </tr>\n";
     buffer << "                <tr>\n";
@@ -126,9 +126,7 @@ PA17_bmat_6::intensityDebugHandler(HttpRequest* pRequest, HttpResponse* pRespons
             Serial.println(i);
             intensityDebug = i;
 
-            Wire.beginTransmission(NANO_I2C_ADDRESS);
-            Wire.write(intensityDebug);
-            Wire.endTransmission();
+            dimmer.setValue((Dimmer::Value) intensityDebug);
         } else {
             Serial.print("Error in converstion: ");
             Serial.print("intensity = ");

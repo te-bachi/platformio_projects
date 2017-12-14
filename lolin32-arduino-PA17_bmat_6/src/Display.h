@@ -12,6 +12,8 @@
 #include <stdint.h>
 #include <Arduino.h>
 
+#include "Dimmer.h"
+
 namespace PA17_bmat_6 {
 
     class Display;
@@ -50,10 +52,14 @@ namespace PA17_bmat_6 {
     class TreatmentMenu : public Menu {
 
         private:
-            bool                m_start;
-            uint32_t            m_startTime;
-            uint32_t            m_lastTime;
-            String              m_thermopileTempStr;
+            bool                m_start;                /*< treatment started? */
+            bool                m_tempReached;          /*< target temperature reached? */
+            uint32_t            m_duration;             /*< copy from parameters when start treatment */
+            double              m_targetTemp;           /*< copy from parameters when start treatment (convert to double) */
+            uint32_t            m_startTime;            /*< set start time when current temperature reaches target  */
+            uint32_t            m_lastTime;             /*< last time the */
+            String              m_thermopileTempStr;    /*< current temperature as string to present to display */
+            Dimmer::Value       m_currentDimmerValue;   /*< current dimmer value */
 
         public:
                                 TreatmentMenu(Display* display) : Menu(display) {};
@@ -75,9 +81,10 @@ namespace PA17_bmat_6 {
                 ACCESS,
             };
 
-            static const char  *RIGHT_SUBMENU[];
-            static const char  *TITLE[];
-            Submenu             m_submenu;
+            static const char      *RIGHT_SUBMENU[];
+            static const char      *TITLE[];
+            static const Submenu    NEXT[];
+            Submenu                 m_submenu;
 
         public:
                                 SettingsMenu(Display* display) : Menu(display) {};

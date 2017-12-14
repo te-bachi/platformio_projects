@@ -14,12 +14,11 @@
 #include <Arduino.h>
 #include <WiFi.h>
 
-#include "MLX90614.h"
 #include "Display.h"
+#include "Dimmer.h"
+#include "MLX90614.h"
 
 using namespace PA17_bmat_6;
-
-#define NANO_I2C_ADDRESS    0x08
 
 typedef uint32_t            DurationType;
 typedef uint32_t            TemperatureType;
@@ -30,6 +29,7 @@ extern TemperatureType      temperature;
 extern IntensityType        intensityDebug;
 
 extern Display              display;
+extern Dimmer               dimmer;
 extern MLX90614             thermopile;
 
 extern const char *         ssid;

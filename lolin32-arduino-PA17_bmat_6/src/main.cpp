@@ -22,12 +22,13 @@
 using namespace PA17_bmat_6;
 
 HttpServer      httpServer;
+Display         display;
+Dimmer          dimmer(Wire, NANO_I2C_ADDRESS);
 MLX90614        thermopile;
 Shell           shell;
-Display         display;
 PushButtonTask  pushButtonTask(BMAT6_TIME_DEBOUNCING_DELAY_MS);
-PushButton      modeButton(32, modeHandler);
-PushButton      selectButton(33, selectHandler);
+PushButton      modeButton(33, modeHandler);
+PushButton      selectButton(32, selectHandler);
 
 /* Duration in seconds (saved in EEPROM) */
 DurationType    duration;
@@ -98,6 +99,9 @@ setup()
 
     /*** DISPLAY **************************************************************/
     display.begin();
+
+    /*** DIMMER ***************************************************************/
+    dimmer.setValue(Dimmer::OFF);
 
     /*** THERMOPILE ***********************************************************/
     thermopile.begin();

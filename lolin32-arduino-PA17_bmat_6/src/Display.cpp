@@ -21,48 +21,6 @@ using namespace PA17_bmat_6;
 
 SSD1306 oled(0x3C /* I2C address */, 21 /* SDA */, 22 /* SCL */);
 
-/*
-display.setFont(ArialMT_Plain_10);
-
-display.clear();
-display.setTextAlignment(TEXT_ALIGN_LEFT);
-display.setFont(ArialMT_Plain_10);
-display.drawString(0, 0, "Hello world");
-display.setFont(ArialMT_Plain_16);
-display.drawString(0, 10, "Hello world");
-display.setFont(ArialMT_Plain_24);
-display.drawString(0, 26, "Hello world");
-display.display();
-
-
-
-
-double temp = thermopile.readObjectTempC();
-String tempStr = String(temp);
-
-//Serial.println("Loop");
-display.clear();
-for (int i = 0, k = 2; i < 16; i++, k++) {
-    display.drawLine(0, i, 2*k, i);
-}
-
-//display.drawProgressBar(0, 0, uint16_t width, uint16_t height, uint8_t progress);
-
-/*
-std::ostringstream os;
-os << "hello " << 12 << "world!";
-display.setFont(ArialMT_Plain_16);
-display.drawString(0, 10, String(os.str().c_str()));
-*/
-
-/*
-display.setFont(ArialMT_Plain_24);
-display.drawString(0, 26, tempStr);
-display.display();
-
-//Serial.println(tempStr);
-*/
-
 /*******************************************************************************
  * Menu
  */
@@ -100,30 +58,12 @@ LogoMenu::loop()
 void
 LogoMenu::modeHandler()
 {
-    /*
-    oled.clear();
-
-    oled.setTextAlignment(TEXT_ALIGN_LEFT);
-    oled.setFont(ArialMT_Plain_10);
-    oled.drawString(0, Display::DISPLAY_YELLOW_HEIGHT + 1, "mode");
-
-    oled.display();
-    */
     m_display->setCurrentMenu(&(m_display->m_treatment));
 }
 
 void
 LogoMenu::selectHandler()
 {
-    /*
-    oled.clear();
-
-    oled.setTextAlignment(TEXT_ALIGN_LEFT);
-    oled.setFont(ArialMT_Plain_10);
-    oled.drawString(0, Display::DISPLAY_YELLOW_HEIGHT + 1, "select");
-
-    oled.display();
-    */
     m_display->setCurrentMenu(&(m_display->m_treatment));
 }
 
@@ -158,36 +98,69 @@ TreatmentMenu::loop()
     oled.setTextAlignment(TEXT_ALIGN_CENTER);
     oled.drawString(64, Display::DISPLAY_YELLOW_HEIGHT, "Treatment");
 
+    /* Debug */
+    oled.setFont(ArialMT_Plain_10);
+    oled.setTextAlignment(TEXT_ALIGN_LEFT);
+    oled.drawString(0, Display::DISPLAY_YELLOW_HEIGHT, String(int(m_currentDimmerValue)));
+
     if (m_start) {
+        double   currentTemp    = thermopile.readObjectTempC();
         uint32_t currentTime    = millis();                             /* in milliseconds */
         uint32_t diffTimeStart  = currentTime - m_startTime;            /* in milliseconds */
         uint32_t diffTimeLast   = currentTime - m_lastTime;             /* in milliseconds */
-        uint32_t s              = duration - (diffTimeStart / 1000);    /* in seconds */
-        uint32_t m              = int(s / 60);                          /* in minutes */
 
-        s = s - (m * 60);
+        if (m_tempReached) {
+            uint32_t s          = m_duration - (diffTimeStart / 1000);  /* in seconds */
+            uint32_t m          = int(s / 60);                          /* in minutes */
 
-        if (s == 0 && m == 0) {
-            m_start = false;
-        }
+            s = s - (m * 60);
 
-        /* Convert number to string in format MM:SS */
-        std::ostringstream buffer;
-        if (s < 10) {
-            buffer << std::to_string(m) << ":0" << std::to_string(s);
+            if (s == 0 && m == 0) {
+                m_start = false;
+                dimmer.setValue(Dimmer::OFF);
+            }
+
+            /* Convert number to string in format MM:SS */
+            std::ostringstream buffer;
+            if (s < 10) {
+                buffer << std::to_string(m) << ":0" << std::to_string(s);
+            } else {
+                buffer << std::to_string(m) << ":" << std::to_string(s);
+            }
+            String stopwatchStr = String(buffer.str().c_str());
+
+            oled.setFont(ArialMT_Plain_16);
+            oled.setTextAlignment(TEXT_ALIGN_LEFT);
+            oled.drawString(0, 40, stopwatchStr);
+
+            /* Cool down */
+            if (currentTemp >= (m_targetTemp - 0.1) && m_currentDimmerValue > Dimmer::OFF) {
+                m_currentDimmerValue = Dimmer::Value(int(m_currentDimmerValue) - 1);
+                dimmer.setValue(m_currentDimmerValue);
+            }
         } else {
-            buffer << std::to_string(m) << ":" << std::to_string(s);
-        }
-        String stopwatchStr = String(buffer.str().c_str());
+            oled.setFont(ArialMT_Plain_16);
+            oled.setTextAlignment(TEXT_ALIGN_LEFT);
+            oled.drawString(0, 40, "PREHEAT");
 
-        oled.setFont(ArialMT_Plain_16);
-        oled.setTextAlignment(TEXT_ALIGN_LEFT);
-        oled.drawString(0, 40, stopwatchStr);
+            /* Temperature reached? */
+            if (currentTemp >= (m_targetTemp - 0.1)) {
+                m_tempReached           = true;
+                m_currentDimmerValue    = Dimmer::THIRD;
+                dimmer.setValue(m_currentDimmerValue);
+            }
+        }
 
         /* Update */
         if (diffTimeLast > 500) {
             m_lastTime          = currentTime;
-            m_thermopileTempStr = String(thermopile.readObjectTempC()) + "°";
+            m_thermopileTempStr = String(currentTemp) + "°";
+
+            /* Heaten up */
+            if (currentTemp < (m_targetTemp - 0.1) && m_currentDimmerValue < Dimmer::FULL) {
+                m_currentDimmerValue = Dimmer::Value(int(m_currentDimmerValue) + 1);
+                dimmer.setValue(m_currentDimmerValue);
+            }
         }
         oled.setFont(ArialMT_Plain_16);
         oled.setTextAlignment(TEXT_ALIGN_RIGHT);
@@ -212,11 +185,17 @@ TreatmentMenu::selectHandler()
 {
     if (!m_start) {
         m_start             = true;
-        m_startTime         = millis();
+        m_tempReached       = false;
         m_lastTime          = m_startTime;
+        m_duration          = duration;
+        m_targetTemp        = double(temperature);
         m_thermopileTempStr = String(thermopile.readObjectTempC()) + "°";
+
+        dimmer.setValue(Dimmer::FULL);
     } else {
         m_start             = false;
+
+        dimmer.setValue(Dimmer::OFF);
     }
 
 }
@@ -238,6 +217,13 @@ const char *SettingsMenu::TITLE[] = {
     [PARAMETERS]    = "Parameters",
     [WIFI]          = "WiFi",
     [ACCESS]        = "Access",
+};
+
+const SettingsMenu::Submenu SettingsMenu::NEXT[] = {
+    [NONE]          = PARAMETERS,
+    [PARAMETERS]    = WIFI,
+    [WIFI]          = ACCESS,
+    [ACCESS]        = PARAMETERS,
 };
 
 void
@@ -314,15 +300,8 @@ SettingsMenu::modeHandler()
 void
 SettingsMenu::selectHandler()
 {
-    if (m_submenu == NONE) {
-        m_submenu = PARAMETERS;
-    } else if (m_submenu == PARAMETERS) {
-        m_submenu = WIFI;
-    } else if (m_submenu == WIFI) {
-        m_submenu = ACCESS;
-    } else if (m_submenu == ACCESS) {
-        m_submenu = PARAMETERS;
-    }
+    /* Select next submenu */
+    m_submenu = NEXT[m_submenu];
 }
 
 /*******************************************************************************
