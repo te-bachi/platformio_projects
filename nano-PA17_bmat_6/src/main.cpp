@@ -8,72 +8,60 @@
 
 #include <Arduino.h>
 #include <Wire.h>
-#include "Shell.h"
-#include "TimerOne.h"
-#include "Leishman.h"
 
-void blinkLED(void);
 void receiveEvent(int numBytes);
-void timerIsr();
-void zcdIsr();
 
-//Shell               shell;
+/*******************************************************************************
+ *  50 Hz = 0.02 s (full period)
+ * 100 Hz = 0.01 s (half period)
+ * everything in microseconds: 0 . 000 001 s
+ * wave zero-crossing every:   0 . 010 000 s
+ */
 
-volatile uint32_t   i;
-/* everything in microseconds: 0 . 000 001 */
-/* wave zero-crossing every:   0 . 010 000 */
+uint16_t            timerIncrement;         /* increment timer to final value */
+uint16_t            timerThresholdBulb;     /* */
+uint16_t            timerThresholdWave;     /* threshold to enable ZCD triggering */
+uint16_t            timerCount;             /* from 0 to threshold bulb */
 
-volatile uint16_t   timerIncrement;
-volatile uint16_t   timerThresholdBulb;
-volatile uint16_t   timerThresholdWave;
-volatile uint16_t   timerCount;
+uint32_t            microsOld;              /* old micros() value */
 
-volatile int        ledState = LOW;
-volatile bool       zcdEnabled = false;
+/* Switch on/off light */
+bool                lightOff;
+bool                lightFull;
 
-volatile bool       triggerZcd;
-volatile bool       enableZcd;
+int                 zcdOld         = LOW;
+bool                zcdEnable      = true;
+bool                triggerChange  = false;
 
-volatile bool       timerOverflow = false;
-volatile bool       timerShow = false;
-
-
-const byte          zcdPin = 2;
-const byte          switchPin = 5;
-const byte          ledPin = LED_BUILTIN;
+/* Pin definition */
+const byte          zcdPin      = 2;
+const byte          switchPin   = 5;
+const byte          ledPin      = LED_BUILTIN;
 
 void
 setup()
 {
-    i                  = 0;
+    timerIncrement      = 50;
+    timerThresholdBulb  = 0;
+    timerThresholdWave  = 9000;
+    timerCount          = 0;
+    microsOld           = 0;
 
-    timerIncrement     = 500;
-    timerThresholdBulb = 2500;
-    timerThresholdWave = 9000;
-    timerCount         = 0;
-    triggerZcd         = false;
-    enableZcd          = true;
+    lightOff            = true;
+    lightFull           = false;
+
+    zcdOld              = LOW;
+    zcdEnable           = true;
+    triggerChange       = false;
 
     /*** INPUT/OUTPUT *********************************************************/
     pinMode(switchPin, OUTPUT);
     digitalWrite(switchPin, HIGH);
 
     pinMode(zcdPin, INPUT);
-    //attachInterrupt(digitalPinToInterrupt(zcdPin), zcdIsr, CHANGE);
-
-    /*** TIMER 1 **************************************************************/
-
-    //Timer1.initialize(timerIncrement);
-    //Timer1.attachInterrupt(timerIsr);
-    //Timer1.stop();
-
-    /*** SHELL ****************************************************************/
-    //shell.setPrompt("> ");
-    //shell.begin(Serial, 5);
 
     /*** CONSOLE **************************************************************/
     Serial.begin(115400);
-    //Leishman::begin();
 
     /*** I2C ******************************************************************/
     Wire.begin(8);
@@ -82,409 +70,95 @@ setup()
     Serial.println("Done!");
 }
 
-/******************************************************************************/
-
-void
-loop_a()
-{
-    static int a = LOW;
-    a = (a == LOW ? HIGH : LOW);
-
-    digitalWrite(switchPin, a);
-}
-
-void
-timerIsr_a(void)
-{
-}
-
-
-
-/******************************************************************************/
-
-
-void
-loop_b()
-{
-    uint32_t k;
-
-    digitalWrite(switchPin, HIGH);
-
-    noInterrupts();
-    k = i;
-    interrupts();
-
-    Serial.println(k);
-    delay(1000);
-}
-
-
-void
-timerIsr_b(void)
-{
-
-}
-
-void
-zcdIsr_b()
-{
-    i++;
-}
-
-/******************************************************************************/
-
-void
-loop_c()
-{
-
-    //uint32_t k;
-    //bool     t = false;
-    //cli.check();
-
-    /*
-    noInterrupts();
-    if (timerShow) {
-        ledState = (ledState == LOW ? HIGH : LOW);
-        digitalWrite(ledPin, ledState);
-        timerShow       = false;
-        t               = true;
-        k               = i;
-    }
-    interrupts();
-
-    if (t) {
-        String s = "i = " + String(k);
-        Serial.println(s);
-    }
-    */
-
-    /*
-    noInterrupts();
-    if (timerShow) {
-        timerShow = false;
-        k         = i;
-        t         = true;
-    }
-    interrupts();
-    if (t) {
-        Serial.println(k);
-    }
-    */
-
-    //shell.loop();
-}
-
-void
-timerIsr_c(void)
-{
-    static uint8_t  intTrigger = 0;
-    static uint16_t showTrigger = 0;
-    /*
-    timerOverflow = true;
-    timerShow     = true;
-    Timer1.stop();
-    Serial.println("!");
-    */
-    if (intTrigger >= 10) {
-        intTrigger = 0;
-        attachInterrupt(digitalPinToInterrupt(zcdPin), zcdIsr, RISING);
-    }
-    if (showTrigger >= 1000) {
-        showTrigger = 0;
-        timerShow = true;
-    }
-
-
-    //ledState = (ledState == LOW ? HIGH : LOW);
-    //digitalWrite(ledPin, ledState);
-    intTrigger++;
-    showTrigger++;
-}
-
-
-void
-zcdIsr_c()
-{
-    /*
-    if (!zcdEnabled) {
-        zcdEnabled = true;
-    }
-    */
-
-    /*
-    if (timerOverflow) {
-        timerOverflow = false;
-        Timer1.start();
-    }
-    */
-
-    //Serial.println("!");
-    //detachInterrupt(digitalPinToInterrupt(zcdPin));
-}
-
-/******************************************************************************/
-
-void
-loop_d()
-{
-    uint32_t k;
-
-    noInterrupts();
-    k = i;
-    interrupts();
-
-    Serial.println(k);
-    delay(1000);
-}
-
-
-inline void
-timerIsr_d(void)
-{
-
-    /* Timer count (per ISR) greater than threshold (stop bulb) */
-    if (timerCount >= timerThresholdBulb) {
-        /* Stop Bulb */
-        digitalWrite(switchPin, HIGH);
-
-    }
-
-    if (timerCount >= timerThresholdWave) {
-        attachInterrupt(digitalPinToInterrupt(zcdPin), zcdIsr, CHANGE);
-    }
-
-    timerCount += timerIncrement;
-}
-
-inline void
-zcdIsr_d()
-{
-    detachInterrupt(digitalPinToInterrupt(zcdPin));
-
-    /* Start Bulb */
-    digitalWrite(switchPin, LOW);
-
-    /* Reset timer count */
-    timerCount = 0;
-    //Timer1.restart();
-
-
-    i++;
-}
-
-/******************************************************************************/
-
-void
-loop_e()
-{
-    uint32_t k;
-
-    noInterrupts();
-    k = i;
-    interrupts();
-
-    Serial.println(k);
-    delay(1000);
-}
-
-
-inline void
-timerIsr_e(void)
-{
-
-    /* Timer count (per ISR) greater than threshold (stop bulb) */
-    if (timerCount >= timerThresholdBulb) {
-        /* Stop Bulb */
-        digitalWrite(switchPin, HIGH);
-
-    }
-
-    if (timerCount >= timerThresholdWave) {
-        enableZcd = true;
-    }
-
-    timerCount += timerIncrement;
-}
-
-inline void
-zcdIsr_e()
-{
-    if (enableZcd) {
-        enableZcd = false;
-
-        /* Start Bulb */
-        digitalWrite(switchPin, LOW);
-
-        /* Reset timer count */
-        timerCount = 0;
-
-
-        i++;
-    }
-}
-
-/******************************************************************************/
-
-//inline void
-
-void
-loop_f()
-{
-    static int      _zcdOld         = LOW;
-    static bool     _zcdEnable      = true;
-    static bool     _triggerChange  = false;
-    static uint32_t _timerCount     = 0;
-    static uint32_t _microsOld      = 0;
-
-    int             zcd = digitalRead(zcdPin);
-    uint32_t        microsNew;
-    uint32_t        diff;
-
-    /* If rising edge or falling edge trigger */
-    if ((zcd == HIGH && _zcdOld == LOW) || (zcd == LOW && _zcdOld == HIGH)) {
-        if (_zcdEnable) {
-            _zcdEnable     = false;
-            _triggerChange = true;
-
-            /* Start bulb */
-            digitalWrite(switchPin, LOW);
-
-            /* restar timer */
-            _timerCount = 0;
-        } else {
-            _triggerChange = false;
-        }
-
-    /* Level trigger */
-    } else {
-        _triggerChange = false;
-    }
-
-    /* If not edge trigger */
-    if (!_triggerChange) {
-        microsNew    = micros();
-        diff         = microsNew - _microsOld;
-        _microsOld   = microsNew;
-        _timerCount += diff;
-
-        if (_timerCount >= timerThresholdBulb) {
-            /* Stop bulb */
-            digitalWrite(switchPin, HIGH);
-        }
-
-        if (_timerCount >= timerThresholdWave) {
-            _zcdEnable = true;
-
-            /* Start bulb */
-            //digitalWrite(switchPin, LOW);
-        }
-    }
-
-    _zcdOld     = zcd;
-}
-
-
-inline void
-timerIsr_f(void)
-{
-    /* NOT USED */
-}
-
-inline void
-zcdIsr_f()
-{
-    /* NOT USED */
-}
-
-/******************************************************************************/
-
-void
-loop_g()
-{
-    #define NUM  100
-    int             zcd;
-
-    static bool     _init           = false;
-    static int      _zcdOld         = LOW;
-    static uint32_t _pos[NUM];
-    static uint32_t _neg[NUM];
-    static int      _i              = 0;
-    static int      _k              = 0;
-    static bool     _printValues    = false;
-    static bool     _firstPositiv   = false;
-
-    if (!_init) {
-        _init = true;
-        memset(_pos, 0, sizeof(_pos));
-        memset(_neg, 0, sizeof(_neg));
-    }
-
-    if (_i < NUM || _k < NUM) {
-        zcd = digitalRead(zcdPin);
-
-        if (_i < NUM && zcd == HIGH && _zcdOld == LOW) {
-            _pos[_i++] = micros();
-            _firstPositiv = true;
-            //Serial.println("P");
-        } else if (_firstPositiv &&_k < NUM && zcd == LOW && _zcdOld == HIGH) {
-            _neg[_k++] = micros();
-            //Serial.println("N");
-        }
-
-        _zcdOld     = zcd;
-    } else if (!_printValues) {
-        _printValues = true;
-
-        Serial.println("Pos:");
-        for (int i = 0; i < NUM; i++) {
-            Serial.print("  ");
-            Serial.println(_pos[i]);
-        }
-        Serial.println("Neg:");
-        for (int i = 0; i < NUM; i++) {
-            Serial.print("  ");
-            Serial.println(_neg[i]);
-        }
-        Serial.println("Diff:");
-        for (int i = 0; i < NUM; i++) {
-            uint32_t diff = _neg[i] - _pos[i];
-            Serial.print("  ");
-            Serial.println(diff);
-        }
-    }
-
-}
-
-/******************************************************************************/
-
+/******************************************************************************
+ * void digitalWrite(uint8_t, uint8_t);
+ * int digitalRead(uint8_t);
+ */
 
 void
 loop()
 {
-    loop_f();
-}
+    int             zcd = digitalRead(zcdPin);
+    uint32_t        microsNew;
+    uint32_t        diff;
 
-void
-timerIsr(void)
-{
-    timerIsr_f();
-}
+    if (lightOff) {
+        /* Stop bulb */
+        digitalWrite(switchPin, HIGH);
 
-void
-zcdIsr() {
-    zcdIsr_f();
-}
+    } else if (lightFull) {
+        /* Start bulb */
+        digitalWrite(switchPin, LOW);
 
+    } else {
+        /* If rising edge or falling edge trigger */
+        if ((zcd == HIGH && zcdOld == LOW) || (zcd == LOW && zcdOld == HIGH)) {
+            if (zcdEnable) {
+                zcdEnable     = false;
+                triggerChange = true;
+
+                /* Start bulb */
+                digitalWrite(switchPin, LOW);
+
+                /* restar timer */
+                timerCount = 0;
+            } else {
+                triggerChange = false;
+            }
+
+        /* Level trigger */
+        } else {
+            triggerChange = false;
+        }
+
+        /* If not edge trigger */
+        if (!triggerChange) {
+            microsNew    = micros();
+            diff         = microsNew - microsOld;
+            microsOld   = microsNew;
+            timerCount += diff;
+
+            if (timerCount >= timerThresholdBulb) {
+                /* Stop bulb */
+                digitalWrite(switchPin, HIGH);
+            }
+
+            if (timerCount >= timerThresholdWave) {
+                zcdEnable = true;
+
+            }
+        }
+    }
+
+    zcdOld     = zcd;
+}
 
 void
 receiveEvent(int numBytes) {
-    Serial.print("I2C (bytes=");
-    Serial.print(numBytes);
-    Serial.print(") ");
-    while (1 < Wire.available()) {
-        char c = Wire.read();
-        Serial.print(c);
+    byte factor = Wire.read();
+    switch (factor) {
+        case 0:
+            lightOff            = true;
+            lightFull           = false;
+            break;
+
+        case 1: /* 1 x 1250 = 1250 us */
+        case 2: /* 2 x 1250 = 2500 us */
+        case 3: /* 3 x 1250 = 3750 us */
+        case 4: /* 4 x 1250 = 5000 us */
+        case 5: /* 5 x 1250 = 6250 us */
+        case 6: /* 6 x 1250 = 7500 us */
+        case 7: /* 7 x 1250 = 8750 us */
+            lightOff            = false;
+            lightFull           = false;
+            timerThresholdBulb  = factor * 1250;
+            break;
+
+        case 8: /* 8 x 1250 = 10'000 us = 0.01 s (zero-crossing length)*/
+        default:
+            lightOff            = false;
+            lightFull           = true;
+            break;
+
     }
-    byte x = Wire.read();
-    Serial.println(x);
 }
