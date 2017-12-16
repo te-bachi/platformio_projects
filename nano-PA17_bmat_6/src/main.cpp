@@ -15,11 +15,6 @@ void receiveEvent(int numBytes);
 void edge(uint16_t *count);
 
 typedef enum {
-    NEXT_CROSS_RISING,
-    NEXT_CROSS_FALLING
-} NextCrossType;
-
-typedef enum {
     DIMMER_OFF,
     DIMMER_DIMM,
     DIMMER_FULL
@@ -33,7 +28,9 @@ typedef enum {
  */
 
 const uint16_t      period                  = 20000;    /* 50 Hz => 20'000 us */
-const uint16_t      timerThresholdZcdEdge   = 9000;     /* threshold to enable ZCD edge triggering */
+const uint16_t      timerThresholdZcdEdge   = 9000;     /* 9000 us, threshold to enable ZCD edge triggering */
+const uint16_t      timerIncrement          = 50;       /*   50 us, increment timer to final value */
+const uint16_t      timerThresholdFactor    = 1250;     /* 1250 us, factor to calculate timerThresholdBulb */
 
 const uint16_t      risingOffset            = 1000;     /* rising offset 1000 us */
 const uint16_t      fallingOffset           = 680;      /* falling offset 680 us */
@@ -41,7 +38,6 @@ const uint16_t      fallingOffset           = 680;      /* falling offset 680 us
 const uint16_t      risingThreshold         = period - risingOffset;
 const uint16_t      fallingThreshold        = period - fallingOffset;
 
-uint16_t            timerIncrement;                     /* increment timer to final value */
 uint16_t            timerThresholdBulb;                 /* threshold to switch off bulb*/
 uint16_t            timerOnRisingCount;                 /* from 0 to (period - risingOffset) */
 uint16_t            timerOnFallingCount;                /* from 0 to (period - fallingOffset) */
@@ -51,9 +47,6 @@ uint32_t            microsOld;                          /* old micros() value */
 
 /* Switch on/off light */
 DimmerType          dimmer;
-bool                lightOn;
-
-NextCrossType       nextCross;
 
 int                 zcdOld;
 bool                zcdEnable;
@@ -68,13 +61,11 @@ void
 setup()
 {
     /* timer variables in microseconds */
-    timerIncrement          = 50;
     timerThresholdBulb      = 0;
     timerOffCount           = 0;
     microsOld               = 0;
 
     dimmer                  = DIMMER_OFF;
-    lightOn                 = false;
 
     zcdOld                  = LOW;
     zcdEnable               = true;
@@ -120,12 +111,10 @@ loop()
         /* ZCD: rising edge */
         if (zcd == HIGH && zcdOld == LOW) {
             edge(&timerOnRisingCount);
-            nextCross = NEXT_CROSS_FALLING;
 
         /* ZCD: falling edge */
         } else if (zcd == LOW && zcdOld == HIGH) {
             edge(&timerOnFallingCount);
-            nextCross = NEXT_CROSS_RISING;
 
         /* ZCD: level trigger */
         } else {
@@ -148,7 +137,6 @@ loop()
                 } else if (timerOnFallingCount >= fallingThreshold) {
                     timerOnFallingCount = 0;
                 }
-                lightOn = true;
 
                 /* Switch: Start bulb */
                 digitalWrite(switchPin, LOW);
@@ -159,18 +147,9 @@ loop()
 
             /* Switch off, if... */
             if (timerOffCount >= timerThresholdBulb) {
-                lightOn = false;
 
                 /* Switch: Stop bulb */
                 digitalWrite(switchPin, HIGH);
-
-                /*
-                if (nextCross == NEXT_CROSS_FALLING) {
-                    timerOnFallingCount = 0;
-                } else if (nextCross == NEXT_CROSS_RISING) {
-                    timerOnRisingCount = 0;
-                }
-                */
             }
 
             /* Enable ZCD trigger */
@@ -216,7 +195,7 @@ receiveEvent(int numBytes) {
         case 6: /* 6 x 1250 = 7500 us */
         case 7: /* 7 x 1250 = 8750 us */
             dimmer              = DIMMER_DIMM;
-            timerThresholdBulb  = factor * 1250;
+            timerThresholdBulb  = factor * timerThresholdFactor;
             break;
 
         case 8: /* 8 x 1250 = 10'000 us = 0.01 s (zero-crossing length)*/
