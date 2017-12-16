@@ -29,8 +29,9 @@ typedef enum {
 
 const uint16_t      period                  = 20000;    /* 50 Hz => 20'000 us */
 const uint16_t      timerThresholdZcdEdge   = 9000;     /* 9000 us, threshold to enable ZCD edge triggering */
-const uint16_t      timerIncrement          = 50;       /*   50 us, increment timer to final value */
 const uint16_t      timerThresholdFactor    = 1000;     /* 1000 us, factor to calculate timerThresholdBulb */
+const int16_t       timerThresholdDivisor   = 50;       /* (SIGNED!!) */
+
 
 const uint16_t      risingOffset            = 1000;     /* rising offset 1000 us */
 const uint16_t      fallingOffset           = 680;      /* falling offset 680 us */
@@ -38,7 +39,9 @@ const uint16_t      fallingOffset           = 680;      /* falling offset 680 us
 const uint16_t      risingThreshold         = period - risingOffset;
 const uint16_t      fallingThreshold        = period - fallingOffset;
 
-uint16_t            timerThresholdBulb;                 /* threshold to switch off bulb*/
+uint16_t            timerThresholdBulbFinal;            /* threshold to switch off bulb (final)*/
+uint16_t            timerThresholdBulbCurrent;          /* threshold to switch off bulb (current) */
+int16_t             timerIncrement;                     /* increment timer to final value (SIGNED!!) */
 uint16_t            timerOnRisingCount;                 /* from 0 to (period - risingOffset) */
 uint16_t            timerOnFallingCount;                /* from 0 to (period - fallingOffset) */
 uint16_t            timerOffCount;                      /* from 0 to threshold bulb */
@@ -47,6 +50,7 @@ uint32_t            microsOld;                          /* old micros() value */
 
 /* Switch on/off light */
 DimmerType          dimmer;
+bool                lightOn;
 
 int                 zcdOld;
 bool                zcdEnable;
@@ -61,15 +65,18 @@ void
 setup()
 {
     /* timer variables in microseconds */
-    timerThresholdBulb      = 0;
-    timerOffCount           = 0;
-    microsOld               = 0;
+    timerThresholdBulbFinal     = 0;
+    timerThresholdBulbCurrent   = 0;
 
-    dimmer                  = DIMMER_OFF;
+    timerOffCount               = 0;
+    microsOld                   = 0;
 
-    zcdOld                  = LOW;
-    zcdEnable               = true;
-    triggerChange           = false;
+    dimmer                      = DIMMER_OFF;
+    lightOn                     = false;
+
+    zcdOld                      = LOW;
+    zcdEnable                   = true;
+    triggerChange               = false;
 
     /*** INPUT/OUTPUT *********************************************************/
     pinMode(switchPin, OUTPUT);
@@ -131,7 +138,9 @@ loop()
             timerOnFallingCount    += diff;
 
             /* Switch on, if... */
-            if (timerOnRisingCount >= risingThreshold || timerOnFallingCount >= fallingThreshold) {
+            if (!lightOn && (timerOnRisingCount >= risingThreshold || timerOnFallingCount >= fallingThreshold)) {
+                lightOn = true;
+
                 if (timerOnRisingCount >= risingThreshold) {
                     timerOnRisingCount = 0;
                 } else if (timerOnFallingCount >= fallingThreshold) {
@@ -146,10 +155,15 @@ loop()
             }
 
             /* Switch off, if... */
-            if (timerOffCount >= timerThresholdBulb) {
+            if (lightOn && (timerOffCount >= timerThresholdBulbCurrent)) {
+                lightOn = false;
 
                 /* Switch: Stop bulb */
                 digitalWrite(switchPin, HIGH);
+
+                if (timerThresholdBulbCurrent != timerThresholdBulbFinal) {
+                    timerThresholdBulbCurrent += timerIncrement;
+                }
             }
 
             /* Enable ZCD trigger */
@@ -184,7 +198,7 @@ receiveEvent(int numBytes) {
 
     switch (step) {
         case 0:
-            dimmer              = DIMMER_OFF;
+            dimmer                  = DIMMER_OFF;
             break;
 
         case 1: /* 1 x 1000 = 1000 us */
@@ -196,13 +210,20 @@ receiveEvent(int numBytes) {
         case 7: /* 7 x 1000 = 7000 us */
         case 8: /* 8 x 1000 = 8000 us */
         case 9: /* 9 x 1000 = 9000 us */
-            dimmer              = DIMMER_DIMM;
-            timerThresholdBulb  = step * timerThresholdFactor;
+            dimmer                  = DIMMER_DIMM;
+            timerThresholdBulbFinal = step * timerThresholdFactor;
+            timerIncrement          = (int16_t(timerThresholdBulbFinal) - int16_t(timerThresholdBulbCurrent)) / timerThresholdDivisor;
+            Serial.print("Cur ");
+            Serial.println(timerThresholdBulbCurrent);
+            Serial.print("Fin ");
+            Serial.println(timerThresholdBulbFinal);
+            Serial.print("Inc ");
+            Serial.println(timerIncrement);
             break;
 
         case 10: /* 10 x 1000 = 10'000 us = 0.01 s (zero-crossing length)*/
         default:
-            dimmer              = DIMMER_FULL;
+            dimmer                  = DIMMER_FULL;
             break;
 
     }
