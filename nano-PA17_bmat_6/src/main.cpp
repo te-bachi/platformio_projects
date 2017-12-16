@@ -27,10 +27,10 @@ typedef enum {
  * wave zero-crossing every:   0 . 010 000 s
  */
 
-const uint16_t      period                  = 20000;    /* 50 Hz => 20'000 us */
-const uint16_t      timerThresholdZcdEdge   = 9000;     /* 9000 us, threshold to enable ZCD edge triggering */
-const uint16_t      timerThresholdFactor    = 1000;     /* 1000 us, factor to calculate timerThresholdBulb */
-const int16_t       timerThresholdDivisor   = 50;       /* (SIGNED!!) */
+const int16_t       period                  = 20000;    /* 50 Hz => 20'000 us */
+const int16_t       timerThresholdZcdEdge   = 9000;     /* 9000 us, threshold to enable ZCD edge triggering */
+const int16_t       timerThresholdFactor    = 1000;     /* 1000 us, factor to calculate timerThresholdBulb */
+const int16_t       timerThresholdDivisor   = 100;      /* (SIGNED!!) */
 
 
 const uint16_t      risingOffset            = 1000;     /* rising offset 1000 us */
@@ -39,12 +39,12 @@ const uint16_t      fallingOffset           = 680;      /* falling offset 680 us
 const uint16_t      risingThreshold         = period - risingOffset;
 const uint16_t      fallingThreshold        = period - fallingOffset;
 
-uint16_t            timerThresholdBulbFinal;            /* threshold to switch off bulb (final)*/
-uint16_t            timerThresholdBulbCurrent;          /* threshold to switch off bulb (current) */
+int16_t             timerThresholdBulbFinal;            /* threshold to switch off bulb (final, SIGNED!!)*/
+int16_t             timerThresholdBulbCurrent;          /* threshold to switch off bulb (current, SIGNED!!) */
 int16_t             timerIncrement;                     /* increment timer to final value (SIGNED!!) */
+int16_t             timerOffCount;                      /* from 0 to threshold bulb (SIGNED!!) */
 uint16_t            timerOnRisingCount;                 /* from 0 to (period - risingOffset) */
 uint16_t            timerOnFallingCount;                /* from 0 to (period - fallingOffset) */
-uint16_t            timerOffCount;                      /* from 0 to threshold bulb */
 
 uint32_t            microsOld;                          /* old micros() value */
 
@@ -106,11 +106,11 @@ loop()
     uint32_t        microsNew;
     uint32_t        diff;
 
-    if (dimmer == DIMMER_OFF) {
+    if (timerThresholdBulbCurrent == timerThresholdBulbFinal && dimmer == DIMMER_OFF) {
         /* Stop bulb */
         digitalWrite(switchPin, HIGH);
 
-    } else if (dimmer == DIMMER_FULL) {
+    } else if (timerThresholdBulbCurrent == timerThresholdBulbFinal && dimmer == DIMMER_FULL) {
         /* Start bulb */
         digitalWrite(switchPin, LOW);
 
@@ -161,8 +161,13 @@ loop()
                 /* Switch: Stop bulb */
                 digitalWrite(switchPin, HIGH);
 
-                if (timerThresholdBulbCurrent != timerThresholdBulbFinal) {
+                /* Transition */
+                if (abs(timerIncrement) < abs(timerThresholdBulbFinal - timerThresholdBulbCurrent)) {
+                    /* increment can be negative! */
                     timerThresholdBulbCurrent += timerIncrement;
+                } else {
+                    /* set to final */
+                    timerThresholdBulbCurrent = timerThresholdBulbFinal;
                 }
             }
 
@@ -193,8 +198,6 @@ edge(uint16_t *count)
 void
 receiveEvent(int numBytes) {
     byte step = Wire.read();
-    Serial.print("Step ");
-    Serial.println(step);
 
     switch (step) {
         case 0:
@@ -211,14 +214,6 @@ receiveEvent(int numBytes) {
         case 8: /* 8 x 1000 = 8000 us */
         case 9: /* 9 x 1000 = 9000 us */
             dimmer                  = DIMMER_DIMM;
-            timerThresholdBulbFinal = step * timerThresholdFactor;
-            timerIncrement          = (int16_t(timerThresholdBulbFinal) - int16_t(timerThresholdBulbCurrent)) / timerThresholdDivisor;
-            Serial.print("Cur ");
-            Serial.println(timerThresholdBulbCurrent);
-            Serial.print("Fin ");
-            Serial.println(timerThresholdBulbFinal);
-            Serial.print("Inc ");
-            Serial.println(timerIncrement);
             break;
 
         case 10: /* 10 x 1000 = 10'000 us = 0.01 s (zero-crossing length)*/
@@ -227,4 +222,7 @@ receiveEvent(int numBytes) {
             break;
 
     }
+
+    timerThresholdBulbFinal = step * timerThresholdFactor;
+    timerIncrement          = (timerThresholdBulbFinal - timerThresholdBulbCurrent) / timerThresholdDivisor;
 }
