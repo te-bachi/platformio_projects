@@ -9,7 +9,21 @@
 #include <Arduino.h>
 #include <Wire.h>
 
+#define NANO_I2C_ADDRESS    0x08
+
 void receiveEvent(int numBytes);
+void edge(uint16_t *count);
+
+typedef enum {
+    NEXT_CROSS_RISING,
+    NEXT_CROSS_FALLING
+} NextCrossType;
+
+typedef enum {
+    DIMMER_OFF,
+    DIMMER_DIMM,
+    DIMMER_FULL
+} DimmerType;
 
 /*******************************************************************************
  *  50 Hz = 0.02 s (full period)
@@ -18,20 +32,32 @@ void receiveEvent(int numBytes);
  * wave zero-crossing every:   0 . 010 000 s
  */
 
-uint16_t            timerIncrement;         /* increment timer to final value */
-uint16_t            timerThresholdBulb;     /* */
-uint16_t            timerThresholdWave;     /* threshold to enable ZCD triggering */
-uint16_t            timerCount;             /* from 0 to threshold bulb */
+const uint16_t      period                  = 20000;    /* 50 Hz => 20'000 us */
+const uint16_t      timerThresholdZcdEdge   = 9000;     /* threshold to enable ZCD edge triggering */
 
-uint32_t            microsOld;              /* old micros() value */
+const uint16_t      risingOffset            = 1000;     /* rising offset 1000 us */
+const uint16_t      fallingOffset           = 680;      /* falling offset 680 us */
+
+const uint16_t      risingThreshold         = period - risingOffset;
+const uint16_t      fallingThreshold        = period - fallingOffset;
+
+uint16_t            timerIncrement;                     /* increment timer to final value */
+uint16_t            timerThresholdBulb;                 /* threshold to switch off bulb*/
+uint16_t            timerOnRisingCount;                 /* from 0 to (period - risingOffset) */
+uint16_t            timerOnFallingCount;                /* from 0 to (period - fallingOffset) */
+uint16_t            timerOffCount;                      /* from 0 to threshold bulb */
+
+uint32_t            microsOld;                          /* old micros() value */
 
 /* Switch on/off light */
-bool                lightOff;
-bool                lightFull;
+DimmerType          dimmer;
+bool                lightOn;
 
-int                 zcdOld         = LOW;
-bool                zcdEnable      = true;
-bool                triggerChange  = false;
+NextCrossType       nextCross;
+
+int                 zcdOld;
+bool                zcdEnable;
+bool                triggerChange;
 
 /* Pin definition */
 const byte          zcdPin      = 2;
@@ -41,18 +67,18 @@ const byte          ledPin      = LED_BUILTIN;
 void
 setup()
 {
-    timerIncrement      = 50;
-    timerThresholdBulb  = 0;
-    timerThresholdWave  = 9000;
-    timerCount          = 0;
-    microsOld           = 0;
+    /* timer variables in microseconds */
+    timerIncrement          = 50;
+    timerThresholdBulb      = 0;
+    timerOffCount           = 0;
+    microsOld               = 0;
 
-    lightOff            = true;
-    lightFull           = false;
+    dimmer                  = DIMMER_OFF;
+    lightOn                 = false;
 
-    zcdOld              = LOW;
-    zcdEnable           = true;
-    triggerChange       = false;
+    zcdOld                  = LOW;
+    zcdEnable               = true;
+    triggerChange           = false;
 
     /*** INPUT/OUTPUT *********************************************************/
     pinMode(switchPin, OUTPUT);
@@ -64,7 +90,7 @@ setup()
     Serial.begin(115400);
 
     /*** I2C ******************************************************************/
-    Wire.begin(8);
+    Wire.begin(NANO_I2C_ADDRESS);
     Wire.onReceive(receiveEvent);
 
     Serial.println("Done!");
@@ -82,50 +108,74 @@ loop()
     uint32_t        microsNew;
     uint32_t        diff;
 
-    if (lightOff) {
+    if (dimmer == DIMMER_OFF) {
         /* Stop bulb */
         digitalWrite(switchPin, HIGH);
 
-    } else if (lightFull) {
+    } else if (dimmer == DIMMER_FULL) {
         /* Start bulb */
         digitalWrite(switchPin, LOW);
 
     } else {
-        /* If rising edge or falling edge trigger */
-        if ((zcd == HIGH && zcdOld == LOW) || (zcd == LOW && zcdOld == HIGH)) {
-            if (zcdEnable) {
-                zcdEnable     = false;
-                triggerChange = true;
+        /* ZCD: rising edge */
+        if (zcd == HIGH && zcdOld == LOW) {
+            edge(&timerOnRisingCount);
+            nextCross = NEXT_CROSS_FALLING;
 
-                /* Start bulb */
-                digitalWrite(switchPin, LOW);
+        /* ZCD: falling edge */
+        } else if (zcd == LOW && zcdOld == HIGH) {
+            edge(&timerOnFallingCount);
+            nextCross = NEXT_CROSS_RISING;
 
-                /* restar timer */
-                timerCount = 0;
-            } else {
-                triggerChange = false;
-            }
-
-        /* Level trigger */
+        /* ZCD: level trigger */
         } else {
             triggerChange = false;
         }
 
         /* If not edge trigger */
         if (!triggerChange) {
-            microsNew    = micros();
-            diff         = microsNew - microsOld;
-            microsOld   = microsNew;
-            timerCount += diff;
+            microsNew               = micros();
+            diff                    = microsNew - microsOld;
+            microsOld               = microsNew;
+            timerOffCount          += diff;
+            timerOnRisingCount     += diff;
+            timerOnFallingCount    += diff;
 
-            if (timerCount >= timerThresholdBulb) {
-                /* Stop bulb */
-                digitalWrite(switchPin, HIGH);
+            /* Switch on, if... */
+            if (timerOnRisingCount >= risingThreshold || timerOnFallingCount >= fallingThreshold) {
+                if (timerOnRisingCount >= risingThreshold) {
+                    timerOnRisingCount = 0;
+                } else if (timerOnFallingCount >= fallingThreshold) {
+                    timerOnFallingCount = 0;
+                }
+                lightOn = true;
+
+                /* Switch: Start bulb */
+                digitalWrite(switchPin, LOW);
+
+                /* Reset */
+                timerOffCount = 0;
             }
 
-            if (timerCount >= timerThresholdWave) {
-                zcdEnable = true;
+            /* Switch off, if... */
+            if (timerOffCount >= timerThresholdBulb) {
+                lightOn = false;
 
+                /* Switch: Stop bulb */
+                digitalWrite(switchPin, HIGH);
+
+                /*
+                if (nextCross == NEXT_CROSS_FALLING) {
+                    timerOnFallingCount = 0;
+                } else if (nextCross == NEXT_CROSS_RISING) {
+                    timerOnRisingCount = 0;
+                }
+                */
+            }
+
+            /* Enable ZCD trigger */
+            if (timerOffCount >= timerThresholdZcdEdge) {
+                zcdEnable = true;
             }
         }
     }
@@ -134,12 +184,28 @@ loop()
 }
 
 void
+edge(uint16_t *count)
+{
+    if (zcdEnable) {
+        zcdEnable     = false;
+        triggerChange = true;
+
+        /* restar timer */
+        *count = 0;
+    } else {
+        triggerChange = false;
+    }
+}
+
+void
 receiveEvent(int numBytes) {
     byte factor = Wire.read();
+    Serial.print("Dimmer ");
+    Serial.println(factor);
+
     switch (factor) {
         case 0:
-            lightOff            = true;
-            lightFull           = false;
+            dimmer              = DIMMER_OFF;
             break;
 
         case 1: /* 1 x 1250 = 1250 us */
@@ -149,15 +215,13 @@ receiveEvent(int numBytes) {
         case 5: /* 5 x 1250 = 6250 us */
         case 6: /* 6 x 1250 = 7500 us */
         case 7: /* 7 x 1250 = 8750 us */
-            lightOff            = false;
-            lightFull           = false;
+            dimmer              = DIMMER_DIMM;
             timerThresholdBulb  = factor * 1250;
             break;
 
         case 8: /* 8 x 1250 = 10'000 us = 0.01 s (zero-crossing length)*/
         default:
-            lightOff            = false;
-            lightFull           = true;
+            dimmer              = DIMMER_FULL;
             break;
 
     }
