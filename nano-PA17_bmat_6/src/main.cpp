@@ -30,7 +30,7 @@ typedef enum {
 const uint16_t      period                  = 20000;    /* 50 Hz => 20'000 us */
 const uint16_t      timerThresholdZcdEdge   = 9000;     /* 9000 us, threshold to enable ZCD edge triggering */
 const uint16_t      timerIncrement          = 50;       /*   50 us, increment timer to final value */
-const uint16_t      timerThresholdFactor    = 1250;     /* 1250 us, factor to calculate timerThresholdBulb */
+const uint16_t      timerThresholdFactor    = 1000;     /* 1000 us, factor to calculate timerThresholdBulb */
 
 const uint16_t      risingOffset            = 1000;     /* rising offset 1000 us */
 const uint16_t      fallingOffset           = 680;      /* falling offset 680 us */
@@ -178,27 +178,29 @@ edge(uint16_t *count)
 
 void
 receiveEvent(int numBytes) {
-    byte factor = Wire.read();
-    Serial.print("Dimmer ");
-    Serial.println(factor);
+    byte step = Wire.read();
+    Serial.print("Step ");
+    Serial.println(step);
 
-    switch (factor) {
+    switch (step) {
         case 0:
             dimmer              = DIMMER_OFF;
             break;
 
-        case 1: /* 1 x 1250 = 1250 us */
-        case 2: /* 2 x 1250 = 2500 us */
-        case 3: /* 3 x 1250 = 3750 us */
-        case 4: /* 4 x 1250 = 5000 us */
-        case 5: /* 5 x 1250 = 6250 us */
-        case 6: /* 6 x 1250 = 7500 us */
-        case 7: /* 7 x 1250 = 8750 us */
+        case 1: /* 1 x 1000 = 1000 us */
+        case 2: /* 2 x 1000 = 2000 us */
+        case 3: /* 3 x 1000 = 3000 us */
+        case 4: /* 4 x 1000 = 4000 us */
+        case 5: /* 5 x 1000 = 5000 us */
+        case 6: /* 6 x 1000 = 6000 us */
+        case 7: /* 7 x 1000 = 7000 us */
+        case 8: /* 8 x 1000 = 8000 us */
+        case 9: /* 9 x 1000 = 9000 us */
             dimmer              = DIMMER_DIMM;
-            timerThresholdBulb  = factor * timerThresholdFactor;
+            timerThresholdBulb  = step * timerThresholdFactor;
             break;
 
-        case 8: /* 8 x 1250 = 10'000 us = 0.01 s (zero-crossing length)*/
+        case 10: /* 10 x 1000 = 10'000 us = 0.01 s (zero-crossing length)*/
         default:
             dimmer              = DIMMER_FULL;
             break;
