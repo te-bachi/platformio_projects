@@ -101,7 +101,7 @@ setup()
     display.begin();
 
     /*** DIMMER ***************************************************************/
-    dimmer.setValue(Dimmer::OFF);
+    dimmer.setStep(Dimmer::OFF);
 
     /*** THERMOPILE ***********************************************************/
     thermopile.begin();

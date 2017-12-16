@@ -18,9 +18,9 @@ m_twoWire(twoWire), m_address(address)
 }
 
 void
-Dimmer::setValue(Value value)
+Dimmer::setStep(Step step)
 {
     m_twoWire.beginTransmission(m_address);
-    m_twoWire.write(value);
+    m_twoWire.write(step);
     m_twoWire.endTransmission();
 }

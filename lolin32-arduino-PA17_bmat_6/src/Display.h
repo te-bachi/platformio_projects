@@ -59,7 +59,7 @@ namespace PA17_bmat_6 {
             uint32_t            m_startTime;            /*< set start time when current temperature reaches target  */
             uint32_t            m_lastTime;             /*< last time the */
             String              m_thermopileTempStr;    /*< current temperature as string to present to display */
-            Dimmer::Value       m_currentDimmerValue;   /*< current dimmer value */
+            Dimmer::Step        m_currentDimmerStep;    /*< current dimmer step */
 
         public:
                                 TreatmentMenu(Display* display) : Menu(display) {};

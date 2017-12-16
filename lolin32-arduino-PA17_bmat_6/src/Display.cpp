@@ -101,7 +101,7 @@ TreatmentMenu::loop()
     /* Debug */
     oled.setFont(ArialMT_Plain_10);
     oled.setTextAlignment(TEXT_ALIGN_LEFT);
-    oled.drawString(0, Display::DISPLAY_YELLOW_HEIGHT, String(int(m_currentDimmerValue)));
+    oled.drawString(0, Display::DISPLAY_YELLOW_HEIGHT, String(int(m_currentDimmerStep)));
 
     if (m_start) {
         double   currentTemp    = thermopile.readObjectTempC();
@@ -117,7 +117,7 @@ TreatmentMenu::loop()
 
             if (s == 0 && m == 0) {
                 m_start = false;
-                dimmer.setValue(Dimmer::OFF);
+                dimmer.setStep(Dimmer::OFF);
             }
 
             /* Convert number to string in format MM:SS */
@@ -134,9 +134,9 @@ TreatmentMenu::loop()
             oled.drawString(0, 40, stopwatchStr);
 
             /* Cool down */
-            if (currentTemp >= (m_targetTemp - 0.1) && m_currentDimmerValue > Dimmer::OFF) {
-                m_currentDimmerValue = Dimmer::Value(int(m_currentDimmerValue) - 1);
-                dimmer.setValue(m_currentDimmerValue);
+            if (currentTemp >= (m_targetTemp - 0.1) && m_currentDimmerStep > Dimmer::OFF) {
+                m_currentDimmerStep = Dimmer::Step(int(m_currentDimmerStep) - 1);
+                dimmer.setStep(m_currentDimmerStep);
             }
         } else {
             oled.setFont(ArialMT_Plain_16);
@@ -146,8 +146,8 @@ TreatmentMenu::loop()
             /* Temperature reached? */
             if (currentTemp >= (m_targetTemp - 0.1)) {
                 m_tempReached           = true;
-                m_currentDimmerValue    = Dimmer::THIRD;
-                dimmer.setValue(m_currentDimmerValue);
+                m_currentDimmerStep     = Dimmer::THIRD;
+                dimmer.setStep(m_currentDimmerStep);
             }
         }
 
@@ -157,9 +157,9 @@ TreatmentMenu::loop()
             m_thermopileTempStr = String(currentTemp) + "°";
 
             /* Heaten up */
-            if (currentTemp < (m_targetTemp - 0.1) && m_currentDimmerValue < Dimmer::FULL) {
-                m_currentDimmerValue = Dimmer::Value(int(m_currentDimmerValue) + 1);
-                dimmer.setValue(m_currentDimmerValue);
+            if (currentTemp < (m_targetTemp - 0.1) && m_currentDimmerStep < Dimmer::FULL) {
+                m_currentDimmerStep = Dimmer::Step(int(m_currentDimmerStep) + 1);
+                dimmer.setStep(m_currentDimmerStep);
             }
         }
         oled.setFont(ArialMT_Plain_16);
@@ -191,11 +191,11 @@ TreatmentMenu::selectHandler()
         m_targetTemp        = double(temperature);
         m_thermopileTempStr = String(thermopile.readObjectTempC()) + "°";
 
-        dimmer.setValue(Dimmer::FULL);
+        dimmer.setStep(Dimmer::FULL);
     } else {
         m_start             = false;
 
-        dimmer.setValue(Dimmer::OFF);
+        dimmer.setStep(Dimmer::OFF);
     }
 
 }

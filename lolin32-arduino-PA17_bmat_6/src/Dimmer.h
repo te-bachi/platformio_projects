@@ -19,7 +19,7 @@ namespace PA17_bmat_6 {
     class Dimmer {
 
         public:
-            enum Value {
+            enum Step {
                 OFF     = 0,
                 FIRST   = 1,
                 SECOND  = 2,
@@ -28,7 +28,9 @@ namespace PA17_bmat_6 {
                 FIFTH   = 5,
                 SIXTH   = 6,
                 SEVENT  = 7,
-                FULL    = 8
+                EIGTH   = 8,
+                NINTH   = 9,
+                FULL    = 10
             };
 
         private:
@@ -39,7 +41,7 @@ namespace PA17_bmat_6 {
                                 Dimmer(TwoWire& twoWire, int address);
             virtual             ~Dimmer() {};
 
-            void                setValue(Value value);
+            void                setStep(Step step);
     };
 };
 
