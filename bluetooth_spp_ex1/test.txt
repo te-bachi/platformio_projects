@@ -1,0 +1,2 @@
+
+C:\Users\bachman0\Documents\PlatformIO\Projects\bluetooth_spp_ex1\platformio.ini
