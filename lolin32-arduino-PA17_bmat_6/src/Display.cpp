@@ -132,12 +132,6 @@ TreatmentMenu::loop()
             oled.setFont(ArialMT_Plain_16);
             oled.setTextAlignment(TEXT_ALIGN_LEFT);
             oled.drawString(0, 40, stopwatchStr);
-
-            /* Cool down */
-            if (currentTemp >= (m_targetTemp - 0.1) && m_currentDimmerStep > Dimmer::OFF) {
-                m_currentDimmerStep = Dimmer::Step(int(m_currentDimmerStep) - 1);
-                dimmer.setStep(m_currentDimmerStep);
-            }
         } else {
             oled.setFont(ArialMT_Plain_16);
             oled.setTextAlignment(TEXT_ALIGN_LEFT);
@@ -145,6 +139,7 @@ TreatmentMenu::loop()
 
             /* Temperature reached? */
             if (currentTemp >= (m_targetTemp - 0.1)) {
+                m_startTime             = currentTime;
                 m_tempReached           = true;
                 m_currentDimmerStep     = Dimmer::THIRD;
                 dimmer.setStep(m_currentDimmerStep);
@@ -152,16 +147,23 @@ TreatmentMenu::loop()
         }
 
         /* Update */
-        if (diffTimeLast > 500) {
+        //if (diffTimeLast > 500) {
             m_lastTime          = currentTime;
             m_thermopileTempStr = String(currentTemp) + "°";
+
+
+            /* Cool down */
+            if (currentTemp >= (m_targetTemp - 0.1) && m_currentDimmerStep > Dimmer::OFF) {
+                m_currentDimmerStep = Dimmer::Step(int(m_currentDimmerStep) - 1);
+                dimmer.setStep(m_currentDimmerStep);
+            }
 
             /* Heaten up */
             if (currentTemp < (m_targetTemp - 0.1) && m_currentDimmerStep < Dimmer::FULL) {
                 m_currentDimmerStep = Dimmer::Step(int(m_currentDimmerStep) + 1);
                 dimmer.setStep(m_currentDimmerStep);
             }
-        }
+        //}
         oled.setFont(ArialMT_Plain_16);
         oled.setTextAlignment(TEXT_ALIGN_RIGHT);
         oled.drawString(128, 40, m_thermopileTempStr);
@@ -186,7 +188,7 @@ TreatmentMenu::selectHandler()
     if (!m_start) {
         m_start             = true;
         m_tempReached       = false;
-        m_lastTime          = m_startTime;
+        m_lastTime          = millis();
         m_duration          = duration;
         m_targetTemp        = double(temperature);
         m_thermopileTempStr = String(thermopile.readObjectTempC()) + "°";
