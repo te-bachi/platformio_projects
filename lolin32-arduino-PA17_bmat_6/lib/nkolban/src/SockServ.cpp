@@ -228,7 +228,7 @@ Socket SockServ::waitForData(std::set<Socket>& socketSet) {
  * or can return immediately is there is already a client connection in existence.
  */
 Socket SockServ::waitForNewClient() {
-	ESP_LOGD(LOG_TAG, ">> waitForNewClient")
+	ESP_LOGD(LOG_TAG, ">> waitForNewClient");
 	m_clientSemaphore.wait("waitForNewClient");                 // Unlocked in acceptTask.
 	m_clientSemaphore.take("waitForNewClient");
 	Socket tempSocket;

@@ -23,6 +23,7 @@ static const char* LOG_TAG = "HttpServer";
  * @param [in] path The path of the directory to list.
  * @param [in] response The response object to use to send data back to the browser.
  */
+/*
 static void listDirectory(std::string path, HttpResponse& response) {
 	// If path ends with a "/" then remove it.
 	if (GeneralUtils::endsWith(path, '/')) {
@@ -45,6 +46,7 @@ static void listDirectory(std::string path, HttpResponse& response) {
 	response.sendData("</body></html>");
 	response.close();
 } // listDirectory
+*/
 
 /**
  * Constructor for HTTP Server

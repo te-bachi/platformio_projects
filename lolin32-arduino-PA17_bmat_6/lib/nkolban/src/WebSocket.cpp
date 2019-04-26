@@ -218,7 +218,7 @@ void WebSocketHandler::onClose() {
  * This will read the whole message into the string stream.
  */
 void WebSocketHandler::onMessage(WebSocketInputStreambuf* pWebSocketInputStreambuf) {
-	ESP_LOGD("WebSocketHandler", ">> onMessage")
+	ESP_LOGD("WebSocketHandler", ">> onMessage");
 } // onData
 
 

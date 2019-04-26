@@ -33,7 +33,7 @@ EEPROMUtil::writeDuration(DurationType duration)
 DurationType
 EEPROMUtil::readDuration()
 {
-
+    return 0;
 }
 
 void
@@ -45,7 +45,7 @@ EEPROMUtil::writeTemperature(TemperatureType temperature)
 TemperatureType
 EEPROMUtil::readTemperature()
 {
-
+    return 0;
 }
 
 void

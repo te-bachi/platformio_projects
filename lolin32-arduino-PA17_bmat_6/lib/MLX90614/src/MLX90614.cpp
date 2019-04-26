@@ -78,7 +78,7 @@ uint16_t MLX90614::read16(uint8_t a) {
   ret = Wire.read(); // receive DATA
   ret |= Wire.read() << 8; // receive DATA
 
-  uint8_t pec = Wire.read();
+  //uint8_t pec = Wire.read();
 
   return ret;
 }

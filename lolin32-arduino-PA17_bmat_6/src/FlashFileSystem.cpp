@@ -76,7 +76,7 @@ readFile(fs::FS &fs, const char * path)
     Serial.print(file.size());
     Serial.println(")");
 
-    char b;
+    //char b;
     while (file.available()) {
         //String s = file.readStringUntil('\n');
         //Serial.println(s);

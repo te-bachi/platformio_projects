@@ -38,10 +38,10 @@ namespace PA17_bmat_6 {
                 HANDLER_CLASS,
                 HANDLER_FUNC
             };
+            int                     m_pin;
             PushButtonHandlerType   m_handlerType;
             PushButtonHandler&      m_handler;
             PushButtonHandlerFunc   m_handlerFunc;
-            int                     m_pin;
             PushButtonEvent         m_lastEvent;
 
         public:

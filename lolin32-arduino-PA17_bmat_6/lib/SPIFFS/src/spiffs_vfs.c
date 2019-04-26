@@ -924,7 +924,6 @@ int vfs_spiffs_register(const char *mountpoint)
         return 1;
 
     esp_vfs_t vfs = {
-        .fd_offset = 0,
         .flags = ESP_VFS_FLAG_DEFAULT,
         .write = &vfs_spiffs_write,
         .open = &vfs_spiffs_open,

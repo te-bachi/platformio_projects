@@ -96,7 +96,7 @@ PushButtonTask::run(void* data)
 {
     int             pin;
     int             value;
-    PushButtonEvent event;
+    PushButtonEvent event = PUSH_BUTTON_NONE;
 
     //Serial.println("PushButtonTask::run");
     m_running = true;

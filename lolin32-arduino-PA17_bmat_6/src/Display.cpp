@@ -107,7 +107,7 @@ TreatmentMenu::loop()
         double   currentTemp    = thermopile.readObjectTempC();
         uint32_t currentTime    = millis();                             /* in milliseconds */
         uint32_t diffTimeStart  = currentTime - m_startTime;            /* in milliseconds */
-        uint32_t diffTimeLast   = currentTime - m_lastTime;             /* in milliseconds */
+        //uint32_t diffTimeLast   = currentTime - m_lastTime;             /* in milliseconds */
 
         if (m_tempReached) {
             uint32_t s          = m_duration - (diffTimeStart / 1000);  /* in seconds */
