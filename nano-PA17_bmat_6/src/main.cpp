@@ -85,13 +85,13 @@ setup()
     pinMode(zcdPin, INPUT);
 
     /*** CONSOLE **************************************************************/
-    Serial.begin(115400);
+    //Serial.begin(115200);
 
     /*** I2C ******************************************************************/
     Wire.begin(NANO_I2C_ADDRESS);
     Wire.onReceive(receiveEvent);
 
-    Serial.println("Done!");
+    //Serial.println("Done!");
 }
 
 /******************************************************************************
