@@ -1,0 +1,43 @@
+{
+    "name": "GUIslice", 
+    "version": "0.13.0", 
+    "keywords": [
+        "display"
+    ], 
+    "description": "GUIslice embedded touchscreen GUI library in C for Arduino & Raspberry Pi", 
+    "frameworks": [
+        "arduino"
+    ], 
+    "platforms": [
+        "atmelavr", 
+        "espressif8266", 
+        "espressif32", 
+        "ststm32", 
+        "atmelsam"
+    ], 
+    "authors": [
+        {
+            "email": "guislice@gmail.com", 
+            "url": null, 
+            "maintainer": true, 
+            "name": "Calvin Hass"
+        }
+    ], 
+    "repository": {
+        "type": "git", 
+        "url": "https://github.com/ImpulseAdventure/GUIslice"
+    }, 
+    "homepage": null, 
+    "export": {
+        "include": null, 
+        "exclude": [
+            "extras", 
+            "docs", 
+            "tests", 
+            "test", 
+            "*.doxyfile", 
+            "*.pdf"
+        ]
+    }, 
+    "id": 5168
+}
