@@ -7,7 +7,7 @@
 #define TFT_MISO 19 // (leave TFT SDO disconnected if other SPI devices share MISO)
 #define TFT_MOSI 23
 #define TFT_SCLK 18
-#define TFT_CS   14  // Chip select control pin
+#define TFT_CS   26  // Chip select control pin
 #define TFT_DC   27  // Data Command control pin
 #define TFT_RST  33  // Reset pin (could connect to RST pin)
 

@@ -130,6 +130,7 @@ digitalWrite(TFT_BL, HIGH);
   while (!Serial);
 
   Serial.println(""); Serial.println("");
+  Serial.println("Andreas 1");
   Serial.print("TFT_MOSI "); Serial.println(TFT_MOSI);
   Serial.print("TFT_SCLK "); Serial.println(TFT_SCLK);
   Serial.print("TFT_CS   "); Serial.println(TFT_CS);
