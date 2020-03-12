@@ -65,10 +65,19 @@ btLoop(void * arg)
                     valid = true;
                     Serial.println("Ready!");
                 }
+
+                /* UART -> BT */
                 if (Serial1.available() > 0) {
                     int c = Serial1.read();
                     SerialBT.write(c);
-                    //Serial.print(".");
+                    Serial.print(".");
+                }
+
+                /* BT -> UART */
+                if (SerialBT.available() > 0) {
+                    int c = SerialBT.read();
+                    Serial1.write(c);
+                    Serial.print("-");
                 }
             } else {
                 if (valid) {
