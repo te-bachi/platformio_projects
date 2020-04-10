@@ -1,8 +1,12 @@
 
+
+#ifdef ANDREAS
+
 #include <Arduino.h>
 
 #include <SPI.h>
 #include <TFT_eSPI.h>
+#include <XPT2046_Touchscreen.h>
 
 /*
 int ledPin = 5;
@@ -110,11 +114,12 @@ unsigned long testFilledTriangles();
 unsigned long testRoundRects();
 unsigned long testFilledRoundRects();
 
-
-#define TFT_BL 32
-
+#define TFT_BL 17
+#define XPT2046_CS 33
 
 TFT_eSPI tft = TFT_eSPI();
+
+XPT2046_Touchscreen ts(XPT2046_CS); // Chip Select pin
 
 unsigned long total = 0;
 unsigned long tn = 0;
@@ -123,10 +128,10 @@ unsigned long tn = 0;
 
 void setup() {
 
-pinMode(TFT_BL, OUTPUT);
-digitalWrite(TFT_BL, HIGH);
+  pinMode(TFT_BL, OUTPUT);
+  digitalWrite(TFT_BL, HIGH);
 
-  Serial.begin(9600);
+  Serial.begin(115200);
   while (!Serial);
 
   Serial.println(""); Serial.println("");
@@ -139,7 +144,9 @@ digitalWrite(TFT_BL, HIGH);
   Serial.print("TFT_BL   "); Serial.println(TFT_BL);
 
   tft.init();
+  ts.begin();
 
+  /*
   tn = micros();
   tft.fillScreen(TFT_BLACK);
 
@@ -208,14 +215,21 @@ digitalWrite(TFT_BL, HIGH);
   //Serial.print(F("Total = ")); Serial.println(total);
   
   //yield();Serial.println(millis()-tn);
+  */
 }
 
 void loop(void) {
+  
+  tft.setRotation(1);
+  testText();
+
+  /*
   for (uint8_t rotation = 0; rotation < 4; rotation++) {
     tft.setRotation(rotation);
     testText();
     delay(2000);
   }
+  */
 }
 
 
@@ -254,6 +268,28 @@ unsigned long testText() {
   tft.println("in the gobberwarts");
   tft.println("with my blurglecruncheon,");
   tft.println("see if I don't!");
+  
+  if (ts.touched()) {
+    TS_Point p = ts.getPoint();
+    tft.print("x = ");
+    tft.print(p.x);
+    tft.print(", y = ");
+    tft.print(p.y);
+    tft.println("");
+
+
+    Serial.print("Pressure = ");
+    Serial.print(p.z);
+    Serial.print(", x = ");
+    Serial.print(p.x);
+    Serial.print(", y = ");
+    Serial.print(p.y);
+    delay(30);
+    Serial.println();
+  } else {
+    tft.println("no touch");
+  }
+  
   return micros() - start;
 }
 
@@ -477,3 +513,5 @@ unsigned long testFilledRoundRects() {
   Written by Limor Fried/Ladyada for Adafruit Industries.
   MIT license, all text above must be included in any redistribution
  ****************************************************/
+
+#endif
