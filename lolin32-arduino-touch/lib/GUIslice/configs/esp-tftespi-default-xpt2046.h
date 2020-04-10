@@ -127,7 +127,7 @@ extern "C" {
   //   in TFT_eSPI's User_Setup.h is commented out.
 
   // Touch bus & pinout
-  #define XPT2046_CS     3
+  #define XPT2046_CS     33
 
 
   // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
@@ -138,10 +138,17 @@ extern "C" {
 
   // Calibration settings from diag_ard_touch_calib:
   // DRV_TOUCH_XPT2046:
+  
+  #define ADATOUCH_X_MIN    3889
+  #define ADATOUCH_X_MAX    253
+  #define ADATOUCH_Y_MIN    3958
+  #define ADATOUCH_Y_MAX    228
+  /*
   #define ADATOUCH_X_MIN    246
   #define ADATOUCH_X_MAX    3837
   #define ADATOUCH_Y_MIN    3925
   #define ADATOUCH_Y_MAX    370
+  */
   #define ADATOUCH_REMAP_YX 0    // Some touch controllers may swap X & Y coords
 
   // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
