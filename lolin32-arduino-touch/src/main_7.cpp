@@ -1,25 +1,43 @@
 
+
+#ifndef ANDREAS
+
 #include <lvgl.h>
 #include <Ticker.h>
 #include <TFT_eSPI.h>
 
 #include "Arduino.h"
+#include "app.h"
+#include "comm.h"
 
 #define LED_PIN 2
 #define TFT_BL 17
 
-#define LVGL_TICK_PERIOD 60
+#define LVGL_TICK_PERIOD 1
 
 Ticker tick; /* timer for interrupt handler */
 TFT_eSPI tft = TFT_eSPI(); /* TFT instance */
 static lv_disp_buf_t disp_buf;
-static lv_color_t buf1[LV_HOR_RES_MAX * 10];
-static lv_color_t buf2[LV_HOR_RES_MAX * 10];
+static lv_color_t buf1[LV_HOR_RES_MAX * 20];
+static lv_color_t buf2[LV_HOR_RES_MAX * 20];
 
 lv_obj_t * slider_label;
 int screenWidth = 480;
 int screenHeight = 320;
 
+QueueHandle_t qTempCurrent;
+
+void
+taskTempCurrentGet(void *parameter)
+{
+    while (true) {
+        float temp = comm_temp_current_get();
+        xQueueSend(qTempCurrent, &temp, 0);
+        delay(200);
+    }
+
+    vTaskDelete(NULL);
+}
 
 /*****************************************************************************/
 
@@ -33,27 +51,27 @@ void printEvent(String Event, lv_event_t event);
 void my_print(lv_log_level_t level, const char * file, uint32_t line, const char * dsc)
 {
 
-  Serial.printf("%s@%d->%s\r\n", file, line, dsc);
-  delay(100);
+    Serial.printf("%s@%d->%s\r\n", file, line, dsc);
+    delay(100);
 }
 #endif
 
 /* Display flushing */
 void my_disp_flush(lv_disp_drv_t *disp, const lv_area_t *area, lv_color_t *color_p)
 {
-  uint16_t c;
+    uint16_t c;
 
-  tft.startWrite(); /* Start new TFT transaction */
-  tft.setAddrWindow(area->x1, area->y1, (area->x2 - area->x1 + 1), (area->y2 - area->y1 + 1)); /* set the working window */
-  for (int y = area->y1; y <= area->y2; y++) {
-    for (int x = area->x1; x <= area->x2; x++) {
-      c = color_p->full;
-      tft.writeColor(c, 1);
-      color_p++;
+    tft.startWrite(); /* Start new TFT transaction */
+    tft.setAddrWindow(area->x1, area->y1, (area->x2 - area->x1 + 1), (area->y2 - area->y1 + 1)); /* set the working window */
+    for (int y = area->y1; y <= area->y2; y++) {
+        for (int x = area->x1; x <= area->x2; x++) {
+            c = color_p->full;
+            tft.writeColor(c, 1);
+            color_p++;
+        }
     }
-  }
-  tft.endWrite(); /* terminate TFT transaction */
-  lv_disp_flush_ready(disp); /* tell lvgl that flushing is done */
+    tft.endWrite(); /* terminate TFT transaction */
+    lv_disp_flush_ready(disp); /* tell lvgl that flushing is done */
 }
 
 bool my_touchpad_read(lv_indev_drv_t * indev_driver, lv_indev_data_t * data)
@@ -64,35 +82,38 @@ bool my_touchpad_read(lv_indev_drv_t * indev_driver, lv_indev_data_t * data)
 
     if(!touched)
     {
-      return false;
+        return false;
     }
 
     if(touchX>screenWidth || touchY > screenHeight)
     {
-      Serial.println("Y or y outside of expected parameters..");
-      Serial.print("y:");
-      Serial.print(touchX);
-      Serial.print(" x:");
-      Serial.print(touchY);
+        /*
+        Serial.println("Y or y outside of expected parameters..");
+        Serial.print("y:");
+        Serial.print(touchX);
+        Serial.print(" x:");
+        Serial.print(touchY);
+        */
     }
     else
     {
 
-      data->state = touched ? LV_INDEV_STATE_PR : LV_INDEV_STATE_REL; 
-  
-      /*Save the state and save the pressed coordinate*/
-      //if(data->state == LV_INDEV_STATE_PR) touchpad_get_xy(&last_x, &last_y);
-     
-      /*Set the coordinates (if released use the last pressed coordinates)*/
-      data->point.x = touchX;
-      data->point.y = touchY;
-  
-      Serial.print("Data x");
-      Serial.println(touchX);
+        data->state = touched ? LV_INDEV_STATE_PR : LV_INDEV_STATE_REL; 
+    
+        /*Save the state and save the pressed coordinate*/
+        //if(data->state == LV_INDEV_STATE_PR) touchpad_get_xy(&last_x, &last_y);
       
-      Serial.print("Data y");
-      Serial.println(touchY);
-
+        /*Set the coordinates (if released use the last pressed coordinates)*/
+        data->point.x = touchX;
+        data->point.y = touchY;
+    
+        /*
+        Serial.print("Data x");
+        Serial.println(touchX);
+        
+        Serial.print("Data y");
+        Serial.println(touchY);
+        */
     }
 
     return false; /*Return `false` because we are not buffering and no more data to read*/
@@ -101,8 +122,7 @@ bool my_touchpad_read(lv_indev_drv_t * indev_driver, lv_indev_data_t * data)
 /* Interrupt driven periodic handler */
 static void lv_tick_handler(void)
 {
-
-  lv_tick_inc(LVGL_TICK_PERIOD);
+    lv_tick_inc(LVGL_TICK_PERIOD);
 }
 
 
@@ -111,47 +131,47 @@ static void lv_tick_handler(void)
 
 void slider_event_cb(lv_obj_t * slider, lv_event_t event)
 {
+    printEvent("Slider", event);
 
-  printEvent("Slider", event);
-
-  if(event == LV_EVENT_VALUE_CHANGED) {
-      static char buf[4];                                 /* max 3 bytes  for number plus 1 null terminating byte */
-      snprintf(buf, 4, "%u", lv_slider_get_value(slider));
-      lv_label_set_text(slider_label, buf);               /*Refresh the text*/
-  }
+    if(event == LV_EVENT_VALUE_CHANGED) {
+        static char buf[4];                                 /* max 3 bytes  for number plus 1 null terminating byte */
+        snprintf(buf, 4, "%u", lv_slider_get_value(slider));
+        lv_label_set_text(slider_label, buf);               /*Refresh the text*/
+    }
 }
 
 void printEvent(String Event, lv_event_t event)
 {
-  
-  Serial.print(Event);
-  printf(" ");
+    /*
+    Serial.print(Event);
+    printf(" ");
 
-  switch(event) {
-      case LV_EVENT_PRESSED:
-          printf("Pressed\n");
-          break;
+    switch(event) {
+        case LV_EVENT_PRESSED:
+            printf("Pressed\n");
+            break;
 
-      case LV_EVENT_SHORT_CLICKED:
-          printf("Short clicked\n");
-          break;
+        case LV_EVENT_SHORT_CLICKED:
+            printf("Short clicked\n");
+            break;
 
-      case LV_EVENT_CLICKED:
-          printf("Clicked\n");
-          break;
+        case LV_EVENT_CLICKED:
+            printf("Clicked\n");
+            break;
 
-      case LV_EVENT_LONG_PRESSED:
-          printf("Long press\n");
-          break;
+        case LV_EVENT_LONG_PRESSED:
+            printf("Long press\n");
+            break;
 
-      case LV_EVENT_LONG_PRESSED_REPEAT:
-          printf("Long press repeat\n");
-          break;
+        case LV_EVENT_LONG_PRESSED_REPEAT:
+            printf("Long press repeat\n");
+            break;
 
-      case LV_EVENT_RELEASED:
-          printf("Released\n");
-          break;
-  }
+        case LV_EVENT_RELEASED:
+            printf("Released\n");
+            break;
+    }
+    */
 }
 
 
@@ -159,89 +179,115 @@ void printEvent(String Event, lv_event_t event)
 
 /*****************************************************************************/
 
+#define rs485 Serial1
+#define RS485_DIR 26
+
 void setup() {
 
 
-  pinMode(LED_PIN, OUTPUT);
-  digitalWrite(LED_PIN, HIGH);
+    pinMode(LED_PIN, OUTPUT);
+    digitalWrite(LED_PIN, HIGH);
 
-  pinMode(TFT_BL, OUTPUT);
-  digitalWrite(TFT_BL, HIGH);
+    pinMode(RS485_DIR, OUTPUT);
+    digitalWrite(RS485_DIR, LOW);
 
-  ledcSetup(10, 5000/*freq*/, 10 /*resolution*/);
-  ledcAttachPin(32, 10);
-  analogReadResolution(10);
-  ledcWrite(10,768);
+    //pinMode(TFT_BL, OUTPUT);
+    //digitalWrite(TFT_BL, HIGH);
 
-  Serial.begin(115200); /* prepare for possible serial debug */
+    //ledcSetup(10, 5000/*freq*/, 10 /*resolution*/);
+    //ledcAttachPin(32, 10);
+    //analogReadResolution(10);
+    //ledcWrite(10,768);
 
-  lv_init();
+    Serial.begin(115200); /* prepare for possible serial debug */
+    Serial.println("Serial done!");
 
-  #if USE_LV_LOG != 0
-    lv_log_register_print(my_print); /* register print function for debugging */
-  #endif
+    rs485.begin(115200, SERIAL_8N1, 4, 5);
+    Serial.println("RS485 done!");
 
-  tft.begin(); /* TFT init */
-  tft.setRotation(3);
+    qTempCurrent = xQueueCreate(2, sizeof(float));
 
-  uint16_t calData[5] = { 275, 3620, 264, 3532, 1 };
-  tft.setTouch(calData);
+    xTaskCreate(taskTempCurrentGet,     /* Task function. */
+                "taskTempCurrentGet",   /* String with name of task. */
+                10000,                  /* Stack size in bytes. */
+                NULL,                   /* Parameter passed as input of the task */
+                1,                      /* Priority of the task. */
+                NULL);                  /* Task handle. */
 
-  lv_disp_buf_init(&disp_buf, buf1, buf2, LV_HOR_RES_MAX * 10);
+    lv_init();
 
-  /*Initialize the display*/
-  lv_disp_drv_t disp_drv;
-  lv_disp_drv_init(&disp_drv);
-  disp_drv.hor_res = screenWidth;
-  disp_drv.ver_res = screenHeight;
-  disp_drv.flush_cb = my_disp_flush;
-  disp_drv.buffer = &disp_buf;
-  lv_disp_drv_register(&disp_drv);
+    #if USE_LV_LOG != 0
+      lv_log_register_print(my_print); /* register print function for debugging */
+    #endif
 
-  lv_indev_drv_t indev_drv;
-  lv_indev_drv_init(&indev_drv);             /*Descriptor of a input device driver*/
-  indev_drv.type = LV_INDEV_TYPE_POINTER;    /*Touch pad is a pointer-like device*/
-  indev_drv.read_cb = my_touchpad_read;      /*Set your driver function*/
-  lv_indev_drv_register(&indev_drv);         /*Finally register the driver*/
+    tft.begin(); /* TFT init */
+    tft.setRotation(1);
+
+    //uint16_t calData[5] = { 275, 3620, 264, 3532, 1 };
+    //tft.setTouch(calData);
+    // Use this calibration code in setup():
+    uint16_t calData[5] = { 285, 3623, 283, 3478, 7 };
+    tft.setTouch(calData);
 
 
-  /*Initialize the touch pad*/
-  //lv_indev_drv_t indev_drv;
-  //lv_indev_drv_init(&indev_drv);
-  //indev_drv.type = LV_INDEV_TYPE_ENCODER;
-  //indev_drv.read_cb = read_encoder;
-  //lv_indev_drv_register(&indev_drv);
+    lv_disp_buf_init(&disp_buf, buf1, buf2, LV_HOR_RES_MAX * 20);
 
-  /*Initialize the graphics library's tick*/
-  tick.attach_ms(LVGL_TICK_PERIOD, lv_tick_handler);
+    /*Initialize the display*/
+    lv_disp_drv_t disp_drv;
+    lv_disp_drv_init(&disp_drv);
+    disp_drv.hor_res = screenWidth;
+    disp_drv.ver_res = screenHeight;
+    disp_drv.flush_cb = my_disp_flush;
+    disp_drv.buffer = &disp_buf;
+    lv_disp_drv_register(&disp_drv);
 
-  //Set the theme..
-  //lv_theme_t * th = lv_theme_night_init(210, NULL);     //Set a HUE value and a Font for the Night Theme
-  //lv_theme_set_current(th);
+    lv_indev_drv_t indev_drv;
+    lv_indev_drv_init(&indev_drv);             /*Descriptor of a input device driver*/
+    indev_drv.type = LV_INDEV_TYPE_POINTER;    /*Touch pad is a pointer-like device*/
+    indev_drv.read_cb = my_touchpad_read;      /*Set your driver function*/
+    lv_indev_drv_register(&indev_drv);         /*Finally register the driver*/
 
-  lv_obj_t * scr = lv_cont_create(NULL, NULL);
-  lv_disp_load_scr(scr);
 
-  //lv_obj_t * tv = lv_tabview_create(scr, NULL);
-  //lv_obj_set_size(tv, lv_disp_get_hor_res(NULL), lv_disp_get_ver_res(NULL));
+    /*Initialize the touch pad*/
+    //lv_indev_drv_t indev_drv;
+    //lv_indev_drv_init(&indev_drv);
+    //indev_drv.type = LV_INDEV_TYPE_ENCODER;
+    //indev_drv.read_cb = read_encoder;
+    //lv_indev_drv_register(&indev_drv);
 
-  /* Create simple label */
-  lv_obj_t *label = lv_label_create(lv_scr_act(), NULL);
-  lv_label_set_text(label, "Hello Arduino! (V6.1)");
-  lv_obj_align(label, NULL, LV_ALIGN_CENTER, 0, -50);
+    /*Initialize the graphics library's tick*/
+    tick.attach_ms(LVGL_TICK_PERIOD, lv_tick_handler);
 
-  /* Create a slider in the center of the display */
-  lv_obj_t * slider = lv_slider_create(lv_scr_act(), NULL);
-  lv_obj_set_width(slider, screenWidth-50);                        /*Set the width*/
-  lv_obj_set_height(slider, 50);
-  lv_obj_align(slider, NULL, LV_ALIGN_CENTER, 0, 0);    /*Align to the center of the parent (screen)*/
-  lv_obj_set_event_cb(slider, slider_event_cb);         /*Assign an event function*/
+    //Set the theme..
+    //lv_theme_t * th = lv_theme_night_init(210, NULL);     //Set a HUE value and a Font for the Night Theme
+    //lv_theme_set_current(th);
 
-  /* Create a label below the slider */
-  slider_label = lv_label_create(lv_scr_act(), NULL);
-  lv_label_set_text(slider_label, "0");
-  lv_obj_set_auto_realign(slider, true);
-  lv_obj_align(slider_label, slider, LV_ALIGN_OUT_BOTTOM_MID, 0, 10);
+    //demo_create();
+    app_create(lv_disp_get_scr_act(NULL));
+
+    // lv_obj_t * scr = lv_cont_create(NULL, NULL);
+    // lv_disp_load_scr(scr);
+
+    // //lv_obj_t * tv = lv_tabview_create(scr, NULL);
+    // //lv_obj_set_size(tv, lv_disp_get_hor_res(NULL), lv_disp_get_ver_res(NULL));
+
+    // /* Create simple label */
+    // lv_obj_t *label = lv_label_create(lv_scr_act(), NULL);
+    // lv_label_set_text(label, "Hello Arduino! (V6.1)");
+    // lv_obj_align(label, NULL, LV_ALIGN_CENTER, 0, -50);
+
+    // /* Create a slider in the center of the display */
+    // lv_obj_t * slider = lv_slider_create(lv_scr_act(), NULL);
+    // lv_obj_set_width(slider, screenWidth-50);                        /*Set the width*/
+    // lv_obj_set_height(slider, 50);
+    // lv_obj_align(slider, NULL, LV_ALIGN_CENTER, 0, 0);    /*Align to the center of the parent (screen)*/
+    // lv_obj_set_event_cb(slider, slider_event_cb);         /*Assign an event function*/
+
+    // /* Create a label below the slider */
+    // slider_label = lv_label_create(lv_scr_act(), NULL);
+    // lv_label_set_text(slider_label, "0");
+    // lv_obj_set_auto_realign(slider, true);
+    // lv_obj_align(slider_label, slider, LV_ALIGN_OUT_BOTTOM_MID, 0, 10);
 
 }
 
@@ -249,8 +295,14 @@ void setup() {
 /*****************************************************************************/
 
 void loop() {
+    float temp;
 
-  lv_task_handler(); /* let the GUI do its work */
-  delay(5);
+    lv_task_handler(); /* let the GUI do its work */
+    delay(5);
+    if (xQueueReceive(qTempCurrent, &temp, 0)) {
+        //Serial.println(temp);
+        app_temp_current_set(temp);
+    }
 }
 
+#endif
