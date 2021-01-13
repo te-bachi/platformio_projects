@@ -25,7 +25,7 @@ void btLoop(void * arg);
 void ledLoop(void * arg);
 
 void setup() {
-    pinMode(LED_BUILTIN, OUTPUT);
+    pinMode(13, OUTPUT);
 
     Serial.begin(115200);
     Serial.println("Serial done!");
@@ -70,14 +70,14 @@ btLoop(void * arg)
                 if (Serial1.available() > 0) {
                     int c = Serial1.read();
                     SerialBT.write(c);
-                    Serial.print(".");
+                    //Serial.print(".");
                 }
 
                 /* BT -> UART */
                 if (SerialBT.available() > 0) {
                     int c = SerialBT.read();
                     Serial1.write(c);
-                    Serial.print("-");
+                    //Serial.print("-");
                 }
             } else {
                 if (valid) {
@@ -94,9 +94,9 @@ void
 ledLoop(void * arg)
 {
     while (true) {
-        digitalWrite(LED_BUILTIN, HIGH);
+        digitalWrite(13, HIGH);
         delay(500);
-        digitalWrite(LED_BUILTIN, LOW);
+        digitalWrite(13, LOW);
         delay(500);
         //Serial.println("LED!");
     }
